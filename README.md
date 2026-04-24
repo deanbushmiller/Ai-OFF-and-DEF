@@ -1,6 +1,6 @@
 # Ai-OFF-and-DEF
-for OReilly class
-tentative setup
+for OReilly class tentative setup
+
 💻 1. Hardware & Environment
 Because we lack AI-optimized CPUs, we will use Python as the glue and APIs (OpenAI, Groq, or Anthropic) for the "intelligence" layer.
 
