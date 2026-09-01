@@ -1,80 +1,57 @@
-# Ai-OFF-and-DEF
-for OReilly class tentative setup
+# AI Offense and Defense Lab
 
-💻 1. Hardware & Environment
-Because we lack AI-optimized CPUs, we will use Python as the glue and APIs (OpenAI, Groq, or Anthropic) for the "intelligence" layer.
+> **Beta version 20260901**
+> This course is under review. Lab flow, Docker images, and prompts may change before the final release.
 
-RAM: Minimum 8GB (16GB preferred to run local vector databases and IDEs simultaneously).
+An eight-hour, remote course for intermediate security professionals. The course has nine standalone labs. Every lab uses harmless local targets and synthetic data.
 
-IDE: VS Code (highly recommended) with the Jupyter Extension installed.
+## Student requirements
 
-Python: Version 3.10 or higher.
+- A Mac or Windows computer.
+- Docker Desktop installed before class.
+- A current ChatGPT or Claude subscription.
+- A modern web browser.
+- Git, or a downloaded ZIP copy of this repository.
 
-📦 2. Required Libraries (The "Cyber-AI" Stack)
-Learners should create a dedicated virtual environment (python -m venv ai_cyber_env) and run the following installations before arrival:
+The course does not need API keys, paid cloud accounts, Python, or a local GPU. Students use ChatGPT or Claude in the browser. They copy only the supplied synthetic data into a chat.
 
-The Offensive Toolkit
-openai: For interacting with the LLM "brain."
+## Start the lab
 
-garak: The standard LLM vulnerability scanner.
+1. Clone or download this repository.
+2. Start Docker Desktop.
+3. Run `docker compose up --build` from the repository root.
+4. Open `http://localhost:8080`.
+5. Follow [student setup](docs/student-setup.md).
 
-langchain & langchain-community: For building the RAG and Agent pipelines we will attack.
+Docker starts a local, read-only portal. Lab 2 also runs a local Semgrep supply-chain scan. Docker does not send data to an LLM.
 
-beautifulsoup4: For web-scraping exercises in the orchestration module.
+Students can complete every lab from the Markdown files if Docker is unavailable. They use a ChatGPT or Claude browser chat for the supplied synthetic prompts.
 
-The Defensive Toolkit
-faiss-cpu: A library for efficient similarity search (crucial for RAG defense). Note: Ensure they install the -cpu version.
+## Course materials
 
-guardrails-ai or nemoguardrails: For the defense modules.
+- [Course overview](docs/course-overview.md)
+- [Lab architecture](docs/lab-architecture.md)
+- [Student setup](docs/student-setup.md)
+- [Instructor guide](docs/instructor-guide.md)
+- [Safety policy](docs/safety-policy.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
-pyrit: Microsoft's Python Risk Identification Tool for the Red Teaming hour.
+## Labs
 
-python-dotenv: To manage API keys securely.
+1. [Indirect prompt injection](labs/01-indirect-prompt-injection/README.md)
+2. [Supply-chain audit](labs/02-supply-chain-audit/README.md)
+3. [Adversarial red teaming](labs/03-adversarial-red-teaming/README.md)
+4. [MITRE ATLAS mapping](labs/04-mitre-atlas/README.md)
+5. [Dual-LLM guardrails](labs/05-dual-llm-guardrails/README.md)
+6. [Secure MCP](labs/06-secure-mcp/README.md)
+7. [RAG poisoning](labs/07-rag-poisoning/README.md)
+8. [AI-native incident response](labs/08-ai-incident-response/README.md)
+9. [Enterprise guardrails](labs/09-enterprise-guardrails/README.md)
 
-Quick Install Command:
+## Evidence and completion
 
-Bash
-pip install openai garak langchain langchain-community beautifulsoup4 faiss-cpu guardrails-ai pyrit python-dotenv fastapi uvicorn
-🔑 3. API & Access Setup
-Since local inference is off the table, learners must have an API key.
+The course uses completion, not grades. Each student saves one short finding or decision record for each lab. Use the templates in [templates](templates/README.md). Do not upload customer data, secrets, or real attack content.
 
-Recommended: A Groq API Key (it is currently the fastest for live demos and offers a generous free tier for developers) or an OpenAI API Key with at least $5 of credit.
+## License and use
 
-Task: Create a .env file in their project root:
-
-Plaintext
-OPENAI_API_KEY=your_key_here
-GROQ_API_KEY=your_key_here
-📂 4. Pre-Loaded Datasets & Assets
-To make the "Supply Chain" and "RAG" modules work, they need mock data to "poison."
-
-The "Corporate Wiki" (RAG Exercise): A folder containing 5-10 PDF/Text files describing fake internal company policies (e.g., Travel_Policy.pdf, IT_Access_Rules.txt).
-
-The "Malicious Model" (Supply Chain Exercise): A provided Python script that demonstrates a pickle.load() exploit (demonstrating why loading .pth or .bin files from untrusted sources is a critical risk).
-
-The "Target Database": A simple SQLite database file or a CSV containing mock employee data for the "Agent Hijacking" module.
-
-✅ 5. The "Smoke Test" (Pre-Class Verification)
-Ask learners to run this snippet to ensure their environment is ready. If this works, they are ready for Hour 1.
-
-Python
-import openai
-import faiss
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-# Test API Connection
-try:
-    # Example using OpenAI or Groq
-    print("Checking API Connectivity...")
-    # (Insert simple test call here)
-    print("✅ API Connectivity: Success")
-except Exception as e:
-    print(f"❌ API Connectivity: Failed - {e}")
-
-# Test Local Cyber Libraries
-print(f"✅ FAISS version: {faiss.__version__} (CPU)")
-Pro-Tip for the Instructor:
-Since they aren't using AI CPUs, they might struggle with Docker. If any of your exercises require a database (like Vector DBs), recommend they use ChromaDB or FAISS in "In-Memory" mode. This keeps the local overhead extremely low while still providing a realistic "Enterprise" experience.
+Use this material only for authorized education and local testing. See the [safety policy](docs/safety-policy.md).

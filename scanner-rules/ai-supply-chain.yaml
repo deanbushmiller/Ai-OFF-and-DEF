@@ -1,0 +1,13 @@
+rules:
+  - id: unsafe-pickle-deserialization
+    message: Do not deserialize an untrusted model artifact with pickle.load. Use a verified format and trusted source.
+    severity: ERROR
+    languages: [python]
+    patterns:
+      - pattern: pickle.load(...)
+  - id: insecure-model-download-source
+    message: Model artifacts need a verified origin, checksum, and signature before release.
+    severity: WARNING
+    languages: [python]
+    patterns:
+      - pattern: requests.get("http://...", ...)

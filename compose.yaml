@@ -1,0 +1,21 @@
+services:
+  portal:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+  scanner:
+    image: semgrep/semgrep:latest
+    profiles:
+      - scanner
+    working_dir: /work
+    volumes:
+      - ./:/work:ro
+    entrypoint: ["semgrep"]
+    command:
+      - "--config"
+      - "scanner-rules/ai-supply-chain.yaml"
+      - "labs/02-supply-chain-audit/assets"

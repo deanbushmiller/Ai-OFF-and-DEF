@@ -1,0 +1,6 @@
+.DS_Store
+.env
+evidence/
+reports/
+__pycache__/
+.ipynb_checkpoints/
