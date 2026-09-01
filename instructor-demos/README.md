@@ -1,5 +1,7 @@
 # Instructor Demonstrations
 
+Advanced students could in theory run this lab set up. This will require local AI capable machine.
+
 These demonstrations use a local model through Ollama. They run attacks only against a local, synthetic application. They do not contact a vendor model, external MCP server, customer system, or public endpoint.
 
 ## Safety boundary
