@@ -3,6 +3,7 @@
 **Time:** 35 minutes  
 **Company:** CityWorks Support  
 **Evidence:** An MCP control checklist and finding record
+**OWASP mapping:** [LLM01, LLM05, LLM06, ML01, ML09, and MCP02/MCP03/MCP06/MCP07/MCP08/MCP10](../../docs/owasp-threat-mapping.md#lab-6-mcp-crosswalk)
 
 ## Scenario
 

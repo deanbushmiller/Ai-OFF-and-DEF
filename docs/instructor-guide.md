@@ -12,6 +12,18 @@
 
 State that the labs simulate enterprise AI risks with local, synthetic assets. State that students may not test real systems. State that the LLM helps analyze evidence but does not make security decisions.
 
+## Instructor demonstration flow
+
+Use the local-model demonstration before each matching student lab when time and hardware permit. The demonstration replaces the scenario introduction. It does not add time to the student lab.
+
+1. Name the mapped OWASP threat.
+2. Run the baseline local-model demonstration.
+3. Run the guarded local-model demonstration.
+4. Ask students what changed at the application boundary.
+5. Start the matching student lab.
+
+See [instructor demonstrations](../instructor-demos/README.md) and the [OWASP threat mapping](owasp-threat-mapping.md). Do not run a demonstration against a vendor model, an external tool server, or a real data source.
+
 ## Facilitation pattern
 
 For each lab, use this pattern:

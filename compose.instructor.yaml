@@ -1,0 +1,27 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - instructor-models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  demo:
+    image: python:3.12-alpine
+    profiles: ["demo"]
+    working_dir: /work/instructor-demos
+    volumes:
+      - ./:/work:ro
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      LOCAL_MODEL: ${LOCAL_MODEL:-llama3.2:1b}
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: ["python", "scripts/run_demo.py"]
+
+volumes:
+  instructor-models:

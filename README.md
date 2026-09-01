@@ -35,6 +35,8 @@ Students can complete every lab from the Markdown files if Docker is unavailable
 - [Instructor guide](docs/instructor-guide.md)
 - [Safety policy](docs/safety-policy.md)
 - [Troubleshooting](docs/troubleshooting.md)
+- [OWASP threat mapping](docs/owasp-threat-mapping.md)
+- [Instructor demonstrations](instructor-demos/README.md)
 
 ## Labs
 

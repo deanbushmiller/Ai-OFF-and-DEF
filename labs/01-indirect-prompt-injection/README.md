@@ -3,6 +3,7 @@
 **Time:** 45 minutes  
 **Company:** Northstar Travel  
 **Evidence:** A completed [finding record](../../templates/finding-record.md)
+**OWASP mapping:** [LLM01, LLM06, LLM07, ML01, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Alder Financial  
 **Evidence:** A guardrail design and decision record
+**OWASP mapping:** [LLM02, LLM05, LLM06, LLM07, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

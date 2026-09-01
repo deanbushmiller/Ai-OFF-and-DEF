@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Harbor Claims  
 **Evidence:** A completed [finding record](../../templates/finding-record.md)
+**OWASP mapping:** [LLM03, LLM05, ML06, and ML10](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

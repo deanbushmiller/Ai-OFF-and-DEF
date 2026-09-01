@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Meridian Health Benefits  
 **Evidence:** A completed [finding record](../../templates/finding-record.md)
+**OWASP mapping:** [LLM01, LLM02, LLM06, LLM09, ML01, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

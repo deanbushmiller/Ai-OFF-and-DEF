@@ -39,6 +39,8 @@ After the course, students can:
 
 Each lab uses a fictitious company and a contained scenario. Students inspect local files, use a browser LLM for analysis, and record evidence. The LLM never receives real data. The instructor treats LLM output as a hypothesis, not as proof.
 
+The instructor may start each lab with a matching local-model demonstration. The demonstration compares a permissive application configuration with a guarded configuration. It stays inside local Docker services and uses synthetic content.
+
 ## Completion standard
 
 Students finish a lab when they produce the stated evidence and can explain one mitigation. The advanced section is optional. It adds depth without blocking the next lab.

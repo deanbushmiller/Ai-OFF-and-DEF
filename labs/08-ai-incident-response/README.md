@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Summit Logistics  
 **Evidence:** A completed [incident record](../../templates/incident-record.md)
+**OWASP mapping:** [LLM01, LLM05, LLM10, ML01, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

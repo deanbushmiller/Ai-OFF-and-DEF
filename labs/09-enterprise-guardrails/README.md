@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Redwood Retail Group  
 **Evidence:** A completed [guardrail policy](../../templates/guardrail-policy.md)
+**OWASP mapping:** [LLM01–LLM10, ML06, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

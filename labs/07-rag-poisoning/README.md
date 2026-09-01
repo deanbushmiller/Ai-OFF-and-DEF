@@ -3,6 +3,7 @@
 **Time:** 40 minutes  
 **Company:** Brightline Manufacturing  
 **Evidence:** A knowledge-base admission policy and finding record
+**OWASP mapping:** [LLM04, LLM08, LLM09, ML02, and ML10](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 

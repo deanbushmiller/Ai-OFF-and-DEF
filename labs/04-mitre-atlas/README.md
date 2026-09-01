@@ -3,6 +3,7 @@
 **Time:** 30 minutes  
 **Company:** Northstar Travel  
 **Evidence:** An ATLAS mapping worksheet and one visual
+**OWASP mapping:** [LLM01, LLM04, LLM06, LLM08, ML01, ML02, and ML09](../../docs/owasp-threat-mapping.md#lab-crosswalk)
 
 ## Scenario
 
