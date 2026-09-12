@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ===========================================================================
-#  SecLLM Bootcamp - Lab 1 setup  (macOS)
+#  SecLLM Bootcamp - Lab 1 setup  (macOS and Linux)
 #
 #  Windows students: use setup.ps1 instead.
 #
@@ -22,6 +22,8 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS="$HERE/lab1-results.txt"
 EXTRA_ARGS=("$@")
 
+OS_KIND="$(uname -s | tr '[:upper:]' '[:lower:]')"   # darwin | linux
+
 ok()   { printf '  [ OK ]  %s\n' "$*"; }
 bad()  { printf '  [FAIL]  %s\n' "$*"; }
 warn() { printf '  [WARN]  %s\n' "$*"; }
@@ -30,7 +32,7 @@ hr()   { printf '%s\n' "--------------------------------------------------------
 
 printf '\n'; hr
 printf '  SecLLM Bootcamp - Lab 1: Data and model supply chain poisoning\n'
-printf '  Setup and launcher (macOS)\n'
+printf '  Setup and launcher (macOS / Linux)\n'
 hr; printf '\n'
 printf '  Checking prerequisites...\n\n'
 
@@ -38,8 +40,23 @@ printf '  Checking prerequisites...\n\n'
 if ! command -v docker >/dev/null 2>&1; then
   bad "Docker is not installed."
   printf '\n'
-  info "Install Docker Desktop, then run this script again:"
-  info "  https://www.docker.com/products/docker-desktop/"
+  if [ "$OS_KIND" = "linux" ]; then
+    info "Install Docker Engine, then run this script again."
+    info ""
+    info "  Debian / Ubuntu:  sudo apt install docker.io"
+    info "  Fedora / RHEL:    sudo dnf install docker"
+    info "  Arch:             sudo pacman -S docker"
+    info ""
+    info "  Or the official packages:  https://docs.docker.com/engine/install/"
+    info ""
+    info "After installing:"
+    info "    sudo systemctl enable --now docker"
+    info "    sudo usermod -aG docker \$USER"
+    info "    (then log out and back in)"
+  else
+    info "Install Docker Desktop, then run this script again:"
+    info "  https://www.docker.com/products/docker-desktop/"
+  fi
   printf '\n'
   exit 1
 fi
@@ -47,10 +64,37 @@ ok "Docker is installed  ($(docker --version 2>/dev/null))"
 
 # --- 2. Docker daemon running? ----------------------------------------------
 if ! docker info >/dev/null 2>&1; then
+  # On Linux the most common cause is NOT a stopped daemon - it is that the
+  # user is not in the docker group. Distinguish them, or students chase the
+  # wrong problem.
+  if [ "$OS_KIND" = "linux" ] && ! groups 2>/dev/null | tr ' ' '\n' | grep -qx docker; then
+    bad "You are not in the 'docker' group."
+    printf '\n'
+    info "Docker is installed, but your user cannot talk to it without sudo."
+    info "Fix it once:"
+    info ""
+    info "    sudo usermod -aG docker \$USER"
+    info ""
+    info "Then LOG OUT AND BACK IN - a new terminal is not enough, the group"
+    info "membership is attached at login. Then run this script again."
+    printf '\n'
+    info "To check it worked:  groups | grep docker"
+    printf '\n'
+    exit 1
+  fi
   bad "Docker is installed but not running."
   printf '\n'
-  info "Open Docker Desktop from Applications and wait for the whale icon in"
-  info "your menu bar to stop animating, then run this script again."
+  if [ "$OS_KIND" = "linux" ]; then
+    info "Start the Docker service:"
+    info ""
+    info "    sudo systemctl start docker"
+    info "    sudo systemctl enable docker     # start it at boot"
+    info ""
+    info "Then run this script again."
+  else
+    info "Open Docker Desktop from Applications and wait for the whale icon in"
+    info "your menu bar to stop animating, then run this script again."
+  fi
   printf '\n'
   exit 1
 fi
@@ -58,13 +102,29 @@ ok "Docker is running"
 
 # --- 3. Detect operating system and hardware --------------------------------
 HW="$(uname -m)"
-OS_VER="$(sw_vers -productVersion 2>/dev/null || echo 'unknown')"
 
+# NOTE: macOS reports arm64, Linux reports aarch64. Same chip, different string.
 case "$HW" in
-  arm64)  DETECTED="arm64"; CONFIG="macOS on Apple Silicon (M-series)" ;;
-  x86_64) DETECTED="amd64"; CONFIG="macOS on Intel" ;;
-  *)      DETECTED="";      CONFIG="unrecognised hardware: $HW" ;;
+  arm64|aarch64) DETECTED="arm64" ;;
+  x86_64|amd64)  DETECTED="amd64" ;;
+  *)             DETECTED="" ;;
 esac
+
+if [ "$OS_KIND" = "linux" ]; then
+  OS_VER="$(. /etc/os-release 2>/dev/null && echo "$PRETTY_NAME" || echo 'Linux')"
+  case "$DETECTED" in
+    arm64) CONFIG="Linux on ARM (aarch64)" ;;
+    amd64) CONFIG="Linux on Intel or AMD (x86_64)" ;;
+    *)     CONFIG="unrecognised hardware: $HW" ;;
+  esac
+else
+  OS_VER="macOS $(sw_vers -productVersion 2>/dev/null || echo 'unknown')"
+  case "$DETECTED" in
+    arm64) CONFIG="macOS on Apple Silicon (M-series)" ;;
+    amd64) CONFIG="macOS on Intel" ;;
+    *)     CONFIG="unrecognised hardware: $HW" ;;
+  esac
+fi
 
 # Cross-check against the Docker engine. The engine is the authority.
 ENGINE_ARCH="$(docker version --format '{{.Server.Arch}}' 2>/dev/null || echo '')"
@@ -75,7 +135,7 @@ if [ -n "$ENGINE_ARCH" ] && [ -n "$DETECTED" ] && [ "$ENGINE_ARCH" != "$DETECTED
 fi
 [ -z "$DETECTED" ] && [ -n "$ENGINE_ARCH" ] && DETECTED="$ENGINE_ARCH"
 
-ok "Detected: macOS $OS_VER  /  $HW"
+ok "Detected: $OS_VER  /  $HW"
 info "Configuration: $CONFIG"
 info "Image needed:  $DETECTED"
 
@@ -83,8 +143,13 @@ info "Image needed:  $DETECTED"
 printf '\n'; hr
 printf '  Is this right?\n\n'
 printf '    [Enter]  Yes - use %s   (detected automatically)\n' "$DETECTED"
-printf '    1        Mac, Apple Silicon (M1/M2/M3/M4)  -> arm64\n'
-printf '    2        Mac, Intel                        -> amd64\n'
+if [ "$OS_KIND" = "linux" ]; then
+  printf '    1        ARM (aarch64)                     -> arm64\n'
+  printf '    2        Intel or AMD (x86_64)             -> amd64\n'
+else
+  printf '    1        Mac, Apple Silicon (M1/M2/M3/M4)  -> arm64\n'
+  printf '    2        Mac, Intel                        -> amd64\n'
+fi
 hr
 printf '  Choice: '
 if [ -t 0 ]; then read -r CHOICE || CHOICE=""; else CHOICE=""; fi
@@ -95,7 +160,12 @@ esac
 printf '\n'; ok "Using image architecture: $DETECTED"
 
 # --- 5. Disk space -----------------------------------------------------------
-AVAIL_GB="$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')"
+# df -g is BSD/macOS; Linux needs -BG.
+if [ "$OS_KIND" = "linux" ]; then
+  AVAIL_GB="$(df -BG "$HOME" 2>/dev/null | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
+else
+  AVAIL_GB="$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')"
+fi
 if [ -n "${AVAIL_GB:-}" ]; then
   if [ "$AVAIL_GB" -lt 2 ]; then
     warn "Only ${AVAIL_GB} GB free. The lab needs about 2 GB. It may fail."

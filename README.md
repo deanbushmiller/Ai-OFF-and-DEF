@@ -9,10 +9,11 @@ data, and runs entirely on your own machine.
 
 ## What you need
 
-- A Mac or Windows computer. **No GPU.**
-- **Docker Desktop 4.90 or newer**, installed and running before class.
+- A Mac, Windows or Linux computer. **No GPU.**
+- **Docker Desktop 4.90 or newer** (macOS/Windows), or **Docker Engine** (Linux),
+  installed and running before class.
 - About **2 GB of free disk**, and 4 GB of free RAM.
-- A terminal: macOS Terminal, or Windows PowerShell.
+- A terminal: macOS Terminal, Windows PowerShell, or any Linux shell.
 
 You do **not** need an API key, a ChatGPT or Claude subscription, Python, or a cloud
 account. Every model the labs use is small, open, and baked into the container image.
@@ -20,6 +21,17 @@ account. Every model the labs use is small, open, and baked into the container i
 **Windows students: [read the setup guide first](docs/student-setup.md).** Windows needs
 two extra steps that Docker's own installer does not do for you, and skipping either one
 looks identical to "Docker is broken".
+
+## Getting the course files
+
+```bash
+git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
+```
+
+No git? [Step 0 of the setup guide](docs/student-setup.md) covers installing it on both
+platforms, choosing where to put the labs, and the no-git ZIP alternative.
+
+Run every command below **from inside the course folder**.
 
 ## How the labs run
 
@@ -31,7 +43,7 @@ You run a setup script rather than raw Docker commands. It checks your prerequis
 works out whether your machine needs the Intel or ARM image, downloads it, and starts the
 lab.
 
-**macOS**
+**macOS and Linux**
 
 ```bash
 bash labs/lab1/setup/setup.sh
