@@ -1,0 +1,72 @@
+{
+  "lab": 1,
+  "title": "Data and model supply chain poisoning",
+  "cache_root": "/opt/lab-assets",
+  "hf_home": "/opt/lab-assets/hf",
+  "offline_at_runtime": true,
+  "ports": [],
+  "interaction": "student types each of 7 commands; runner validates and corrects",
+  "models": [
+    {
+      "source_id": "prajjwal1/bert-tiny",
+      "provider": "huggingface",
+      "files": [
+        {
+          "name": "pytorch_model.bin",
+          "bytes": 17830000,
+          "note": "pickle format - the point of the lab; repo has no safetensors"
+        },
+        {
+          "name": "vocab.txt",
+          "bytes": 232000
+        },
+        {
+          "name": "config.json",
+          "bytes": 285
+        }
+      ],
+      "total_bytes": 18062285,
+      "shared": true,
+      "shared_note": "Labs 2-8 needing a tiny BERT MUST reuse this exact source ID and cache path so the merged image stores it once."
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "torch",
+      "version": "2.9.1",
+      "index": "https://download.pytorch.org/whl/cpu",
+      "shared": true,
+      "note": "CPU-only. Default PyPI wheel is 554 MB on x86_64 and pulls nvidia-* packages."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true,
+      "note": "Silences torch's 'Failed to initialize NumPy' warning; needed by labs 2+ anyway."
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    },
+    {
+      "name": "picklescan",
+      "version": "1.0.5",
+      "shared": false,
+      "license": "MIT"
+    },
+    {
+      "name": "fickling",
+      "version": "0.1.12",
+      "shared": false,
+      "license": "LGPL-3.0",
+      "note": "Installed without the [torch] extra, which would drag in torchvision. Steps 6-7."
+    }
+  ],
+  "not_used": [
+    {
+      "name": "transformers",
+      "reason": "Dropped. v5 is safetensors-first and we only need a state dict. hf_hub_download + torch.load is smaller and clearer to read."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "lab": 2,
+  "title": "RAG and semantic ingestion attacks",
+  "cache_root": "/opt/lab-assets",
+  "hf_home": "/opt/lab-assets/hf",
+  "offline_at_runtime": true,
+  "ports": [],
+  "interaction": "beginner (10 guided typed commands) or expert (real shell + nano)",
+  "models": [
+    {
+      "source_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "provider": "huggingface",
+      "role": "embeddings",
+      "bytes": 90900000,
+      "shared": true,
+      "shared_note": "Any lab needing sentence embeddings MUST reuse this exact ID."
+    },
+    {
+      "source_id": "google/flan-t5-small",
+      "provider": "huggingface",
+      "role": "answer generation",
+      "bytes": 307900000,
+      "shared": true,
+      "shared_note": "Chosen over Qwen2.5-0.5B (988 MB): both are 3/3 on content poisoning, so the extra 680 MB buys nothing. Weak priors also make it MORE faithful to a poisoned corpus."
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "torch",
+      "version": "2.9.1",
+      "index": "https://download.pytorch.org/whl/cpu",
+      "shared": true
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    },
+    {
+      "name": "transformers",
+      "version": "5.17.0",
+      "shared": true,
+      "note": "PINNED ACROSS ALL 8 LABS at 5.x. transformers 4.x requires huggingface-hub<1.0, which conflicts with the hub 1.31.0 lab 1 already ships. Discovered at build time, 2026-09-12."
+    },
+    {
+      "name": "sentencepiece",
+      "version": "0.2.0",
+      "shared": true,
+      "note": "T5 tokenizer."
+    },
+    {
+      "name": "reportlab",
+      "version": "4.2.5",
+      "shared": false,
+      "note": "Creates the white-on-white PDF."
+    },
+    {
+      "name": "pypdf",
+      "version": "5.1.0",
+      "shared": false,
+      "note": "Reads the PDF text layer."
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "nano",
+      "shared": true,
+      "note": "Required for expert mode."
+    },
+    {
+      "name": "less",
+      "shared": true,
+      "note": "Reading LAB.md in expert mode."
+    }
+  ],
+  "vector_store": "numpy cosine similarity, in memory, saved as .npz (NOT pickle - see lab 1)",
+  "measured": {
+    "note": "Measured 2026-09-12 on Docker 29.7.2, arm64.",
+    "arm64": {
+      "download_mb": 591,
+      "disk_gb": 1.87
+    },
+    "peak_ram": "<1 GB (verified: runs under --memory=1g)",
+    "compute_seconds_2_cores": 42,
+    "runs_offline": "verified with --network none",
+    "retrieval_result": "poisoned_handbook.pdf 0.772 beats bell.txt 0.723; Mona Lisa 0.837 beats davinci.txt 0.691"
+  }
+}

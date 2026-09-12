@@ -1,31 +1,82 @@
-# AI Offense and Defense Lab
+# SecLLM Bootcamp — AI Offense and Defense Labs
 
-> **Beta version 20260912**
-> This course is being completely rebuilt on this day. Please wait to pull.
+> **Beta — rebuilt 2026-09**
+> Eight hands-on labs. Two are published; labs 3–8 are in progress.
 
-An eight-hour, remote course for intermediate security professionals. The course has nine standalone labs. Every lab uses harmless local targets and synthetic data.
+An eight-hour remote course for intermediate security professionals. You learn to attack
+LLM systems so you can defend them. Every lab uses harmless local targets and synthetic
+data, and runs entirely on your own machine.
 
-## Student requirements
+## What you need
 
+- A Mac or Windows computer. **No GPU.**
+- **Docker Desktop 4.90 or newer**, installed and running before class.
+- About **2 GB of free disk**, and 4 GB of free RAM.
+- A terminal: macOS Terminal, or Windows PowerShell.
 
-## Start the lab
+You do **not** need an API key, a ChatGPT or Claude subscription, Python, or a cloud
+account. Every model the labs use is small, open, and baked into the container image.
 
+**Windows students: [read the setup guide first](docs/student-setup.md).** Windows needs
+two extra steps that Docker's own installer does not do for you, and skipping either one
+looks identical to "Docker is broken".
 
-Docker starts a local, read-only portal. Lab 2 also runs a local Semgrep supply-chain scan. Docker does not send data to an LLM.
+## How the labs run
 
-Students can complete every lab from the Markdown files if Docker is unavailable. They use a ChatGPT or Claude browser chat for the supplied synthetic prompts.
+Each lab is a self-contained container. There is no shared server, nothing hosted, and
+**no network access once the image is pulled** — every model and dataset is baked in at
+build time.
+
+You run a setup script rather than raw Docker commands. It checks your prerequisites,
+works out whether your machine needs the Intel or ARM image, downloads it, and starts the
+lab.
+
+**macOS**
+
+```bash
+bash labs/lab1/setup/setup.sh
+```
+
+**Windows** (PowerShell)
+
+```bash
+powershell -ExecutionPolicy Bypass -File .\labs\lab1\setup\setup.ps1
+```
+
+Most labs offer two modes. **Beginner** shows each command, you type it, and it is checked
+before anything runs. **Expert** drops you into a real shell to work from the lab's
+`LAB.md`. Add `--expert` or `--challenge` to the setup command to pick.
+
+Each lab ends by offering to download the next one. Say yes — the labs share container
+layers, so every lab after the first is a small delta rather than a full download.
+
+## The labs
+
+| # | Lab | OWASP 2026 | Status |
+|---|---|---|---|
+| 1 | [Data and model supply chain poisoning](labs/lab1/) | LLM04, LLM05 | **published** |
+| 2 | [RAG and semantic ingestion attacks](labs/lab2/) | LLM01, LLM07, LLM09 | **published** |
+| 3 | Advanced prompt injection | LLM01 | in progress |
+| 4 | Multimodal and vision-based exploits | — | planned |
+| 5 | Exploiting AI agents and excessive agency | LLM03 | planned |
+| 6 | MCP and interface hijacking | — | planned |
+| 7 | AI-powered attack orchestration | — | planned |
+| 8 | Offensive recap and transition to defense | — | planned |
 
 ## Course materials
 
+- [Student setup](docs/student-setup.md) — start here, especially on Windows
+- [OWASP threat mapping](docs/owasp-threat-mapping.md) — how each lab maps to the 2026 Top 10
 
-## Labs
+## Safety
 
+Every lab is contained by design:
 
+- Payloads are benign stand-ins. Lab 1's "malicious" code runs `echo`. Lab 2's poison is a
+  false sentence, not an instruction.
+- Models are toy-sized and open. Nothing sends data anywhere.
+- Containers bind no ports and have no network access during the lab.
+- Nothing leaves your machine.
 
-## Evidence and completion
-
-
-
-## License and use
-
-Use this material only for authorized education and local testing. See the [safety policy](docs/safety-policy.md).
+Use this material only for authorised education and local testing. What you learn here
+applies to systems you own or have written permission to test.
