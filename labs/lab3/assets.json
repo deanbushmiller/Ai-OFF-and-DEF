@@ -1,0 +1,90 @@
+{
+  "lab": 3,
+  "title": "Advanced prompt injection",
+  "cache_root": "/opt/lab-assets",
+  "offline_at_runtime": true,
+  "ports": [
+    {
+      "port": 8003,
+      "bind": "127.0.0.1",
+      "why": "mock website, loopback only, never 0.0.0.0"
+    }
+  ],
+  "interaction": "beginner (7 guided typed commands) or expert (real shell + nano)",
+  "models": [
+    {
+      "source_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "bytes": 1120000000,
+      "shared": true,
+      "shared_note": "SHARED with labs 5-7. Any lab needing an instruction-following model MUST reuse this exact ID, file and path.",
+      "measured": {
+        "injection_reliability": "3/3 on two payload styles, verified after quantisation",
+        "peak_ram_gb": 1.19,
+        "sec_per_answer_4_cores": 4.8,
+        "sec_per_answer_2_cores": 13.3
+      },
+      "rejected_alternatives": {
+        "google/flan-t5-small": "0/4 payload styles - cannot follow injected commands",
+        "Qwen/Qwen2.5-0.5B-Instruct": "1/3 - unusable, and failures produced confused output",
+        "Qwen2.5-1.5B bf16": "3/3 but 9.0 GB RAM and 21.7s/answer at 2 cores"
+      }
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "llama-cpp-python",
+      "version": "0.3.35",
+      "shared": true,
+      "note": "NO PyPI wheels - source build. Multi-stage, 89s compile, 134 MB runtime. Build with CMAKE_ARGS=-DGGML_NATIVE=OFF or the binary bakes in the build machine's instruction set and crashes on older student CPUs."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "REQUIRED. libllama.so links against OpenMP; without it the import dies with 'libgomp.so.1: cannot open shared object file'."
+    },
+    {
+      "name": "nano",
+      "shared": true
+    },
+    {
+      "name": "less",
+      "shared": true
+    },
+    {
+      "name": "curl",
+      "shared": true,
+      "note": "Students fetch the page the way the assistant does."
+    }
+  ],
+  "not_used": [
+    {
+      "name": "torch",
+      "reason": "llama.cpp runs the model. Lab 3 needs no PyTorch at all."
+    }
+  ],
+  "network": "None at run time. Mock site served from inside the container on 127.0.0.1 only. /etc/hosts maps news.acme.com to 127.0.0.1 so the URL looks real.",
+  "measured": {
+    "note": "Measured 2026-09-12, arm64, Docker 29.7.2.",
+    "download_mb": 1210,
+    "disk_gb": 2.73,
+    "peak_ram": "<1.5 GB (verified at --memory=1500m)",
+    "compute_seconds_2_cores": 117,
+    "build_seconds_warm": 49,
+    "runs_offline": "verified with --network none",
+    "determinism": "3/3 consecutive runs hijacked at temperature 0"
+  }
+}

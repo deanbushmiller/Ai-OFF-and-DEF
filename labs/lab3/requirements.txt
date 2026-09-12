@@ -1,0 +1,7 @@
+# Lab 3 - shared dependency set for the consolidated 8-lab image.
+# torch is NOT needed here: llama.cpp runs the model, not PyTorch.
+
+# Shared across labs. transformers 5.x is REQUIRED: 4.x pins huggingface-hub<1.0,
+# which conflicts with the hub 1.31.0 labs 1 and 2 already ship.
+numpy==2.3.5
+huggingface-hub==1.31.0

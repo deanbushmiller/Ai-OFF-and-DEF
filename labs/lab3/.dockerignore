@@ -1,0 +1,35 @@
+# Build context hygiene. Everything here is either irrelevant to the image or
+# student output that would make builds non-reproducible.
+
+# macOS / editor noise
+.DS_Store
+._*
+Thumbs.db
+*~
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Instructor-only - not shipped inside the student image
+instructor/
+INSTRUCTOR-TEST.md
+publish.sh
+
+# Host-side launcher scripts - students run these OUTSIDE the container
+setup/
+
+# Generated at run time; must never be baked into the image
+index.npz
+answers.json
+*-results.txt
+poisoned_handbook.pdf
+bert_tiny_*.pt
+data.pkl
+unzipped/
+
+# Credentials
+.env
+*.pem
+*.key
