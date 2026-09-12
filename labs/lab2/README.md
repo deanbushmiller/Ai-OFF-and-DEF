@@ -7,107 +7,55 @@ Expert mode runs the whole list, including the steps beginner skips.
 
 ---
 
-## Setup
+## Before you start
 
-You need **Docker Desktop** installed and running. Nothing else. The lab installs nothing
-on your computer — everything lives inside a container.
+> **First lab? Not set up yet?**
+> Go to **[the setup guide](../../docs/student-setup.md)** first. It covers getting the
+> course files, installing Docker, and the extra steps Windows needs. Come back here when
+> `docker --version` works.
 
-### Windows students: read this before class
+If you have already done lab 1, you are ready — nothing new to install.
 
-Docker Desktop on Windows does not run on its own. It runs its engine inside **WSL2**,
-which needs hardware virtualization. Do these **in this order** — installing Docker first
-is the usual reason it will not start.
+---
 
-**Step 1 — Install WSL, from GitHub, not the Store.**
+## Run the lab
 
-<https://github.com/microsoft/WSL/releases>
+From inside the course folder:
 
-Take the newest release **not** marked *Pre-release* — **2.7.14** or later — and download:
-
-| Your CPU | File |
-|---|---|
-| Intel / AMD | `wsl.<version>.x64.msi` |
-| Windows on ARM (Snapdragon, Surface) | `wsl.<version>.arm64.msi` |
-
-Run the MSI, then **reboot**.
-
-> **Why not `wsl --install`?** That command installs through the Microsoft Store, and the
-> Store route fails on VMs, Windows Server, and company-managed machines — usually with an
-> unhelpful error. The MSI works in all of those. If `wsl --install` already worked for
-> you, you are fine; this is the fallback that actually succeeds when it does not.
-
-**Step 2 — Install Docker Desktop 4.90 or newer.**
-
-<https://www.docker.com/products/docker-desktop/>
-
-Start it and wait until it says *Engine running*.
-
-> **The first launch is slow — expect several minutes.** Docker Desktop builds its Linux
-> disk image (`ext4.vhdx`) the first time it starts, and the window can look frozen while
-> it does. Let it finish. This happens **once**; every later start is quick.
->
-> This is why all of Step 1–3 must be done **before class**, not in the setup window.
-> WSL install + reboot + Docker install + first launch + image pull adds up to well over
-> half an hour, and none of it is work you want to do while the class waits.
-
-**Step 3 — Running Windows inside a virtual machine?** (VMware, VirtualBox, Parallels, Hyper-V)
-
-You must enable **nested virtualization** — passing the CPU's virtualization features
-through to the guest. **Shut the VM down first**; this cannot be changed while it runs.
-
-| Your VM software | Where to turn it on |
-|---|---|
-| VMware | VM Settings → Processors → *Virtualize Intel VT-x/EPT or AMD-V/RVI* |
-| VirtualBox | Settings → System → Processor → *Enable Nested VT-x/AMD-V* |
-| Parallels | Hardware → CPU & Memory → Advanced → *Enable nested virtualization* |
-| Hyper-V | On the **host**, admin PowerShell: `Set-VMProcessor -VMName <name> -ExposeVirtualizationExtensions $true` |
-
-**Also in a VM: preallocate the virtual disk.** This one costs 10–20 minutes if you skip it.
-
-Docker builds its Linux disk image (`ext4.vhdx`) the first time it starts. If your VM's
-virtual disk grows on demand — "dynamically allocated", "expanding", "thin provisioned" —
-that growth happens *while you wait*, and it looks exactly like Docker has hung.
-
-| Your VM software | Set the disk to |
-|---|---|
-| VMware | *Allocate all disk space now* (set when the disk is created) |
-| VirtualBox | *Fixed size*, not *Dynamically allocated* |
-| Hyper-V | *Fixed size* VHDX, not *Dynamically expanding* |
-| Parallels | Hardware → Hard Disk → uncheck *Expanding disk* |
-
-Give the VM **at least 20 GB free**. The lab image is under 1 GB, but Docker's own disk
-image needs room on top of it.
-
-**On real hardware instead?** If Docker still will not start, virtualization may be off in
-firmware. Reboot into BIOS/UEFI and enable **Intel VT-x** or **AMD-V / SVM Mode**.
-
-`setup.ps1` checks all of this before it downloads anything and tells you which one is
-wrong — so run it early rather than discovering this in class.
-
-**macOS**
+**macOS and Linux**
 
 ```bash
-bash setup.sh
+bash labs/lab2/setup/setup.sh
 ```
 
-**Windows** (PowerShell, in this folder)
+**Windows** (PowerShell)
 
 ```bash
-powershell -ExecutionPolicy Bypass -File .\setup.ps1
+powershell -ExecutionPolicy Bypass -File .\labs\lab2\setup\setup.ps1
 ```
 
 The script checks Docker, works out whether your machine needs the Intel or ARM image,
-downloads it (~190–250 MB, 1–3 minutes), and starts the lab.
+fetches it if you do not already have it, and starts the lab.
 
-**Hard mode:** add `--challenge` to either command and the runner describes each step but
-hides the command, so you work it out yourself. Same checking, same corrections.
+### Choose a mode
+
+The lab asks which you want. You can re-run it to switch.
+
+**Beginner** — the default, and the right choice if you are not sure. The lab shows you
+each command with a short explanation of what it does and why. You type or paste it, and
+the lab checks it before anything runs. Get it wrong and it tells you what the command
+should have been; get it wrong twice and it runs the correct one for you so you are never
+stuck. Ten commands.
+
+**Expert** — drops you into a real shell in the lab folder. No commands shown, no
+corrections. You work from [`LAB.md`](LAB.md), which lists every command. Expert also adds
+the steps beginner skips: moving around the folder yourself, and editing the payload with
+`nano` to put your own name in it. Finish with `python check.py` to confirm it worked.
+
+To go straight to expert mode, add `--expert` to the command above.
 
 **If it fails**, the script tells you why in plain English. Send that message to the
 instructor through GitHub.
-
-
-**Expert mode:** add `--expert` to go straight to a shell.
-**Hard mode:** add `--challenge` for beginner mode with the commands hidden.
 
 ---
 
