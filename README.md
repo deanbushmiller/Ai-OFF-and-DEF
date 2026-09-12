@@ -1,7 +1,7 @@
 # SecLLM Bootcamp — AI Offense and Defense Labs
 
 > **Beta — rebuilt 2026-09**
-> Eight hands-on labs. Two are published; labs 3–8 are in progress.
+> Eight hands-on labs. Three are published; labs 4–8 are in progress.
 
 An eight-hour remote course for intermediate security professionals. You learn to attack
 LLM systems so you can defend them. Every lab uses harmless local targets and synthetic
@@ -60,7 +60,12 @@ before anything runs. **Expert** drops you into a real shell to work from the la
 `LAB.md`. Add `--expert` or `--challenge` to the setup command to pick.
 
 Each lab ends by offering to download the next one. Say yes — the labs share container
-layers, so every lab after the first is a small delta rather than a full download.
+layers, so most labs after the first are a small delta rather than a full download.
+
+**Lab 3 is the exception: about 1.2 GB.** It runs a real language model locally, and that
+model is reused by several later labs. Take lab 2's offer to pre-fetch it and you will not
+wait. Lab 3 is also the only lab so far that serves a page — on `127.0.0.1:8003`, your own
+machine only.
 
 ## The labs
 
@@ -68,7 +73,7 @@ layers, so every lab after the first is a small delta rather than a full downloa
 |---|---|---|---|
 | 1 | [Data and model supply chain poisoning](labs/lab1/) | LLM04, LLM05 | **published** |
 | 2 | [RAG and semantic ingestion attacks](labs/lab2/) | LLM01, LLM07, LLM09 | **published** |
-| 3 | Advanced prompt injection | LLM01 | in progress |
+| 3 | [Advanced prompt injection](labs/lab3/) | LLM01 | **published** |
 | 4 | Multimodal and vision-based exploits | — | planned |
 | 5 | Exploiting AI agents and excessive agency | LLM03 | planned |
 | 6 | MCP and interface hijacking | — | planned |
