@@ -302,13 +302,27 @@ try {
 $Tag = "$Image`:$Lab-$Detected"
 Write-Host ""
 Hr
-Write-Host "  Downloading the lab image. About 190-250 MB, usually 1-3 minutes."
-Write-Host "  $Tag"
-Hr
-Write-Host ""
 
-& docker pull $Tag
-if ($LASTEXITCODE -ne 0) {
+# The previous lab offers to pre-pull this image when it finishes. If the
+# student took that offer, it is already here and there is nothing to download.
+& docker image inspect $Tag *> $null
+$alreadyHave = ($LASTEXITCODE -eq 0)
+
+if ($alreadyHave) {
+    Write-Host "  Lab image is already on your machine."
+    Write-Host "  $Tag"
+    Hr
+    Write-Host ""
+    Ok "No download needed - the previous lab fetched this for you."
+} else {
+    Write-Host "  Downloading the lab image. About 190-600 MB, usually 1-3 minutes."
+    Write-Host "  $Tag"
+    Hr
+    Write-Host ""
+    & docker pull $Tag
+}
+
+if (-not $alreadyHave -and $LASTEXITCODE -ne 0) {
     Write-Host ""
     Bad "Could not download the lab image."
     Write-Host ""
@@ -383,6 +397,29 @@ if ($NextLab) {
         if ($LASTEXITCODE -eq 0) {
             Write-Host ""
             Ok "$NextName is ready on your machine."
+            # Absolute path: -File does NOT change the working directory, and we
+            # cannot assume which folder the student launched from.
+            # Walk up: setup -> labN -> labs. Guard every step; if the folder
+            # layout is not what we expect, say so plainly rather than throwing
+            # a PowerShell error at the student.
+            $NextScript = $null
+            try {
+                $labDir  = Split-Path -Parent $Here
+                $LabsDir = if ($labDir) { Split-Path -Parent $labDir } else { $null }
+                if ($LabsDir) {
+                    $NextScript = Join-Path $LabsDir (Join-Path $NextLab (Join-Path "setup" "setup.ps1"))
+                }
+            } catch { $NextScript = $null }
+            Write-Host ""
+            if ($NextScript -and (Test-Path $NextScript)) {
+                Info "When you are ready to start it, run:"
+                Write-Host ""
+                Write-Host "      powershell -ExecutionPolicy Bypass -File `"$NextScript`""
+                Write-Host ""
+            } else {
+                Info "The next lab's setup script is not in this folder yet."
+                Info "Pull the course repository again before the next session."
+            }
         } else {
             Write-Host ""
             Warn "Could not pull it yet."

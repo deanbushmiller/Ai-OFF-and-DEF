@@ -107,11 +107,23 @@ fi
 # --- 6. Pull -----------------------------------------------------------------
 TAG="$IMAGE:$LAB-$DETECTED"
 printf '\n'; hr
-printf '  Downloading the lab image. About 190-250 MB, usually 1-3 minutes.\n'
-printf '  %s\n' "$TAG"
-hr; printf '\n'
 
-if ! docker pull "$TAG"; then
+# The previous lab offers to pre-pull this image when it finishes. If the
+# student took that offer, it is already here and there is nothing to download.
+if docker image inspect "$TAG" >/dev/null 2>&1; then
+  printf '  Lab image is already on your machine.\n'
+  printf '  %s\n' "$TAG"
+  hr; printf '\n'
+  ok "No download needed - the previous lab fetched this for you."
+  SKIP_PULL=1
+else
+  printf '  Downloading the lab image. About 190-600 MB, usually 1-3 minutes.\n'
+  printf '  %s\n' "$TAG"
+  hr; printf '\n'
+  SKIP_PULL=0
+fi
+
+if [ "$SKIP_PULL" -eq 0 ] && ! docker pull "$TAG"; then
   printf '\n'; bad "Could not download the lab image."
   printf '\n'
   info "Most likely causes, in order:"
@@ -179,6 +191,18 @@ if [ -n "${NEXT_LAB:-}" ]; then
       printf '\n'
       if docker pull "$NEXT_TAG"; then
         printf '\n'; ok "$NEXT_LAB_NAME is ready on your machine."
+        # Absolute path: works no matter which directory the student ran from.
+        LABS_DIR="$(cd "$HERE/../.." 2>/dev/null && pwd || true)"
+        NEXT_SCRIPT=""
+        [ -n "$LABS_DIR" ] && NEXT_SCRIPT="$LABS_DIR/$NEXT_LAB/setup/setup.sh"
+        printf '\n'
+        if [ -n "$NEXT_SCRIPT" ] && [ -f "$NEXT_SCRIPT" ]; then
+          info "When you are ready to start it, run:"
+          printf '\n      bash "%s"\n\n' "$NEXT_SCRIPT"
+        else
+          info "The next lab's setup script is not in this folder yet."
+          info "Pull the course repository again before the next session."
+        fi
       else
         printf '\n'
         warn "Could not pull it yet."
