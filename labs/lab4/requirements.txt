@@ -1,0 +1,13 @@
+# Lab 4 - shared dependency set for the consolidated 8-lab image.
+# torch is NOT needed here: llama.cpp runs the model, not PyTorch, and the
+# vision side of this lab is OCR, not a neural vision encoder.
+
+# Shared across labs. transformers 5.x is REQUIRED where a lab needs it: 4.x
+# pins huggingface-hub<1.0, which conflicts with the hub 1.31.0 labs 1 and 2
+# already ship. Lab 4 does not need transformers at all.
+numpy==2.3.5
+huggingface-hub==1.31.0
+
+# New in lab 4. Renders the invoices at build time and applies the
+# perturbation at run time. Shared with any later lab that touches images.
+pillow==11.3.0

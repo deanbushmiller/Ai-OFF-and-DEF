@@ -1,0 +1,174 @@
+{
+  "lab": 4,
+  "title": "Multimodal and vision-based exploits",
+  "cache_root": "/opt/lab-assets",
+  "offline_at_runtime": true,
+  "ports": [],
+  "ports_note": "This lab does not serve. Port 8004 stays unallocated.",
+  "interaction": "beginner (10 guided typed commands, two attacks) or expert (real shell + nano + craft.py + stamp_gate.py --tune)",
+  "models": [
+    {
+      "source_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "bytes": 1120000000,
+      "shared": true,
+      "shared_note": "SHARED with labs 3 and 5-7. Bought by lab 3; lab 4 reuses it and buys no model of its own.",
+      "measured": {
+        "decision_flip": "3/3 fresh processes, byte-identical wording, temperature 0",
+        "resists_numeric_policy": "0/12 - four payload styles could not talk it past an arithmetic limit",
+        "peak_ram_gb": 1.19,
+        "sec_per_decision_unrestricted": 1.8,
+        "sec_per_decision_4_cpus": 11.7,
+        "sec_per_decision_2_cpus": 30.2
+      },
+      "reproducible_layer": "fetch_assets.py pins the model's mtimes and deletes the hub cache metadata, but MEASURED: that is not sufficient. Two no-cache builds of this Dockerfile still differ on every file-adding layer, because BuildKit stamps added files with the build time. So a student who already pulled lab 3 re-downloads the 1.12 GB model for lab 4. Fixing it needs a course-wide decision (SOURCE_DATE_EPOCH + rewrite-timestamp, a published base image carrying the model, or the 8-lab consolidation, which stores it once anyway)."
+    },
+    {
+      "source_id": "trained at build time by scripts/stamp_gate.py",
+      "file": "gate-weights.npz",
+      "path": "/labs/lab4/gate-weights.npz",
+      "bytes": 102400,
+      "shared": false,
+      "shared_note": "Lab-4 only. Nothing is downloaded: 800 synthetic stamps are rendered and the model is trained in numpy in ~36s at build time.",
+      "measured": {
+        "held_out_accuracy": 0.95,
+        "clean_stamp": "DUPLICATE at p=0.9995",
+        "min_perturbation": "7/255 (2.7% of the brightness range) flips it to ORIGINAL",
+        "random_control": "0 of 30 random perturbations of the same magnitude flipped it",
+        "tradeoff": "jitter +/-6px -> 97.5% and 20/255; +/-8px -> 95.0% and 7/255; +/-10px -> 92.5% and 5/255"
+      }
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "llama-cpp-python",
+      "version": "0.3.35",
+      "shared": true,
+      "note": "NO PyPI wheels - source build. Multi-stage, ~90s compile, 134 MB runtime. Build with CMAKE_ARGS=-DGGML_NATIVE=OFF."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "shared": true,
+      "note": "New in lab 4. Renders the invoices at build time, applies the perturbation at run time. 29 MB installed."
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "REQUIRED. libllama.so links against OpenMP; without it the import dies with 'libgomp.so.1: cannot open shared object file'."
+    },
+    {
+      "name": "nano",
+      "shared": true
+    },
+    {
+      "name": "less",
+      "shared": true
+    },
+    {
+      "name": "curl",
+      "shared": true
+    },
+    {
+      "name": "tesseract-ocr",
+      "shared": true,
+      "note": "New in lab 4, own layer. 89 MB with -eng and fonts-dejavu-core, minus 10 MB for osd.traineddata which is deleted in the same RUN (only --psm 0 uses it)."
+    },
+    {
+      "name": "tesseract-ocr-eng",
+      "shared": true
+    },
+    {
+      "name": "fonts-dejavu-core",
+      "shared": true,
+      "note": "Needed at RUN time as well as build time: expert mode re-renders the attack image from the student's own payload."
+    }
+  ],
+  "lab_assets": [
+    {
+      "file": "invoices/invoice-clean.png",
+      "generated_at": "build",
+      "shared": false,
+      "note": "Rendered deterministically by make_invoices.py --bake. Not stored in git."
+    },
+    {
+      "file": "invoices/perturbation.npz",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 6854,
+      "note": "The clean/attack pixel difference, compressed. 1.6 MB raw, 6.9 KB compressed. The attack image itself is deliberately NOT shipped - the student reconstructs it."
+    },
+    {
+      "file": "invoices/stamp.png",
+      "generated_at": "build",
+      "shared": false,
+      "note": "160x160 DUPLICATE stamp crop, rendered deterministically by stamp_gate.py."
+    },
+    {
+      "file": "invoices/stamp-perturbation.npz",
+      "generated_at": "build",
+      "shared": false,
+      "note": "FGSM perturbation against the stage 1 gate, 7/255. The attack stamp is not shipped; the student builds it."
+    },
+    {
+      "file": "gate-weights.npz",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 102400,
+      "note": "Logistic regression over 25,600 pixels, trained at build time on 800 synthetic stamps. No download, no torch."
+    }
+  ],
+  "not_used": [
+    {
+      "name": "torch",
+      "reason": "llama.cpp runs the model. The vision side of this lab is OCR, not a neural encoder. Adding torch back would cost ~250 MB for nothing."
+    },
+    {
+      "name": "transformers",
+      "reason": "No HF model is loaded at run time."
+    },
+    {
+      "name": "opencv",
+      "reason": "Pillow plus numpy covers every image operation this lab performs."
+    }
+  ],
+  "network": "None at build-time-only asset fetch aside, and none at run time. Verified with --network none.",
+  "measured": {
+    "note": "Measured 2026-09-12, arm64, Docker 29.7.2, on the image built from lab-dev/lab4.",
+    "hidden_text_grey_level": 252,
+    "contrast_percent": 1.2,
+    "pixels_changed_percent": 0.239,
+    "ocr_seconds": 0.17,
+    "disk_gb": 2.86,
+    "download_gb": 1.25,
+    "download_note": "docker save | gzip -1 | wc -c = 1,246,304,231 bytes. Of that, ~1.05 GB is the model.",
+    "layer_tesseract_mb": 78.6,
+    "layer_pip_delta_mb": 20.6,
+    "peak_ram": "<1.2 GB (verified at --memory=1200m)",
+    "lab_seconds_unrestricted": 8,
+    "build_seconds_warm": 47,
+    "runs_offline": "verified with --network none",
+    "determinism": "3/3 fresh runs: clean HOLD, attack APPROVE, byte-identical wording",
+    "pixels_changed": 1994,
+    "max_delta_of_255": 3,
+    "psm": "4 - single column of variable sizes. psm 6 drops the 30pt letterhead under local binarisation.",
+    "gate_train_seconds": 36,
+    "beginner_commands": 10,
+    "lab_seconds_4_cpus": 37,
+    "lab_seconds_2_cpus": 98,
+    "gate_weights_bytes": 95991
+  }
+}
