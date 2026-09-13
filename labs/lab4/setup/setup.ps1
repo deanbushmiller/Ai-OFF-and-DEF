@@ -325,7 +325,19 @@ Ok "Using image architecture: $Detected"
 
 # --- 6. Disk space -----------------------------------------------------------
 try {
-    $freeGb = [math]::Round((Get-PSDrive (Get-Item $Here).PSDrive.Name).Free / 1GB, 1)
+    # Get-PSDrive is NOT safe here. On a UNC path or a redirected Documents
+    # folder, (Get-Item $Here).PSDrive.Name comes back empty, and Get-PSDrive
+    # with an empty required parameter makes PowerShell PROMPT FOR INPUT - which
+    # a student sees as the script hanging with a blinking cursor, right after
+    # "Using image architecture", with no hint what it wants. Hit on a real
+    # Windows box, lab 5, 2026-09-13.
+    #
+    # DriveInfo takes a path root and cannot prompt. On a UNC root it throws,
+    # which the surrounding catch swallows - so the check is skipped rather than
+    # blocking the lab. A disk-space HINT must never be able to stop the lab.
+    $root = [System.IO.Path]::GetPathRoot($Here)
+    if (-not $root) { throw 'no path root' }
+    $freeGb = [math]::Round((New-Object System.IO.DriveInfo $root).AvailableFreeSpace / 1GB, 1)
     # A VM needs headroom for Docker's ext4.vhdx on top of the lab image.
     $needGb = if ($inVM) { 20 } else { 3 }
     if ($freeGb -lt $needGb) {
