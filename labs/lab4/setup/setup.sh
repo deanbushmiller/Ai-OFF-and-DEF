@@ -35,6 +35,11 @@ printf '\n'; hr
 printf '  SecLLM Bootcamp - Lab 4: Multimodal and vision-based exploits\n'
 printf '  Setup and launcher (macOS / Linux)\n'
 hr; printf '\n'
+# Where am I? The script resolves its own location, so it does not matter where the
+# student cloned the course or which directory they launched it from.
+info "Course folder : $(cd "$HERE/../../.." 2>/dev/null && pwd || echo '?')"
+info "Results go to : $HERE"
+printf '\n'
 printf '  Checking prerequisites...\n\n'
 
 # --- 1. Docker installed? ---------------------------------------------------

@@ -38,6 +38,23 @@ Write-Host "  SecLLM Bootcamp - Lab 4: Multimodal and vision-based exploits"
 Write-Host "  Setup and launcher (Windows)"
 Hr
 Write-Host ""
+# Where am I? The script resolves its own location, so it does not matter where the
+# student cloned the course or what directory they launched it from. Printing it means a
+# clone that landed somewhere unexpected is visible immediately, instead of showing up
+# later as a confusing docker cp failure.
+Info "Course folder : $(Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $Here)))"
+Info "Results go to : $Here"
+if ($Here -like "$env:SystemRoot*") {
+    Write-Host ""
+    Warn "The course is inside a Windows system folder."
+    Info "An Administrator PowerShell window starts in C:\Windows\System32, so cloning"
+    Info "without changing directory first puts it here. Writing lab results into a"
+    Info "system folder may fail or need elevation every time."
+    Info "Move the course somewhere of your own and run this again:"
+    Info "    cd `$HOME\Documents"
+    Info "    git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git"
+}
+Write-Host ""
 Write-Host "  Checking prerequisites..."
 Write-Host ""
 

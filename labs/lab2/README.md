@@ -20,18 +20,29 @@ If you have already done lab 1, you are ready — nothing new to install.
 
 ## Run the lab
 
-From inside the course folder:
+Open a terminal **in the course folder** — the `Ai-OFF-and-DEF` folder you cloned, wherever
+you put it. Not sure you are in it? `dir` on Windows, `ls` on macOS and Linux: you should
+see a `labs` folder.
+
+**Windows** — PowerShell, opened **as Administrator** (Start menu → type `powershell` →
+right-click → **Run as administrator**):
+
+```bash
+cd $HOME\Documents\Ai-OFF-and-DEF
+```
+
+```bash
+powershell -ExecutionPolicy Bypass -File .\labs\lab2\setup\setup.ps1
+```
+
+The first line assumes you cloned into your Documents. If you cloned somewhere else, `cd`
+there instead — the second line is relative to the course folder, so it works from any
+location.
 
 **macOS and Linux**
 
 ```bash
 bash labs/lab2/setup/setup.sh
-```
-
-**Windows** (PowerShell)
-
-```bash
-powershell -ExecutionPolicy Bypass -File .\labs\lab2\setup\setup.ps1
 ```
 
 The script checks Docker, works out whether your machine needs the Intel or ARM image,

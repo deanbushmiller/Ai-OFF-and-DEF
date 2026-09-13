@@ -13,16 +13,20 @@ Do this first. Everything else assumes you have the course folder on your machin
 
 ### Choose where the labs will live
 
-Pick a folder you can find again. Avoid anything synced by OneDrive, iCloud or Dropbox —
-sync services lock files mid-write and it causes odd failures. Somewhere simple is best:
+**Anywhere you like.** Nothing in this course depends on the location — the scripts work
+out where they are and where everything else is, so your own Documents folder is fine.
 
-| | Suggested |
-|---|---|
-| Windows | `C:\labs` |
-| macOS | `~/labs` |
-| Linux | `~/labs` |
+Two things to avoid:
 
-**Write the path down.** Every command later starts from there.
+- **Folders synced by OneDrive, iCloud or Dropbox.** Sync services lock files mid-write and
+  it causes odd failures that look like lab bugs.
+- **Windows system folders.** A PowerShell window opened *as Administrator* starts in
+  `C:\Windows\System32`, and cloning there is a bad idea. The commands below move you out
+  of it first.
+
+The commands below use `$HOME` (Windows) and `~` (macOS and Linux), which resolve to your
+own home folder whatever your username is. Put it somewhere else if you prefer — just run
+the same commands from there instead.
 
 ### Use git. On Windows, strongly.
 
@@ -38,8 +42,11 @@ simply work.
 
 If you only install one tool for this course, install git.
 
-**Windows** — open **PowerShell** (Start menu → type `powershell` → Enter) and check
-whether you already have git:
+**Windows** — open **PowerShell as Administrator**: Start menu → type `powershell` →
+right-click **Windows PowerShell** → **Run as administrator**. Do it this way every time
+you work on the labs, including in class.
+
+Then check whether you already have git:
 
 ```bash
 git --version
@@ -54,14 +61,31 @@ winget install --id Git.Git -e --source winget
 
 **Close PowerShell and open a new one** after installing, so it picks up the new command.
 
-Then create your folder, go to it, and download the course:
+An Administrator window starts inside a Windows system folder, so **move to your own
+folder first**. `$HOME` works whatever your username is:
 
 ```bash
-mkdir C:\labs; cd C:\labs; git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
+cd $HOME\Documents
 ```
 
+Then download the course. This creates an `Ai-OFF-and-DEF` folder wherever you are:
+
 ```bash
-cd C:\labs\Ai-OFF-and-DEF
+git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
+```
+
+Then go into it:
+
+```bash
+cd Ai-OFF-and-DEF
+```
+
+That last command is relative, so it works no matter where you cloned. **This folder is the
+"course folder" every later instruction refers to.** If you lose track of it, find it
+again with:
+
+```bash
+Get-ChildItem -Path $HOME -Filter Ai-OFF-and-DEF -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
 ```
 
 **macOS** — open **Terminal** and run:
@@ -74,12 +98,15 @@ macOS does not ship git either, but typing that command pops up an installer for
 Command Line Tools. Click **Install**, wait, then run it again. Then:
 
 ```bash
-mkdir -p ~/labs && cd ~/labs && git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
+cd ~/Documents && git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
 ```
 
 ```bash
-cd ~/labs/Ai-OFF-and-DEF
+cd Ai-OFF-and-DEF
 ```
+
+Both commands are relative to where you are, so put the course somewhere else if you
+prefer — just `cd` there first instead.
 
 **Linux** — git is in every distro's repositories, and often already installed:
 
@@ -88,12 +115,15 @@ git --version || sudo apt install git      # or dnf install git / pacman -S git
 ```
 
 ```bash
-mkdir -p ~/labs && cd ~/labs && git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
+cd ~/Documents && git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
 ```
 
 ```bash
-cd ~/labs/Ai-OFF-and-DEF
+cd Ai-OFF-and-DEF
 ```
+
+Both commands are relative to where you are, so put the course somewhere else if you
+prefer — just `cd` there first instead.
 
 ### Last resort — ZIP, if you genuinely cannot install git
 
@@ -147,7 +177,8 @@ No API key, no ChatGPT or Claude subscription, no Python, no cloud account.
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 2. Open it and wait for the whale icon in the menu bar to stop animating.
-3. From inside the course folder (`~/labs/Ai-OFF-and-DEF`), run the lab 1 setup script:
+3. From inside the course folder — the `Ai-OFF-and-DEF` folder you cloned — run the
+   lab 1 setup script:
 
 ```bash
 bash labs/lab1/setup/setup.sh
@@ -301,7 +332,7 @@ Give the VM at least **20 GB free**.
 
 ### Step 4 — Run the setup script
 
-From inside the course folder (`C:\labs\Ai-OFF-and-DEF`), in PowerShell:
+From inside the course folder, in PowerShell **as Administrator**:
 
 ```bash
 powershell -ExecutionPolicy Bypass -File .\labs\lab1\setup\setup.ps1
