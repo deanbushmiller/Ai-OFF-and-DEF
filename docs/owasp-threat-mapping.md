@@ -109,7 +109,7 @@ against the current sources rather than assumed.
 |---|---|---|
 | 3 | Advanced prompt injection | LLM01:2026 |
 | 4 | Multimodal and vision-based exploits | LLM01:2026 (multimodal delivery) |
-| 5 | Exploiting AI agents and excessive agency | LLM03:2026 |
+| 5 | Exploiting AI agents and excessive agency | LLM03:2026 (risks #1 excessive functionality, #4 excessive permissions; LLM01:2026 is the trigger) |
 | 6 | MCP and interface hijacking | LLM01:2026, LLM03:2026 |
 | 7 | AI-powered attack orchestration | tbc |
 | 8 | Offensive recap and transition to defense | all of the above |

@@ -74,8 +74,8 @@ machine only.
 | 1 | [Data and model supply chain poisoning](labs/lab1/) | LLM04, LLM05 | **published** |
 | 2 | [RAG and semantic ingestion attacks](labs/lab2/) | LLM01, LLM07, LLM09 | **published** |
 | 3 | [Advanced prompt injection](labs/lab3/) | LLM01 | **published** |
-| 4 | Multimodal and vision-based exploits | — | planned |
-| 5 | Exploiting AI agents and excessive agency | LLM03 | planned |
+| 4 | [Multimodal and vision-based exploits](labs/lab4/) | LLM01, LLM02 | **published** |
+| 5 | [Exploiting AI agents and excessive agency](labs/lab5/) | LLM03 | files here, image pending |
 | 6 | MCP and interface hijacking | — | planned |
 | 7 | AI-powered attack orchestration | — | planned |
 | 8 | Offensive recap and transition to defense | — | planned |

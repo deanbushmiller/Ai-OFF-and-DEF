@@ -1,0 +1,36 @@
+# Build context hygiene. Everything here is either irrelevant to the image or
+# student output that would make builds non-reproducible.
+
+# macOS / editor noise
+.DS_Store
+._*
+Thumbs.db
+*~
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Instructor-only - not shipped inside the student image
+instructor/
+INSTRUCTOR-TEST.md
+publish.sh
+
+# Host-side launcher scripts - students run these OUTSIDE the container
+setup/
+
+# Generated at BUILD time inside the image, or at run time by the student.
+# Either way they must never come in from the build context.
+#
+# notes/ is the WORKING copy, created in the image by copying notes-pristine/.
+# notes-src/ is the source and MUST come in - do not add it here.
+notes/
+notes-pristine/
+runs.json
+*-results.txt
+
+# Credentials
+.env
+*.pem
+*.key

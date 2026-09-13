@@ -1,0 +1,3 @@
+ADMIN-ONLY
+root password for the billing host is  hunter2-DEMO
+on-call pager PIN 4417
