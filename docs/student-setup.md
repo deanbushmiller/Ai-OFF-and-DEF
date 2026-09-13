@@ -7,9 +7,34 @@ The 10 minutes at the start of class covers starting a lab and nothing else.
 
 ---
 
-## Step 0 — Get the course files
+## Step 0 — Windows only: check you control this machine
 
-Do this first. Everything else assumes you have the course folder on your machine.
+**Do this first, and do it now rather than in class.** It takes ten seconds and it decides
+whether the rest of the course will work at all.
+
+Start menu → type `powershell` → **right-click** *Windows PowerShell* → **Run as
+administrator**. If Windows asks you to confirm, say yes.
+
+Did a window open with `Administrator:` in the title bar?
+
+- **Yes** → you are fine. Use that window for everything in this guide, and for every lab.
+- **No**, or there is no such option, or it asks for credentials you do not have → **tell
+  the instructor before the labs start.** Do not wait until something fails.
+
+**Why this matters more than it looks.** The labs themselves do not need Administrator —
+Docker runs fine without it. But *installing* Docker Desktop does, and so does installing
+WSL, which Docker needs on Windows. If you cannot open that window, you cannot complete the
+setup on this machine, and the sooner that is known the more can be done about it: a
+different machine, a personal laptop, or your IT team.
+
+A locked-down work laptop is the single most common reason a student cannot finish this
+course. This is the cheapest possible test for it.
+
+---
+
+## Step 1 — Get the course files
+
+Everything else assumes you have the course folder on your machine.
 
 ### Choose where the labs will live
 

@@ -37,6 +37,47 @@ Write-Host "  SecLLM Bootcamp - Lab 2: RAG and semantic ingestion attacks"
 Write-Host "  Setup and launcher (Windows)"
 Hr
 Write-Host ""
+# Where am I, and can this student control this machine? Both answers matter before
+# anything else runs, and both are cheap to get.
+#
+# The script resolves its own location, so it does not matter where the course was cloned
+# or which directory the student launched from. Printing it means a clone that landed
+# somewhere unexpected is visible immediately, instead of surfacing later as a confusing
+# docker cp failure.
+#
+# The Administrator check is a CAPABILITY PROBE, not a requirement. This lab runs fine
+# unelevated. But installing Docker Desktop and WSL both need elevation, so a student who
+# cannot get an Administrator window cannot complete the setup on this machine - and that
+# is worth knowing in the first ten seconds of class, not twenty minutes in.
+Info "Course folder : $(Split-Path -Parent (Split-Path -Parent (Split-Path -Parent $Here)))"
+Info "Results go to : $Here"
+$isAdmin = $false
+try {
+    $isAdmin = ([Security.Principal.WindowsPrincipal] `
+        [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(
+        [Security.Principal.WindowsBuiltInRole]::Administrator)
+} catch { }
+if ($isAdmin) {
+    Ok "Running as Administrator"
+} else {
+    Warn "Not running as Administrator."
+    Info "This lab does not need it, so we will carry on. But installing Docker"
+    Info "Desktop or WSL does, and if you cannot open an Administrator PowerShell"
+    Info "window at all, say so in the class chat now - that is the usual reason a"
+    Info "student cannot finish the course on a work laptop."
+    Info "Start menu > type powershell > right-click > Run as administrator."
+}
+if ($Here -like "$env:SystemRoot*") {
+    Write-Host ""
+    Warn "The course is inside a Windows system folder."
+    Info "An Administrator PowerShell window starts in C:\Windows\System32, so cloning"
+    Info "without changing directory first puts it here. Writing lab results into a"
+    Info "system folder may fail or need elevation every time."
+    Info "Move the course somewhere of your own and run this again:"
+    Info "    cd `$HOME\Documents"
+    Info "    git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git"
+}
+Write-Host ""
 Write-Host "  Checking prerequisites..."
 Write-Host ""
 

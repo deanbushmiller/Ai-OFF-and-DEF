@@ -36,7 +36,8 @@ printf '  SecLLM Bootcamp - Lab 4: Multimodal and vision-based exploits\n'
 printf '  Setup and launcher (macOS / Linux)\n'
 hr; printf '\n'
 # Where am I? The script resolves its own location, so it does not matter where the
-# student cloned the course or which directory they launched it from.
+# course was cloned or which directory it was launched from. Printing it makes a clone
+# that landed somewhere unexpected visible now, not later as a puzzling copy failure.
 info "Course folder : $(cd "$HERE/../../.." 2>/dev/null && pwd || echo '?')"
 info "Results go to : $HERE"
 printf '\n'
