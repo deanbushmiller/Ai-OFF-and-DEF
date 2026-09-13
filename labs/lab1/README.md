@@ -21,6 +21,39 @@ You are ready when `docker --version` works in your terminal.
 
 ---
 
+## How the lab works — read this once
+
+Every step is a small experiment, and it always has the same three beats:
+
+**1. Why** — one or two lines telling you what you are about to do and what to watch for.
+
+**2. The command** — you type or paste it. The lab checks what you typed before it runs
+anything. Get it wrong and it shows you the right command; get it wrong twice and it runs
+the correct one for you.
+
+**3. What it meant** — lines beginning with `^` underneath the output, on the steps where
+something just changed.
+
+> **The `^` lines are the point of the lab.** The output shows you *what happened*; the `^`
+> lines tell you *why it matters*. If you read one thing, read those.
+
+### The output will run off your screen. Nothing is lost.
+
+Some steps print more than a screenful. That is expected, and there are three reasons not
+to worry about it:
+
+- **The lab never moves on by itself.** It waits at every step until you type something.
+  Read first, type second. The 12–15 minutes assumes you are reading.
+- **You can scroll back at any time.** The mouse wheel works everywhere. macOS Terminal and
+  most Linux terminals also take `Shift`+`PageUp`; Windows Terminal takes
+  `Ctrl`+`Shift`+`PageUp`. Scrolling does not interrupt the lab.
+- **The whole transcript is saved to a file**, including every `^` line. When the lab
+  finishes it is copied out to `lab1-results.txt`, next to the setup script you ran. If
+  something scrolled past, open that file afterwards rather than hunting for it in the
+  terminal — and it is the same file you use as evidence.
+
+---
+
 ## Run the lab
 
 Open a terminal **in the course folder** — the `Ai-OFF-and-DEF` folder you cloned, wherever
