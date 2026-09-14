@@ -444,9 +444,9 @@ if ($NextLab) {
     Write-Host ""
     Info $NextName
     Info "Lab 8 reuses the same language model this lab used. Labs 5, 6"
-    Info "and 7 all share their layers - the lab 6 pull was about 30 KB"
-    Info "for anyone who already had lab 5 - so expect this one to be"
-    Info "quick too."
+    Info "and 7 all share their layers - measured on the published"
+    Info "images, this lab 7 pull was 41 KB for anyone who already had"
+    Info "lab 6 - so expect this one to be quick too."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"
     Info "of the next session."

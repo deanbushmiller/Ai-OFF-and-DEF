@@ -269,9 +269,9 @@ if [ -n "${NEXT_LAB:-}" ]; then
   printf '\n'
   info "$NEXT_LAB_NAME"
   info "Lab 8 reuses the same language model this lab used. Labs 5, 6"
-  info "and 7 all share their layers - the lab 6 pull was about 30 KB"
-  info "for anyone who already had lab 5 - so expect this one to be"
-  info "quick too."
+  info "and 7 all share their layers - measured on the published"
+  info "images, this lab 7 pull was 41 KB for anyone who already had"
+  info "lab 6 - so expect this one to be quick too."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."

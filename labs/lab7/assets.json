@@ -167,8 +167,8 @@
     "runs_offline": "verified with --network none",
     "fails_loudly": "4 deliberate sabotages tried: the D2 threshold, a format swapped for one that drops fields, the volume limb, the regularity limb. All 4 produce LAB ERROR and exit 1.",
     "typed_paths": "all 8 typed -> 'You typed 8 of 8'. One step wrong twice -> command run for the student, 'You typed 7 of 8'.",
-    "published_layer_sharing": "TO BE VERIFIED on the published manifest. Labs 5 and 6 measured 9 shared layers, 1.192 GB, and 29,774 bytes of download for a student who already had lab 5. Lab 7 is built the same way from the same publish.sh, so expect tens of KB. Do not promise it in class before checking.",
-    "validated_on": "macOS arm64 end to end. Windows amd64 NOT yet tested - the instructor tests as a student after PUSHTOINTERNET."
+    "published_layer_sharing": "PROVEN 2026-09-14 on the live registry, third lab running. lab7-arm64 shares 10 layers and 1.192 GB with lab6-arm64 - INCLUDING the 1.092 GB model layer - and a student who already has lab 6 downloads 41,538 bytes for lab 7. The 12 unshared layers are lab 7's own script COPYs and total 41 KB. Compare lab4->lab5 (different build recipes): 1,144 MB. The SOURCE_DATE_EPOCH + rewrite-timestamp + no-pycache recipe works, and it now holds across three consecutive labs.",
+    "validated_on": "macOS arm64 end to end, including a pull of the PUBLISHED image with no credentials. Windows amd64 NOT yet tested - the instructor tests as a student next."
   },
   "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical. Verified byte-identical for this lab with cmp."
 }
