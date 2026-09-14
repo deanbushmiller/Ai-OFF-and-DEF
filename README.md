@@ -76,7 +76,7 @@ machine only.
 | 3 | [Advanced prompt injection](labs/lab3/) | LLM01 | **published** |
 | 4 | [Multimodal and vision-based exploits](labs/lab4/) | LLM01, LLM02 | **published** |
 | 5 | [Exploiting AI agents and excessive agency](labs/lab5/) | LLM03 | **published** |
-| 6 | MCP and interface hijacking | — | planned |
+| 6 | [MCP and interface hijacking](labs/lab6/) | LLM01, LLM08 | files here, image pending |
 | 7 | AI-powered attack orchestration | — | planned |
 | 8 | Offensive recap and transition to defense | — | planned |
 

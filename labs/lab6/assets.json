@@ -1,0 +1,74 @@
+{
+  "lab": 6,
+  "title": "MCP and interface hijacking",
+  "cache_root": "/opt/lab-assets",
+  "offline_at_runtime": true,
+  "ports": [8006, 8007],
+  "ports_note": "Bound on 127.0.0.1 INSIDE the container only; neither is published to the host. 8006 is the proxy (the endpoint the client believes is the server), 8007 is the real MCP server. The consolidation contract allocates 8006 to this lab; 8007 is an internal loopback port that never crosses the container boundary. Instructor decision 2026-09-13: do not publish either - everything that talks to them is in the same container, and a -p flag would only add a Windows failure mode.",
+  "interaction": "beginner (7 guided typed commands, 4 of which run the model) or expert (real shell + three processes by hand + nano payload.txt + check.py)",
+  "models": [
+    {
+      "source_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "bytes": 1120000000,
+      "shared": true,
+      "shared_note": "SHARED with labs 3, 4, 5 and 7. Bought by lab 3. Lab 6 buys NO model and no new package of any kind - the second lab running to add zero new bytes.",
+      "measured": {
+        "control": "reports 4820.55 for chk-001, byte-identical across 3 fresh containers",
+        "request_tampering": "reports the user's own account number with the OTHER account's balance (17.02), 3/3 identical",
+        "result_injection": "send_payment fires 3/3 AND the answer never mentions it (mentions_payment false 3/3)",
+        "defended": "signature mismatch refused in transit, 0/3 payments, 3/3 identical",
+        "tool_description_poisoning": "0 of 15 - FAILS on this model. Four phrasings x 3 runs in prose form, plus the same payload presented as a real tools/list JSON object with inputSchema. The model treats descriptions as documentation, not instructions. Moved to the instructor debrief; see MCPTox (arXiv 2508.14925) which measures >60% success on real MCP servers with frontier models.",
+        "peak_ram_gb": 1.19,
+        "generations_per_lab": 9,
+        "model_loads_per_lab": 4
+      }
+    }
+  ],
+  "python_packages": [
+    {"name": "llama-cpp-python", "version": "0.3.35", "shared": true,
+     "note": "From the prebuilt wheel in Activity-Labs/wheels via a named build context. Never compiled in a lab."},
+    {"name": "numpy", "version": "2.3.5", "shared": true, "note": "Not imported by lab 6."},
+    {"name": "huggingface-hub", "version": "1.31.0", "shared": true, "note": "Build time only."},
+    {"name": "pillow", "version": "11.3.0", "shared": true, "note": "Not imported by lab 6. The price of the shared layer."}
+  ],
+  "apt_packages": [
+    {"name": "libgomp1", "shared": true, "note": "REQUIRED - libllama.so links against OpenMP."},
+    {"name": "nano", "shared": true, "note": "Expert mode edits payload.txt."},
+    {"name": "less", "shared": true},
+    {"name": "curl", "shared": true}
+  ],
+  "lab_assets": [
+    {"file": "payload.txt", "generated_at": "shipped", "shared": false, "bytes": 80,
+     "note": "The polite-request phrasing. MEASURED: this is the variant that fires the payment 3/3 AND leaves the answer silent about it. The forged 'SYSTEM NOTE' phrasing also fires 3/3 but makes the assistant confess; a plain declarative statement of the same content fires 0/3 and is echoed as data. Do not 'improve' the wording without re-measuring."},
+    {"file": "wire.log", "generated_at": "run", "shared": false,
+     "note": "Written by proxy.py. Every JSON-RPC message in both directions, plus a ** line for each intervention. This is the evidence."},
+    {"file": "ledger.json", "generated_at": "run", "shared": false,
+     "note": "The server's own record of payments. Ground truth against which the assistant's prose is compared."},
+    {"file": "runs.json", "generated_at": "run", "shared": false,
+     "note": "What the client recorded per beat. The runner asserts on this, not on screen text."}
+  ],
+  "not_used": [
+    {"name": "any MCP SDK or web framework", "reason": "An MCP server is JSON-RPC 2.0 over a transport. stdlib http.server and socketserver cover it, the same way lab 3 served HTML. Adding a framework would break the shared pip layer for the whole 3-7 tier to save nothing."},
+    {"name": "tesseract-ocr", "reason": "Lab 4's OCR layer. Not carried; lab 6 does no image work."},
+    {"name": "torch", "reason": "llama.cpp runs the model."},
+    {"name": "tool-description poisoning as a student beat", "reason": "MEASURED AND REJECTED: 0/15 on this model across four phrasings and two presentations. Kept as an instructor demo with the MCPTox citation, which is a better lesson than a staged success."},
+    {"name": "egress to the instructor's controlled domain", "reason": "Decision CLOSED 2026-09-13 after being parked at labs 3 and 5. MCP was the most tempting case and still fails all four tests: no need, breaks the offline rule, single point of failure for every remote student at once, and student-side EDR incident risk on work laptops."}
+  ],
+  "network": "None at run time. Three processes on 127.0.0.1 inside the container; no port published. Verified with --network none.",
+  "measured": {
+    "note": "Measured 2026-09-13, arm64, Docker 29.7.2, on the image built from lab-beta/lab6.",
+    "beginner_commands": 7,
+    "generations_in_lab": 9,
+    "new_bytes_vs_lab5": 0,
+    "lab_seconds_unrestricted": 32,
+    "lab_seconds_4_cpus": 169,
+    "lab_seconds_2_cpus": 458,
+    "timing_note": "Slower than lab 5 (369s at 2 cpus) for the same 9 generations, because mitm.py starts a fresh client per beat and so loads the model 4 times instead of 3. Model load is negligible unrestricted and is not at 2 cpus.",
+    "peak_ram": "verified at --memory=1200m",
+    "determinism": "byte-identical recorded outcomes across 3 fresh containers",
+    "runs_offline": "verified with --network none"
+  },
+  "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical."
+}
