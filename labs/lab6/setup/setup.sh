@@ -262,9 +262,9 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Lab 7 runs the same language model this lab used. The base layers"
-  info "are already on your machine, but each lab image still carries its"
-  info "own copy of the model, so expect a download of a similar size."
+  info "Lab 7 reuses the same language model this lab used. Labs 5 and 6"
+  info "share their layers - the lab 6 pull was about 30 KB for anyone"
+  info "who already had lab 5 - so expect this one to be quick too."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."
