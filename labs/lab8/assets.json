@@ -1,0 +1,123 @@
+{
+  "lab": 8,
+  "title": "Offensive recap and transition to defense",
+  "cache_root": "/opt/lab-assets",
+  "offline_at_runtime": true,
+  "ports": [],
+  "ports_note": "NONE. Lab 8 is the only lab in the course that serves nothing at all - no model, no listener, no port. The consolidation contract reserved 8008 for an offline worksheet UI; the instructor chose a terminal runner instead on 2026-09-14, so 8008 is deliberately unclaimed and free for part 2.",
+  "interaction": "beginner (8 guided steps, one of which asks 7 checked questions) or expert (real shell + a blank worksheet filled with nano + map.py --grade + check.py)",
+  "models": [],
+  "models_note": "NO MODEL. Lab 8 is the only lab since lab 2 that runs no inference, and the only one in the course that needs no ML stack whatsoever. It does not carry the 1.09 GB Qwen GGUF that labs 3-7 share.",
+  "python_packages": [],
+  "python_packages_note": "NONE. This is the only lab with no pip layer at all. It imports json, argparse, pathlib, re and urllib - all standard library. Labs 3-7 share a 49.8 MB pip layer; carrying it here would cost every student 49.8 MB for a lab that imports none of it, and the build prompt says so explicitly. This is also why fetch_assets.py reads the ATLAS STIX bundle rather than ATLAS.yaml: the YAML is friendlier but needs PyYAML, and adding a pip layer to save one import is the wrong trade.",
+  "apt_packages": [
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "NOT USED by lab 8 - it links llama.cpp's OpenMP and there is no model here. Kept anyway so the apt RUN line stays BYTE-IDENTICAL to labs 3-7. Measured on the published lab7-arm64 manifest, that layer is 28.1 MB; dropping two unused packages would change its digest and cost every student a fresh 28.1 MB download. Same trade the shared requirements file makes with pillow."
+    },
+    {
+      "name": "nano",
+      "shared": true,
+      "note": "Expert mode edits worksheet.txt."
+    },
+    {
+      "name": "less",
+      "shared": true,
+      "note": "Expert mode reads LAB.md."
+    },
+    {
+      "name": "curl",
+      "shared": true,
+      "note": "NOT USED by lab 8 - nothing is fetched at run time. Kept for the byte-identical layer, same reason as libgomp1."
+    }
+  ],
+  "lab_assets": [
+    {
+      "file": "/opt/lab-assets/atlas/atlas.json",
+      "generated_at": "build",
+      "shared": true,
+      "bytes": 24000,
+      "source": "https://raw.githubusercontent.com/mitre-atlas/atlas-navigator-data/main/dist/stix-atlas.json",
+      "note": "MITRE ATLAS, distilled at build time from the 443 KB STIX bundle to ~24 KB: 170 techniques with their tactics, parents, CREATION DATES and mitigations; 35 mitigations; 16 tactics in matrix order. Descriptions dropped - they are most of the bytes and the lab never prints them. The creation dates are kept deliberately: beat 7 claims the defensive literature lags the offensive literature, and the dates are how the student checks that claim instead of taking it on trust. SHARED CACHE PATH, and lab 8 is the natural home for ATLAS data in the merged 8-lab image. NOTE: labs 1-7 hard-code their technique IDs in their own text and read nothing at run time, so nothing points at this file yet. Retrofitting them would mean republishing seven images for zero student-visible benefit - not done, and not recommended before the tier rebuild.",
+      "rejected_alternative": "atlas-navigator-data/dist/stix-atlas-attack-enterprise.json is 39 MB because it carries all of ATT&CK Enterprise. Lab 8 needs none of it."
+    },
+    {
+      "file": "course.json",
+      "generated_at": "generated at build-prep, shipped",
+      "shared": false,
+      "bytes": 4200,
+      "note": "THIS LAB'S ANSWER KEY, AND IT IS GENERATED RATHER THAN TYPED. lab-research/lab8/gen_course.py reads every student-facing file of labs 1-7 (runner.py, LAB.md, README.md) and refuses to emit a key containing a technique the student was never shown. It caught two real problems on its first run: lab 5's AML.T0085.001 and lab 7's AML.T0096 appear in LAB.md but not in the runner banner, so reading the banner alone would have dropped two techniques and two whole tactics from the coverage picture; and lab 3 writes its fourth technique as the shorthand 'AML.T0051.001 / .002' and never spells the second one out. Re-run it if any lab's text changes."
+    },
+    {
+      "file": "worksheet.txt",
+      "generated_at": "run (expert mode only)",
+      "shared": false,
+      "note": "Written by map.py --worksheet. The expert path's mapping exercise with no multiple choice."
+    },
+    {
+      "file": "answers.json",
+      "generated_at": "run",
+      "shared": false,
+      "note": "What the student answered. check.py reads this, not screen text."
+    },
+    {
+      "file": "score.json",
+      "generated_at": "run",
+      "shared": false,
+      "note": "What each step recorded. The runner asserts on this."
+    },
+    {
+      "file": "atlas-layer.json",
+      "generated_at": "run",
+      "shared": false,
+      "note": "THE EVIDENCE. A real ATLAS Navigator layer file - the same format security teams use for their own coverage maps - which loads unmodified at https://atlas.mitre.org/navigator. Instructor decision 2026-09-14: this is the submitted artifact rather than a table of our own design, and the README carries the link and the three clicks. Both setup scripts copy it out of the container next to lab8-results.txt."
+    }
+  ],
+  "not_used": [
+    {
+      "name": "a self-hosted ATLAS Navigator",
+      "reason": "It is the right tool and its layer format IS this lab's evidence artifact. Not bundled: it is an Angular application needing Node, npm and a hundreds-of-MB toolchain, and serving it needs a port. That breaks 'no new bytes', the single-container rule and the no-port decision, for a 12-minute lab. We adopt the format and link to MITRE's hosted copy."
+    },
+    {
+      "name": "PyYAML and ATLAS.yaml",
+      "reason": "The friendlier format, but it would add the only pip layer in the lab to save one import. The STIX bundle carries identical content and json is stdlib. VERIFIED: distilling from STIX reproduces the YAML-derived numbers exactly - 20/20 course techniques resolve, 12 of 16 tactics, 9 with no mitigation."
+    },
+    {
+      "name": "the model tier's requirements.txt",
+      "reason": "Labs 3-7 share it and lab 8 imports none of it. The build prompt says explicitly not to pull it in for consistency, and it is right: 49.8 MB for nothing."
+    },
+    {
+      "name": "GenAI-Security-Crosswalk",
+      "reason": "An open OWASP-to-ATLAS crosswalk (CC BY-SA 4.0) and the first thing an instructor would reach for. Its header says 'Source list: OWASP Top 10 for LLM Applications 2025' and this course is on the 2026 list, where the numbering moved - Supply Chain LLM03->LLM04, Excessive Agency LLM06->LLM03, Unbounded Consumption LLM10->LLM06, plus LLM08 Hidden Context Exposure is new. Adopting it would reintroduce the exact numbering bug labs 5, 6 and 7 each corrected by hand. Cited in the debrief with that warning attached."
+    },
+    {
+      "name": "a defensive tutorial",
+      "reason": "INSTRUCTOR DECISION 2026-09-14. This bootcamp is the first half of a two-part course and part 2 carries a one-for-one defender lab for every attack lab. Lab 8 NAMES controls and says what each does in one line - no configuration, no code, no worked examples. A student asking 'yes but HOW?' is told it is a part-2 lab. The temptation is strongest on AML.M0024 and AML.M0033, which cover five of seven labs, and those are precisely the two that deserve a whole lab rather than a paragraph."
+    },
+    {
+      "name": "port 8008 and a worksheet UI",
+      "reason": "The contract allocates 8008 if this lab serves an offline worksheet UI. Instructor chose the terminal runner 2026-09-14: it matches the other seven labs, needs no port and removes a Windows failure mode. 8008 stays unclaimed."
+    }
+  ],
+  "network": "None at run time. No listener, no port, no outbound. Verified with --network none. The ONLY network access in this lab's whole lifecycle is fetch_assets.py during docker build.",
+  "measured": {
+    "note": "Measured 2026-09-14, arm64, Docker 29.7.2, on the image built from lab-beta/lab8.",
+    "beginner_steps": 8,
+    "generations_in_lab": 0,
+    "image_on_disk": "230 MB - against 2.64 GB for labs 5-7. The smallest lab in the course.",
+    "lab_seconds_unrestricted": 1,
+    "timing_note": "One second, end to end. No model, no inference, no waiting. The 12-15 minute budget is entirely reading time, which is the right shape for a recap and is stated as such in the README.",
+    "atlas_distilled": "443 KB STIX bundle -> 24 KB of JSON. 170 techniques, 35 mitigations, 16 tactics.",
+    "course_coverage": "20 distinct techniques across labs 1-7; 12 of ATLAS's 16 tactics; 8 of the 10 OWASP 2026 entries.",
+    "the_spine": "AML.T0051.001 LLM Prompt Injection: Indirect appears in 5 of the 7 labs. 12 of the 20 techniques appear in exactly one lab.",
+    "top_controls": "AML.M0024 AI Telemetry Logging and AML.M0033 Input and Output Validation for AI Agent Components each touch 5 of the 7 labs.",
+    "the_gap": "9 of the 20 techniques have NO published ATLAS mitigation. Every one was added to ATLAS between 2025-03-12 and 2026-03-30; the 11 that DO have controls are the older classical-ML techniques. This is the lab's ending and the hand-off to part 2.",
+    "peak_ram": "negligible - Python plus a 24 KB JSON file. Verified at --memory=1200m for consistency with the other labs.",
+    "determinism": "trivially deterministic - no model, no randomness, no clock in any output.",
+    "runs_offline": "verified with --network none",
+    "published_layer_sharing": "TO BE VERIFIED on the published manifest. Lab 8 shares the python:3.11-slim-bookworm base (21.3 MB) and the apt layer (28.1 MB) with labs 3-7, and adds only the ATLAS data and its own scripts. A student who already has any of labs 3-7 should pull well under 1 MB. Do not promise it in class before checking.",
+    "validated_on": "macOS arm64 end to end. Windows amd64 NOT yet tested - the instructor tests as a student after PUSHTOINTERNET."
+  },
+  "shared_requirements": "NONE. Lab 8 has no requirements.txt at all - the only lab in the course without one."
+}

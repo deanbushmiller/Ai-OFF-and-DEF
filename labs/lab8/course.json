@@ -1,0 +1,169 @@
+{
+  "labs": {
+    "1": {
+      "title": "Supply chain poisoning",
+      "oneline": "Backdoor a real model file, then let torch.load() run it.",
+      "chain": [
+        "AML.T0058",
+        "AML.T0018.000",
+        "AML.T0010.003",
+        "AML.T0011.000"
+      ],
+      "core": "AML.T0010.003",
+      "accepts": [],
+      "owasp": [
+        "LLM04:2026",
+        "LLM05:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM04:2026",
+        "LLM05:2026"
+      ],
+      "part2": "Architectural hardening and data segregation"
+    },
+    "2": {
+      "title": "RAG ingestion poisoning",
+      "oneline": "Poison the corpus so the assistant faithfully reports a lie.",
+      "chain": [
+        "AML.T0064",
+        "AML.T0066",
+        "AML.T0068",
+        "AML.T0051.001",
+        "AML.T0070"
+      ],
+      "core": "AML.T0070",
+      "accepts": [],
+      "owasp": [
+        "LLM01:2026",
+        "LLM07:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM01:2026",
+        "LLM05:2026",
+        "LLM07:2026",
+        "LLM09:2026"
+      ],
+      "part2": "Semantic firewalls and RAG validation"
+    },
+    "3": {
+      "title": "Indirect prompt injection",
+      "oneline": "Hide instructions in a web page the assistant is asked to summarise.",
+      "chain": [
+        "AML.T0066",
+        "AML.T0068",
+        "AML.T0051.001",
+        "AML.T0051.002"
+      ],
+      "core": "AML.T0051.001",
+      "accepts": [
+        "AML.T0051.002"
+      ],
+      "owasp": [
+        "LLM01:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM01:2026",
+        "LLM03:2026"
+      ],
+      "part2": "Implementing guardrail frameworks - part 1"
+    },
+    "4": {
+      "title": "Multimodal and vision-based exploits",
+      "oneline": "Hide instructions in pixels, and flip a classifier with a perturbation.",
+      "chain": [
+        "AML.T0043.000",
+        "AML.T0015",
+        "AML.T0065",
+        "AML.T0043.003",
+        "AML.T0068",
+        "AML.T0051.001"
+      ],
+      "core": "AML.T0068",
+      "accepts": [],
+      "owasp": [
+        "LLM01:2026",
+        "LLM02:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM01:2026",
+        "LLM02:2026",
+        "LLM03:2026"
+      ],
+      "part2": "Implementing guardrail frameworks - part 2"
+    },
+    "5": {
+      "title": "Exploiting AI agents and excessive agency",
+      "oneline": "Talk an agent into using a tool it should never have been given.",
+      "chain": [
+        "AML.T0084.001",
+        "AML.T0065",
+        "AML.T0051.001",
+        "AML.T0053",
+        "AML.T0085.001"
+      ],
+      "core": "AML.T0053",
+      "accepts": [],
+      "owasp": [
+        "LLM03:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM01:2026",
+        "LLM03:2026",
+        "LLM06:2026"
+      ],
+      "part2": "Securing AI agents"
+    },
+    "6": {
+      "title": "MCP and interface hijacking",
+      "oneline": "Sit on the wire between a model and its tools, and rewrite it.",
+      "chain": [
+        "AML.T0084.001",
+        "AML.T0110",
+        "AML.T0051.001",
+        "AML.T0053"
+      ],
+      "core": "AML.T0110",
+      "accepts": [],
+      "owasp": [
+        "LLM01:2026",
+        "LLM08:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM01:2026",
+        "LLM08:2026"
+      ],
+      "part2": "AI-native incident response and monitoring"
+    },
+    "7": {
+      "title": "AI-powered attack orchestration",
+      "oneline": "Use an LLM to vary a beacon, and find out what that bought you.",
+      "chain": [
+        "AML.T0016.002",
+        "AML.T0043.003",
+        "AML.T0015",
+        "AML.T0096"
+      ],
+      "core": "AML.T0015",
+      "accepts": [],
+      "owasp": [
+        "LLM10:2026",
+        "LLM02:2026"
+      ],
+      "owasp_mentioned": [
+        "LLM02:2026",
+        "LLM06:2026",
+        "LLM10:2026"
+      ],
+      "part2": "Automated red teaming"
+    }
+  },
+  "part2_order": [
+    "Semantic firewalls and RAG validation",
+    "Implementing guardrail frameworks - part 1",
+    "Implementing guardrail frameworks - part 2",
+    "Architectural hardening and data segregation",
+    "Securing AI agents",
+    "AI-native incident response and monitoring",
+    "Automated red teaming"
+  ]
+}

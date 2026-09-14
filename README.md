@@ -60,7 +60,8 @@ before anything runs. **Expert** drops you into a real shell to work from the la
 `LAB.md`. Add `--expert` or `--challenge` to the setup command to pick.
 
 Each lab ends by offering to download the next one. Say yes — the labs share container
-layers, so most labs after the first are a small delta rather than a full download.
+layers, so most labs after the first are a small delta rather than a full download. Lab 8
+is the last one, so it ends by listing the evidence for all eight instead.
 
 **Lab 3 is the exception: about 1.2 GB.** It runs a real language model locally, and that
 model is reused by several later labs. Take lab 2's offer to pre-fetch it and you will not
@@ -77,8 +78,8 @@ machine only.
 | 4 | [Multimodal and vision-based exploits](labs/lab4/) | LLM01, LLM02 | **published** |
 | 5 | [Exploiting AI agents and excessive agency](labs/lab5/) | LLM03 | **published** |
 | 6 | [MCP and interface hijacking](labs/lab6/) | LLM01, LLM08 | **published** |
-| 7 | AI-powered attack orchestration | — | planned |
-| 8 | Offensive recap and transition to defense | — | planned |
+| 7 | [AI-powered attack orchestration](labs/lab7/) | LLM10, LLM02 | **published** |
+| 8 | [Offensive recap and transition to defense](labs/lab8/) | *all of the above* | **published** |
 
 ## Course materials
 
