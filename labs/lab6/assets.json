@@ -137,7 +137,8 @@
     "peak_ram": "verified at --memory=1200m",
     "determinism": "byte-identical recorded outcomes across 3 fresh containers",
     "runs_offline": "verified with --network none",
-    "published_layer_sharing": "PROVEN 2026-09-13 on the live registry. lab5-arm64 and lab6-arm64 are the first pair built with SOURCE_DATE_EPOCH + rewrite-timestamp: 9 layers and 1.192 GB shared, and a student who already has lab 5 downloads 29,774 bytes for lab 6. The 1.09 GB model layer is NOT re-downloaded. Compare lab4->lab5 (different recipes): 1,144 MB."
+    "published_layer_sharing": "PROVEN 2026-09-13 on the live registry. lab5-arm64 and lab6-arm64 are the first pair built with SOURCE_DATE_EPOCH + rewrite-timestamp: 9 layers and 1.192 GB shared, and a student who already has lab 5 downloads 29,774 bytes for lab 6. The 1.09 GB model layer is NOT re-downloaded. Compare lab4->lab5 (different recipes): 1,144 MB.",
+    "validated_on": "macOS arm64 end to end; Windows amd64 end to end on real hardware 2026-09-13, no new bugs. The three loopback processes raised no firewall prompt."
   },
   "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical."
 }
