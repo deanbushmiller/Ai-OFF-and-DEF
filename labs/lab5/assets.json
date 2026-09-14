@@ -30,38 +30,100 @@
     }
   ],
   "python_packages": [
-    {"name": "llama-cpp-python", "version": "0.3.35", "shared": true,
-     "note": "Installed from the prebuilt wheel in Activity-Labs/wheels via a named build context. Never compiled in a lab."},
-    {"name": "numpy", "version": "2.3.5", "shared": true,
-     "note": "Not imported by lab 5. Present because requirements.txt is a verbatim copy of the shared file."},
-    {"name": "huggingface-hub", "version": "1.31.0", "shared": true,
-     "note": "Build time only - fetch_assets.py."},
-    {"name": "pillow", "version": "11.3.0", "shared": true,
-     "note": "Not imported by lab 5. ~10 MB of the shared layer's cost, and the price of sharing the other 40."}
+    {
+      "name": "llama-cpp-python",
+      "version": "0.3.35",
+      "shared": true,
+      "note": "Installed from the prebuilt wheel in Activity-Labs/wheels via a named build context. Never compiled in a lab."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true,
+      "note": "Not imported by lab 5. Present because requirements.txt is a verbatim copy of the shared file."
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true,
+      "note": "Build time only - fetch_assets.py."
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "shared": true,
+      "note": "Not imported by lab 5. ~10 MB of the shared layer's cost, and the price of sharing the other 40."
+    }
   ],
   "apt_packages": [
-    {"name": "libgomp1", "shared": true,
-     "note": "REQUIRED. libllama.so links against OpenMP; without it the import dies with 'libgomp.so.1: cannot open shared object file'."},
-    {"name": "nano", "shared": true, "note": "Expert mode edits payload.txt."},
-    {"name": "less", "shared": true},
-    {"name": "curl", "shared": true}
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "REQUIRED. libllama.so links against OpenMP; without it the import dies with 'libgomp.so.1: cannot open shared object file'."
+    },
+    {
+      "name": "nano",
+      "shared": true,
+      "note": "Expert mode edits payload.txt."
+    },
+    {
+      "name": "less",
+      "shared": true
+    },
+    {
+      "name": "curl",
+      "shared": true
+    }
   ],
   "lab_assets": [
-    {"file": "notes-pristine/public.txt", "generated_at": "build", "shared": false,
-     "note": "Read-only source of truth. plant.py --reset restores notes/ from it."},
-    {"file": "notes-pristine/admin.txt", "generated_at": "build", "shared": false,
-     "note": "Dummy secrets: hunter2-DEMO and a fake pager PIN. Nothing real, nothing reachable."},
-    {"file": "notes/public.txt", "generated_at": "build", "shared": false,
-     "note": "The working copy the agent reads and the student poisons."},
-    {"file": "notes/admin.txt", "generated_at": "build", "shared": false},
-    {"file": "payload.txt", "generated_at": "shipped", "shared": false, "bytes": 188,
-     "note": "The SYSTEM NOTE style payload, measured 3/3 on escalating AND quoting the secret - the only style that is 3/3 on both."}
+    {
+      "file": "notes-pristine/public.txt",
+      "generated_at": "build",
+      "shared": false,
+      "note": "Read-only source of truth. plant.py --reset restores notes/ from it."
+    },
+    {
+      "file": "notes-pristine/admin.txt",
+      "generated_at": "build",
+      "shared": false,
+      "note": "Dummy secrets: hunter2-DEMO and a fake pager PIN. Nothing real, nothing reachable."
+    },
+    {
+      "file": "notes/public.txt",
+      "generated_at": "build",
+      "shared": false,
+      "note": "The working copy the agent reads and the student poisons."
+    },
+    {
+      "file": "notes/admin.txt",
+      "generated_at": "build",
+      "shared": false
+    },
+    {
+      "file": "payload.txt",
+      "generated_at": "shipped",
+      "shared": false,
+      "bytes": 188,
+      "note": "The SYSTEM NOTE style payload, measured 3/3 on escalating AND quoting the secret - the only style that is 3/3 on both."
+    }
   ],
   "not_used": [
-    {"name": "tesseract-ocr", "reason": "Lab 4's OCR layer, 78.6 MB, deliberately NOT carried. Lab 5 does no OCR. The trade-off: lab 5's layer stack diverges from lab 4's right after the pip layer, so nothing below it is shared with lab 4. Instructor decision, recorded in lab-research/lab5/review.md."},
-    {"name": "torch", "reason": "llama.cpp runs the model. Nothing in labs 3-7 imports torch."},
-    {"name": "a JSON grammar (response_format=json_object)", "reason": "MEASURED AND REJECTED. Under the grammar the agent escalates and leaks the secret with NO payload present: 3/3, 3/3 and 1/3 across three system-prompt wordings. A baseline that fails on its own cannot demonstrate an attack. Kept as an instructor demo instead."},
-    {"name": "an open-ended run_command tool", "reason": "MEASURED AND REJECTED. With run_command exposed and a payload asking for whoami, the agent called it 0/3 - it went for the admin box instead, which the system prompt makes more salient. OWASP risk #3 is named in the debrief rather than built."}
+    {
+      "name": "tesseract-ocr",
+      "reason": "Lab 4's OCR layer, 78.6 MB, deliberately NOT carried. Lab 5 does no OCR. The trade-off: lab 5's layer stack diverges from lab 4's right after the pip layer, so nothing below it is shared with lab 4. Instructor decision, recorded in lab-research/lab5/review.md."
+    },
+    {
+      "name": "torch",
+      "reason": "llama.cpp runs the model. Nothing in labs 3-7 imports torch."
+    },
+    {
+      "name": "a JSON grammar (response_format=json_object)",
+      "reason": "MEASURED AND REJECTED. Under the grammar the agent escalates and leaks the secret with NO payload present: 3/3, 3/3 and 1/3 across three system-prompt wordings. A baseline that fails on its own cannot demonstrate an attack. Kept as an instructor demo instead."
+    },
+    {
+      "name": "an open-ended run_command tool",
+      "reason": "MEASURED AND REJECTED. With run_command exposed and a payload asking for whoami, the agent called it 0/3 - it went for the admin box instead, which the system prompt makes more salient. OWASP risk #3 is named in the debrief rather than built."
+    }
   ],
   "network": "None at run time. Verified with --network none. Build time fetches the model only.",
   "measured": {
@@ -69,7 +131,8 @@
     "beginner_commands": 6,
     "generations_in_lab": 9,
     "new_bytes_vs_lab4": 0,
-    "peak_ram": "verified at --memory=1200m"
+    "peak_ram": "verified at --memory=1200m",
+    "validated_on": "macOS arm64 end to end; Windows amd64 end to end on real hardware 2026-09-13 (beginner mode, escalation and mediated defence both correct, lab5-results.txt copied out, lab 6 pre-pull failed gracefully, inside the time budget). One bug found and fixed in labs 1-5: setup.ps1's Get-PSDrive disk check prompted for input on a redirected Documents folder and looked like a hang."
   },
   "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical."
 }

@@ -45,7 +45,7 @@
       "name": "llama-cpp-python",
       "version": "0.3.35",
       "shared": true,
-      "note": "NO PyPI wheels - source build. Multi-stage, ~90s compile, 134 MB runtime. Build with CMAKE_ARGS=-DGGML_NATIVE=OFF."
+      "note": "NO PyPI wheels. Compiled ONCE per arch by wheels/build-wheels.sh and installed from that wheel, not from source in a build stage. Passed in as a named build context (--build-context wheels=...). Measured: the resulting pip layer is 49.8 MB compressed and byte-identical across independent builds, so labs 3-7 share it instead of each carrying a 73.2 MB pair of layers."
     },
     {
       "name": "numpy",
@@ -147,12 +147,12 @@
   ],
   "network": "None at build-time-only asset fetch aside, and none at run time. Verified with --network none.",
   "measured": {
-    "note": "Measured 2026-09-12, arm64, Docker 29.7.2, on the image built from lab-dev/lab4.",
+    "note": "Measured 2026-09-13, arm64, Docker 29.7.2, on the image built from lab-dev/lab4 with the prebuilt llama-cpp wheel.",
     "hidden_text_grey_level": 252,
     "contrast_percent": 1.2,
     "pixels_changed_percent": 0.239,
     "ocr_seconds": 0.17,
-    "disk_gb": 2.86,
+    "disk_gb": 2.75,
     "download_gb": 1.25,
     "download_note": "docker save | gzip -1 | wc -c = 1,246,304,231 bytes. Of that, ~1.05 GB is the model.",
     "layer_tesseract_mb": 78.6,
@@ -169,6 +169,10 @@
     "beginner_commands": 10,
     "lab_seconds_4_cpus": 37,
     "lab_seconds_2_cpus": 98,
-    "gate_weights_bytes": 95991
-  }
+    "gate_weights_bytes": 95991,
+    "validated_on": "macOS arm64 end to end; Windows amd64 end to end on real hardware 2026-09-13 (invoices folder copied out, 10/10 commands, lab 5 pre-pull failed gracefully)",
+    "pip_layer_mb_compressed": 49.8,
+    "pip_layer_reproducible": "yes - 100% identical across two no-cache builds"
+  },
+  "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical."
 }
