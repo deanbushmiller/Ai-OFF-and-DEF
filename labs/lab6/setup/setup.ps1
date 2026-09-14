@@ -33,7 +33,7 @@ function Hr        { Write-Host "-----------------------------------------------
 
 Write-Host ""
 Hr
-Write-Host "  SecLLM Bootcamp - Lab 6: Multimodal and vision-based exploits"
+Write-Host "  SecLLM Bootcamp - Lab 6: MCP and interface hijacking"
 Write-Host "  Setup and launcher (Windows)"
 Hr
 Write-Host ""
