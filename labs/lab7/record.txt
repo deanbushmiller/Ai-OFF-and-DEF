@@ -1,0 +1,1 @@
+agent_id=LAB-BEACON-7742, host=WKSTN-14, user=jhalloran, ts=2026-09-13T14:02:11Z, seq=1, status=idle

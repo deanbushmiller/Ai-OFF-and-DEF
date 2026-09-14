@@ -1,0 +1,12 @@
+# The agent's check-in schedule. Two numbers, and they are the whole of beat 6.
+#
+#   interval   seconds between check-ins
+#   jitter     fraction of the interval to randomise, 0.0 to 0.95
+#
+# The behavioural detector never reads your payload. It reads these two numbers,
+# as they look from the outside. Change them and run:
+#
+#     python detect.py --behaviour
+#
+interval=60
+jitter=0.0

@@ -1,0 +1,174 @@
+{
+  "lab": 7,
+  "title": "AI-powered attack orchestration",
+  "cache_root": "/opt/lab-assets",
+  "offline_at_runtime": true,
+  "ports": [
+    8007
+  ],
+  "ports_note": "Bound on 127.0.0.1 INSIDE the container only; not published to the host. 8007 is the mock collector - this lab's inert stand-in for a C2 endpoint. The consolidation contract allocates 8007 to this lab. CONSOLIDATION CONFLICT, recorded rather than rediscovered: 8007 is ALSO lab 6's internal port (its real MCP server, behind the proxy on 8006). Harmless today - neither is published and the two labs never run at the same time - but it will read as a collision when the eight images merge. Instructor accepted this 2026-09-13 rather than renumber. Noted in lab 6's assets.json too.",
+  "interaction": "beginner (8 guided typed commands, 1 of which runs the model 5 times) or expert (real shell + collector by hand with curl + nano schedule.txt + a format measured to fail + check.py)",
+  "models": [
+    {
+      "source_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "bytes": 1120000000,
+      "shared": true,
+      "shared_note": "SHARED with labs 3, 4, 5 and 6. Bought by lab 3. Lab 7 buys NO model and no new package of any kind - the THIRD lab running to add zero new bytes.",
+      "measured": {
+        "reencoding_works": "json, csv, kv, xml, urlq, yaml - 6/6 field values kept, byte-identical across 3 runs at temperature 0. Five of these ship; yaml is held in reserve.",
+        "ini_fails": "0/6 fields. Returns the key names as bare [section] headers and DROPS every value - confidently, and identically on three runs. Refused by variants.py with the measurement attached; expert mode invites the student to try it.",
+        "syslog_fails": "6/6 fields but no RFC 3164 framing at all - it returns a comma list. Supplying a worked example made it WORSE: 5/6 fields and NOT deterministic. A worked example is not always a help on a 1.5B model.",
+        "base64_fails": "0/6. Degenerate repeating loop for 48.9 s producing garbage that decodes to 'C05316716716...'. A stricter 'character by character, output only the base64' phrasing answers in 2.6 s with 'SGVsbG8gd29ybGQ=' - base64 for 'Hello world', a memorised string unrelated to the input. Hex fails the same way, decoding to 'SELINECALLEDABLE' repeating. These two were the ONLY cases in 36 generations that were not deterministic at temperature 0.",
+        "why_that_matters": "A model is a paraphraser, not a computer: it cannot perform an exact transform on data it has not memorised. base64 and hex are therefore produced by two lines of stdlib, labelled PYTHON on screen, and the contrast is a teaching beat. It is also why LAMEHUG (AML.CS0044) used a Qwen model for command TEXT and ordinary code for everything that had to be right.",
+        "model_returns_prose": "6 of 10 cases wrapped the answer in a code fence or prefaced it with a sentence despite 'output only the encoded record, nothing else'. variants.py has an extractor; without it the detectors would be measuring our parser.",
+        "peak_ram_gb": 1.19,
+        "generations_per_lab": 5,
+        "model_loads_per_lab": 1
+      }
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "llama-cpp-python",
+      "version": "0.3.35",
+      "shared": true,
+      "note": "From the prebuilt wheel in Activity-Labs/wheels via a named build context. Never compiled in a lab."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true,
+      "note": "Not imported by lab 7."
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true,
+      "note": "Build time only."
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "shared": true,
+      "note": "Not imported by lab 7. The price of the shared layer."
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "REQUIRED - libllama.so links against OpenMP."
+    },
+    {
+      "name": "nano",
+      "shared": true,
+      "note": "Expert mode edits schedule.txt."
+    },
+    {
+      "name": "less",
+      "shared": true
+    },
+    {
+      "name": "curl",
+      "shared": true,
+      "note": "Expert mode POSTs a check-in to the collector by hand."
+    }
+  ],
+  "lab_assets": [
+    {
+      "file": "record.txt",
+      "generated_at": "shipped",
+      "shared": false,
+      "bytes": 101,
+      "note": "The beacon record. One line, six fields, marker LAB-BEACON-7742. The marker is our EICAR - the same convention garak's av_spam_scanning probe uses with EICAR, GTUBE and GTPHISH, which exist so a detector can be proven to fire without anyone handling real malware."
+    },
+    {
+      "file": "schedule.txt",
+      "generated_at": "shipped, edited at run time",
+      "shared": false,
+      "bytes": 388,
+      "note": "interval and jitter. Two numbers, and they are the whole of beat 6. The runner resets them to 60 / 0.0 on every run so a stale edit cannot satisfy an assertion this run never earned."
+    },
+    {
+      "file": "variants.json",
+      "generated_at": "run",
+      "shared": false,
+      "note": "Written by variants.py: every variant, its source (model or python), its generation time and its field count. The DETECTORS NEVER READ THIS - a defender does not get the attacker's working files."
+    },
+    {
+      "file": "collector.log",
+      "generated_at": "run",
+      "shared": false,
+      "note": "Written by collector.py, one JSON object per check-in. This is the defender's entire view of the incident and the only input to D1 and D2."
+    },
+    {
+      "file": "results.json",
+      "generated_at": "run",
+      "shared": false,
+      "note": "What each detector recorded. The runner asserts on this, not on screen text."
+    }
+  ],
+  "not_used": [
+    {
+      "name": "base64 or hex generated BY THE MODEL",
+      "reason": "MEASURED AND REJECTED: it does not work, and the instructor confirmed 2026-09-13 that the live model-failure beat is dropped. The encodings still ship, from two lines of Python, because they are the only two variants that get past the signature detector - without them beats 4 and 5 collapse into each other."
+    },
+    {
+      "name": "a phishing-email beat",
+      "reason": "Offered by the build prompt as an alternative. Skipped on the instructor's instruction 2026-09-13: same lesson, a second set of assets, and more generations in a lab already carrying five. LLM10:2026 risk #5 and garak's GTPHISH cover it in the debrief for free."
+    },
+    {
+      "name": "an evasion-optimisation loop",
+      "reason": "A program that tests variants against a detector and refines until one passes is an offensive tool regardless of payload. Explicitly rejected by the instructor 2026-09-13. There is no --tune flag and there must never be one. The student sets two numbers by hand, twice."
+    },
+    {
+      "name": "Microsoft PyRIT",
+      "reason": "Its converter pipeline IS this lab's mechanic and it is the right thing to cite. Not installed: ~40 direct dependencies including azure-*, openai, datasets, fastapi and pyodbc would break the shared pip layer for the whole 3-7 tier, and its TAP/crescendo orchestrators are the refine-until-it-passes loop we deliberately do not ship."
+    },
+    {
+      "name": "NVIDIA garak",
+      "reason": "av_spam_scanning is the closest published thing to this lab and validated our marker choice independently. Not installed: heavy, and run-and-report by design, so the student watches instead of attacking. Cited in LAB.md."
+    },
+    {
+      "name": "RITA, Zeek, Wireshark and a PCAP",
+      "reason": "ActiveCM's beacon lab is the real defender's version and D3 is described as a toy of RITA. Not used: four host installs the students are forbidden to make, hundreds of MB of PCAP, and purely defensive. Recommended in the README as follow-up study."
+    },
+    {
+      "name": "tesseract-ocr",
+      "reason": "Lab 4's OCR layer. Not carried; lab 7 does no image work."
+    },
+    {
+      "name": "torch",
+      "reason": "llama.cpp runs the model."
+    },
+    {
+      "name": "egress to the instructor's controlled domain",
+      "reason": "CLOSED PERMANENTLY 2026-09-13, on the instructor's instruction, after being parked at labs 3, 5 and 6. This lab is the clearest case: it is ABOUT beaconing on a timer to a collector, so a work laptop making periodic timed check-ins to an unfamiliar external domain is not something EDR might flag - it is the textbook detection, and beat 6 would be tuning the interval of a real one. beacon.py prints what a real operator's endpoint would have received instead."
+    }
+  ],
+  "network": "None at run time. One collector process on 127.0.0.1:8007 inside the container; no port published. Verified with --network none.",
+  "measured": {
+    "note": "Measured 2026-09-13, arm64, Docker 29.7.2, on the image built from lab-beta/lab7.",
+    "beginner_commands": 8,
+    "generations_in_lab": 5,
+    "new_bytes_vs_lab6": 0,
+    "image_on_disk": "2.64 GB - the same size as labs 5 and 6",
+    "lab_seconds_unrestricted": 35,
+    "lab_seconds_4_cpus": 37,
+    "lab_seconds_2_cpus": 89,
+    "timing_note": "FASTER than labs 5 and 6 at every CPU count, because lab 7 does 5 generations behind ONE model load where lab 6 did 9 behind four. The 4-cpu figure is within noise of unrestricted: generation is memory-bandwidth-bound, so past about four threads more cores buy nothing.",
+    "thread_fix": "FOUND AND FIXED HERE, and it affects labs 3-6 too. os.cpu_count() returns the HOST's core count (24) even inside `docker run --cpus=2`, because --cpus is a CFS quota and not a cpuset - sched_getaffinity agrees with it. llama.cpp then starts 24 threads to share 2 CPUs and thrashes. Before the fix: 541 s at --cpus=2 and 189 s at --cpus=4. After reading the cgroup v2 quota instead: 89 s and 37 s. A 6x and 5x improvement. A real student is usually unaffected, because Docker Desktop's CPU setting changes the VM's core count and os.cpu_count() sees that correctly - but anyone who caps a container is, and every documented CPU floor for labs 3-6 is pessimistic by this factor.",
+    "detector_results": "D1 signature 6/8 - misses base64 and hex, the two the model could not write. D2 structural 8/8. D3 behavioural FLAGGED on both limbs at 60 s / 0 % (1440 check-ins, cv 0.000, 60.00 records/h), CLEAN at 7200 s / 95 % (18 check-ins, cv 0.680, 0.75 records/h). Slowdown 80x; 500 records goes from 8 hours to 28 days.",
+    "d3_negative_finding": "The first D3 keyed on regularity ALONE and collapsed: 60 s with 60 % jitter is clean AND 61.04 records/h, so evasion cost 1x and the lab's ending would have been false. Two orthogonal limbs (volume > 24 per 24 h, OR cv < 0.35) restore it. Thresholds confirmed by the instructor 2026-09-13. The runner asserts on BOTH limbs, not just the verdict - sabotaging the volume limb alone left the verdict correct while the closing claim had quietly become false.",
+    "peak_ram": "verified at --memory=1200m",
+    "determinism": "byte-identical variants.json and results.json across 3 fresh containers",
+    "runs_offline": "verified with --network none",
+    "fails_loudly": "4 deliberate sabotages tried: the D2 threshold, a format swapped for one that drops fields, the volume limb, the regularity limb. All 4 produce LAB ERROR and exit 1.",
+    "typed_paths": "all 8 typed -> 'You typed 8 of 8'. One step wrong twice -> command run for the student, 'You typed 7 of 8'.",
+    "published_layer_sharing": "TO BE VERIFIED on the published manifest. Labs 5 and 6 measured 9 shared layers, 1.192 GB, and 29,774 bytes of download for a student who already had lab 5. Lab 7 is built the same way from the same publish.sh, so expect tens of KB. Do not promise it in class before checking.",
+    "validated_on": "macOS arm64 end to end. Windows amd64 NOT yet tested - the instructor tests as a student after PUSHTOINTERNET."
+  },
+  "shared_requirements": "Activity-Labs/requirements-llama.txt - copied verbatim into labs 3-7. The layer is only shared if the file is byte-identical. Verified byte-identical for this lab with cmp."
+}

@@ -7,7 +7,7 @@
     8006,
     8007
   ],
-  "ports_note": "Bound on 127.0.0.1 INSIDE the container only; neither is published to the host. 8006 is the proxy (the endpoint the client believes is the server), 8007 is the real MCP server. The consolidation contract allocates 8006 to this lab; 8007 is an internal loopback port that never crosses the container boundary. Instructor decision 2026-09-13: do not publish either - everything that talks to them is in the same container, and a -p flag would only add a Windows failure mode.",
+  "ports_note": "Bound on 127.0.0.1 INSIDE the container only; neither is published to the host. 8006 is the proxy (the endpoint the client believes is the server), 8007 is the real MCP server. The consolidation contract allocates 8006 to this lab; 8007 is an internal loopback port that never crosses the container boundary. Instructor decision 2026-09-13: do not publish either - everything that talks to them is in the same container, and a -p flag would only add a Windows failure mode. CONSOLIDATION NOTE added 2026-09-13 while building lab 7: 8007 is ALSO lab 7's port (its mock collector). Harmless - neither is published and the two labs never run at the same time - but it will read as a collision when the eight images merge. Instructor accepted this rather than renumber. Recorded in both labs' assets.json.",
   "interaction": "beginner (7 guided typed commands, 4 of which run the model) or expert (real shell + three processes by hand + nano payload.txt + check.py)",
   "models": [
     {
