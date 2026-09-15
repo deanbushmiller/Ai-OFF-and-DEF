@@ -18,7 +18,7 @@
       "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
       "bytes": 1120000000,
       "shared": true,
-      "shared_note": "SHARED with labs 5-7. Any lab needing an instruction-following model MUST reuse this exact ID, file and path.",
+      "shared_note": "SHARED with labs 4, 5, 6 and 7 - the whole model tier. Any lab needing an instruction-following model MUST reuse this exact ID, file and path. Verified 2026-09-14: lab 3's model layer is now digest sha256:8e259fa11b94..., 1,092,414,416 bytes, byte-identical to the layer labs 4-7 already publish.",
       "measured": {
         "injection_reliability": "3/3 on two payload styles, verified after quantisation",
         "peak_ram_gb": 1.19,
@@ -37,17 +37,25 @@
       "name": "llama-cpp-python",
       "version": "0.3.35",
       "shared": true,
-      "note": "NO PyPI wheels - source build. Multi-stage, 89s compile, 134 MB runtime. Build with CMAKE_ARGS=-DGGML_NATIVE=OFF or the binary bakes in the build machine's instruction set and crashes on older student CPUs."
+      "note": "From the prebuilt wheel in Activity-Labs/wheels via a named build context. Never compiled in a lab. Lab 3 compiled it in a multi-stage build until 2026-09-14; a compiled layer can never be shared because the compiler is not deterministic, and the build stage also shipped an unpinned second numpy."
     },
     {
       "name": "numpy",
       "version": "2.3.5",
-      "shared": true
+      "shared": true,
+      "note": "Not imported by lab 3. Present because requirements.txt is a verbatim copy of the shared file."
     },
     {
       "name": "huggingface-hub",
       "version": "1.31.0",
-      "shared": true
+      "shared": true,
+      "note": "Build time only - fetch_assets.py."
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "shared": true,
+      "note": "Not imported by lab 3. The price of the shared layer, and the right trade."
     }
   ],
   "apt_packages": [
@@ -68,6 +76,11 @@
       "name": "curl",
       "shared": true,
       "note": "Students fetch the page the way the assistant does."
+    },
+    {
+      "name": "ca-certificates",
+      "shared": true,
+      "note": "Part of the byte-identical apt line shared by labs 3-8. Do not remove it to tidy up."
     }
   ],
   "not_used": [
@@ -78,13 +91,19 @@
   ],
   "network": "None at run time. Mock site served from inside the container on 127.0.0.1 only. /etc/hosts maps news.acme.com to 127.0.0.1 so the URL looks real.",
   "measured": {
-    "note": "Measured 2026-09-12, arm64, Docker 29.7.2.",
-    "download_mb": 1210,
-    "disk_gb": 2.73,
-    "peak_ram": "<1.5 GB (verified at --memory=1500m)",
-    "compute_seconds_2_cores": 117,
-    "build_seconds_warm": 49,
-    "runs_offline": "verified with --network none",
-    "determinism": "3/3 consecutive runs hijacked at temperature 0"
+    "note": "Re-measured 2026-09-14 on the live registry after the realignment, arm64, Docker 29.7.2, buildx v0.36.1 / buildkit v0.32.2. Download is what a student pays who already has labs 1-2 - per-lab-in-isolation numbers hide the sharing.",
+    "download_bytes": 1144221354,
+    "download_mb": 1091,
+    "download_mb_before_realignment": 1109,
+    "disk_gb": 2.64,
+    "peak_ram": "<1.2 GB (verified at --memory=1200m, exit 0)",
+    "shares_with_labs_4_to_7": {
+      "apt_layer": "sha256:1a96e484... 1,954,634 bytes",
+      "requirements_copy_layer": "sha256:1d080ddc... 792 bytes",
+      "pip_layer": "sha256:8dde66ff... 49,822,232 bytes",
+      "model_layer": "sha256:8e259fa1... 1,092,414,416 bytes"
+    },
+    "runs_offline": "verified with --network none, exit 0",
+    "determinism": "4/4 consecutive runs hijacked at temperature 0, identical output, after the wheel switch"
   }
 }

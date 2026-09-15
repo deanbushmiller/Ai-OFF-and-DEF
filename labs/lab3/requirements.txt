@@ -1,7 +1,22 @@
-# Lab 3 - shared dependency set for the consolidated 8-lab image.
-# torch is NOT needed here: llama.cpp runs the model, not PyTorch.
+# SHARED dependency set for every lab that runs the local language model:
+# labs 3, 4, 5, 6 and 7.
+#
+# THIS FILE IS COPIED VERBATIM INTO EACH OF THOSE LABS. Do not edit one lab's copy.
+# The layer it produces is only shared between labs if the file is byte-identical,
+# and sharing it is worth ~50 MB of download per lab. If a lab needs a new package,
+# add it HERE and rebuild the whole tier.
+#
+# llama-cpp-python==0.3.35 is deliberately NOT listed. It ships no PyPI wheels, so it
+# is installed from the prebuilt wheel in Activity-Labs/wheels/ - see the Dockerfile
+# and wheels/build-wheels.sh. Pinning it in two places would let them drift apart.
+#
+# torch is NOT here. llama.cpp runs the model; nothing in labs 3-7 imports torch, and
+# adding it would cost ~250 MB for nothing. Labs 1 and 2 have their own file.
 
-# Shared across labs. transformers 5.x is REQUIRED: 4.x pins huggingface-hub<1.0,
-# which conflicts with the hub 1.31.0 labs 1 and 2 already ship.
 numpy==2.3.5
 huggingface-hub==1.31.0
+
+# Image work: lab 4 renders the invoices and stamps. Carried by the whole tier so the
+# layer stays identical across labs - about 10 MB for labs that do not use it, which
+# is the price of sharing the other 40.
+pillow==11.3.0

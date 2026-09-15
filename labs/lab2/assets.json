@@ -80,10 +80,14 @@
   ],
   "vector_store": "numpy cosine similarity, in memory, saved as .npz (NOT pickle - see lab 1)",
   "measured": {
-    "note": "Measured 2026-09-12 on Docker 29.7.2, arm64.",
+    "note": "Re-measured 2026-09-15 after the __pycache__ purge was added to the asset RUN. Docker 29.7.2, arm64, measured on the live registry.",
     "arm64": {
-      "download_mb": 591,
-      "disk_gb": 1.87
+      "download_mb": 527,
+      "disk_gb": 1.87,
+      "download_bytes": 526587398,
+      "download_mb_before_purge": 545,
+      "pycache_saving_bytes": 18853648,
+      "pycache_note": "The .pyc files transformers and torch wrote while fetch_assets.py ran were 18,828,992 bytes of the asset layer, and the apt layer lost a further 24,971 to the /var/log and /var/cache deletions. Purging them is not only about reproducibility - it is a permanent download saving."
     },
     "peak_ram": "<1 GB (verified: runs under --memory=1g)",
     "compute_seconds_2_cores": 42,

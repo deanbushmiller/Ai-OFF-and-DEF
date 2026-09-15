@@ -2,23 +2,6 @@
 # Consolidation contract: python:3.11-slim-bookworm, assets baked at build time,
 # everything under /labs/lab4/. This lab does NOT serve - no port, no /etc/hosts entry.
 
-# ---------------------------------------------------------------------------
-# Build stage: compile llama-cpp-python. It ships NO wheels on PyPI, so this is
-# a source build needing cmake and a C++ toolchain. Multi-stage keeps ~400 MB of
-# build tooling out of the image students pull.
-#
-# GGML_NATIVE=OFF is load-bearing: the default bakes in the BUILD machine's
-# instruction set, which crashes on older student CPUs.
-#
-# These four lines are IDENTICAL to lab 3's on purpose. Do not "tidy" them.
-# ---------------------------------------------------------------------------
-FROM python:3.11-slim-bookworm AS build
-RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake git \
- && rm -rf /var/lib/apt/lists/*
-ENV CMAKE_ARGS="-DGGML_NATIVE=OFF"
-RUN pip install --no-cache-dir llama-cpp-python==0.3.35
-
-# ---------------------------------------------------------------------------
 FROM python:3.11-slim-bookworm
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
@@ -36,10 +19,10 @@ ENV PYTHONUNBUFFERED=1 \
 # digest changes on every build and every lab re-downloads it. Measured: with
 # them gone, two independent builds produce a byte-identical apt layer.
 #
-# libgomp1: the compiled libllama.so links against OpenMP, which ships with gcc
-# in the build stage and is NOT in slim. Without it the import dies at run time
-# with "libgomp.so.1: cannot open shared object file".
-# Kept identical to lab 3's line so the two images stay easy to diff.
+# libgomp1: libllama.so links against OpenMP, which is NOT in slim. Still required
+# now that the wheel is prebuilt - the wheel carries the .so, not its system
+# dependency. Without it the IMPORT dies at run time with
+# "libgomp.so.1: cannot open shared object file", long after a green build.
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libgomp1 nano less curl ca-certificates \
  && rm -rf /var/lib/apt/lists/* /var/log/apt /var/log/dpkg.log /var/log/alternatives.log \
@@ -66,9 +49,32 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/* /var/log/apt /var/log/dpkg.log /var/log/alternatives.log \
            /var/cache/fontconfig/* /var/cache/ldconfig/aux-cache
 
-COPY --from=build /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+# ---------------------------------------------------------------------------
+# Python dependencies, in ONE layer, from a wheel that was compiled once.
+#
+# llama-cpp-python ships no PyPI wheels, so labs used to compile it from source in
+# a build stage and COPY the whole site-packages across. That cost a C++ compile per
+# lab per architecture, and produced a DIFFERENT layer every time - the compiler is
+# not deterministic - so every lab re-downloaded 43.6 MB of the same thing. It also
+# dragged the build stage's own numpy along, which was never pinned: pip resolved
+# whatever was newest, then requirements.txt installed 2.3.5 over the top, and both
+# shipped.
+#
+# Now: build-wheels.sh compiles it once per arch into wheels/, and every lab installs
+# that wheel alongside requirements.txt in a single pip layer. numpy resolves once.
+#
+# The wheels are NOT in this folder - they are passed in as a named build context, so
+# one copy serves every lab:
+#     docker build --build-context wheels=<Activity-Labs>/wheels .
+# publish.sh does this for you. Build without it and pip fails loudly on a missing file.
+# ---------------------------------------------------------------------------
+ARG TARGETARCH
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt \
+RUN --mount=type=bind,from=wheels,target=/wheels \
+    pip install --no-cache-dir \
+      "$(ls /wheels/${TARGETARCH}/llama_cpp_python-*.whl)" \
+      -r /tmp/requirements.txt \
+ && rm /tmp/requirements.txt \
  && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
  && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
 

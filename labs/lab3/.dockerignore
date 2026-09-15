@@ -20,14 +20,14 @@ publish.sh
 # Host-side launcher scripts - students run these OUTSIDE the container
 setup/
 
-# Generated at run time; must never be baked into the image
-index.npz
-answers.json
+# Generated at BUILD time inside the image, or at run time by the student.
+# Either way they must never come in from the build context.
+#
+# Written at RUN time by the lab: the assistant's before/after transcript and
+# the runner's saved output. The previous list here was inherited verbatim from
+# labs 1-2 and named none of lab 3's own artefacts.
+runs.json
 *-results.txt
-poisoned_handbook.pdf
-bert_tiny_*.pt
-data.pkl
-unzipped/
 
 # Credentials
 .env

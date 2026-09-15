@@ -39,8 +39,17 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
 # ---------------------------------------------------------------------------
 # Assets baked at build time. Nothing downloads during class.
 # ---------------------------------------------------------------------------
+# The __pycache__ purge is NOT housekeeping - it is what makes this layer
+# reproducible. Running fetch_assets.py imports huggingface_hub (and, in lab 2,
+# transformers and torch), which writes .pyc files into the SAME layer as the
+# baked model. A .pyc header embeds the source file's mtime, so the layer differs
+# on every build and every student re-downloads it whole for a rebuild that
+# changed nothing. rewrite-timestamp cannot help: it rewrites mtimes, not file
+# CONTENTS. Added 2026-09-15; labs 3-8 have had it since 2026-09-13.
 COPY scripts/fetch_assets.py /tmp/fetch_assets.py
-RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py
+RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
+ && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
+ && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
 
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1
