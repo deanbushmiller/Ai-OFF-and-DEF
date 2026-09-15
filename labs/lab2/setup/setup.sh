@@ -248,8 +248,9 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Most of it is already on your machine (the labs share layers), so"
-  info "this is a much smaller download than the first one."
+  info "Lab 3 buys the language model that labs 4-7 all reuse, so it is the"
+  info "biggest download in the course: about 1.1 GB. Every lab after it is"
+  info "tiny by comparison."
   printf '\n'
   info "Doing it now means no waiting at the start of the next session."
   printf '\n  Pull it now? [Y/n] '
@@ -263,7 +264,7 @@ if [ -n "${NEXT_LAB:-}" ]; then
     *)
       printf '\n'
       info "(If $NEXT_LAB is not published yet you will see an error here."
-      info " That is expected and harmless - lab 1 is already complete.)"
+      info " That is expected and harmless - lab 2 is already complete.)"
       printf '\n'
       if docker pull "$NEXT_TAG"; then
         printf '\n'; ok "$NEXT_LAB_NAME is ready on your machine."

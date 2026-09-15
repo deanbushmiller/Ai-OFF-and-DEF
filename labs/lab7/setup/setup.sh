@@ -286,7 +286,7 @@ if [ -n "${NEXT_LAB:-}" ]; then
     *)
       printf '\n'
       info "(If $NEXT_LAB is not published yet you will see an error here."
-      info " That is expected and harmless - lab 6 is already complete.)"
+      info " That is expected and harmless - lab 7 is already complete.)"
       printf '\n'
       if docker pull "$NEXT_TAG"; then
         printf '\n'; ok "$NEXT_LAB_NAME is ready on your machine."

@@ -247,8 +247,8 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Most of it is already on your machine (the labs share layers), so"
-  info "this is a much smaller download than the first one."
+  info "Lab 2 brings two models of its own, so this one is a real download:"
+  info "about 500-600 MB. The shared base layers are already here."
   printf '\n'
   info "Doing it now means no waiting at the start of the next session."
   printf '\n  Pull it now? [Y/n] '

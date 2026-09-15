@@ -449,9 +449,9 @@ if ($NextLab) {
     Hr
     Write-Host ""
     Info $NextName
-    Info "Lab 5 runs the same language model this lab used. The base layers"
-    Info "are already on your machine, but each lab image still carries its"
-    Info "own copy of the model, so expect a download of a similar size."
+    Info "Lab 5 reuses the same language model, and the two images SHARE it."
+    Info "Measured on the published images: well under 100 KB, not another"
+    Info "1.2 GB. This should take seconds, not minutes."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"
     Info "of the next session."
