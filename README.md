@@ -61,7 +61,11 @@ before anything runs. **Expert** drops you into a real shell to work from the la
 
 Each lab ends by offering to download the next one. Say yes — the labs share container
 layers, so most labs after the first are a small delta rather than a full download. Lab 8
-is the last one, so it ends by listing the evidence for all eight instead.
+closes the attack half by listing the evidence for all eight instead of offering a pre-pull.
+
+**Lab 9 reuses lab 1's model and dependencies**, so if you still have lab 1 on your machine
+the lab 9 download is a few hundred kilobytes. It is also the first lab that runs with
+`--network none` — no network at all — because egress control is what it teaches.
 
 **Lab 3 is the exception: about 1.2 GB.** It runs a real language model locally, and that
 model is reused by several later labs. Take lab 2's offer to pre-fetch it and you will not
@@ -69,6 +73,11 @@ wait. Lab 3 is also the only lab so far that serves a page — on `127.0.0.1:800
 machine only.
 
 ## The labs
+
+Sixteen labs in one continuous numbering. The first eight teach the attack; the second eight
+defend the same ground, one for one.
+
+### Attack labs (1–8)
 
 | # | Lab | OWASP 2026 | Status |
 |---|---|---|---|
@@ -80,6 +89,21 @@ machine only.
 | 6 | [MCP and interface hijacking](labs/lab6/) | LLM01, LLM08 | **published** |
 | 7 | [AI-powered attack orchestration](labs/lab7/) | LLM10, LLM02 | **published** |
 | 8 | [Offensive recap and transition to defense](labs/lab8/) | *all of the above* | **published** |
+
+### Defend labs (9–16)
+
+Each defend lab pairs with an attack lab and turns it into a control you build, run and tune.
+
+| # | Lab | Defends | OWASP 2026 | Status |
+|---|---|---|---|---|
+| 9 | [Defending the model supply chain](labs/lab9/) | lab 1 | LLM04, LLM05 | **published** |
+| 10 | Defending RAG ingestion | lab 2 | — | planned |
+| 11 | Defending multimodal input | lab 4 | — | planned |
+| 12 | Defending against prompt injection | lab 3 | — | planned |
+| 13 | Defending agents | lab 5 | — | planned |
+| 14 | Defending MCP interfaces | lab 6 | — | planned |
+| 15 | Defending against orchestration | lab 7 | — | planned |
+| 16 | Red-team process | — | — | planned |
 
 ## Course materials
 

@@ -1,0 +1,15 @@
+{
+  "_comment": "The gate's own policy, separate from the scanner's. You add one line to blocked_globals in the last step of the lab.",
+  "on_scanner_error": "block",
+  "_on_scanner_error_options": "pass | block",
+  "_on_scanner_error_note": "What the gate does when the scanner cannot give a verdict - it crashed, it could not parse the file, or it exited with a code that is neither clean nor infected. 'pass' means an unreadable artifact goes into your build. 'block' means no verdict is not a clean verdict. It ships as 'block'. Change it to 'pass' if you want to see what the other choice buys you.",
+  "blocked_globals": [
+    "posix.system",
+    "os.system",
+    "nt.system",
+    "subprocess.Popen",
+    "builtins.exec",
+    "builtins.eval"
+  ],
+  "_blocked_globals_note": "Names the gate refuses on sight, whatever the scanner concludes. This is the gate's own opinion, kept separately so it survives a scanner upgrade."
+}

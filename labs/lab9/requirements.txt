@@ -1,0 +1,10 @@
+# Lab 1 - shared dependency set for the consolidated 8-lab image.
+# torch is installed separately from the PyTorch CPU index (see Dockerfile).
+
+# Shared across labs.
+numpy==2.3.5
+huggingface-hub==1.31.0
+
+# Lab 1 specific - two scanners with opposite detection philosophies.
+picklescan==1.0.5
+fickling==0.1.12

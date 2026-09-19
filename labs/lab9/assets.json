@@ -1,0 +1,102 @@
+{
+  "lab": 9,
+  "title": "Defending the model supply chain",
+  "defends": 1,
+  "tier": "torch",
+  "cache_root": "/opt/lab-assets",
+  "hf_home": "/opt/lab-assets/hf",
+  "offline_at_runtime": true,
+  "runs_with_network_none": true,
+  "ports": [],
+  "interaction": "beginner types 9 commands and each is validated; expert works from LAB.md in a shell and finishes with check.py",
+  "new_bytes_bought_by_this_lab": "under 0.1 MB - eight Python files, one JSON policy and LAB.md. Every dependency and the model were paid for by lab 1.",
+  "models": [
+    {
+      "source_id": "prajjwal1/bert-tiny",
+      "provider": "huggingface",
+      "files": [
+        {
+          "name": "pytorch_model.bin",
+          "bytes": 17830000,
+          "note": "pickle format - the point of labs 1 and 9; repo has no safetensors"
+        },
+        {
+          "name": "vocab.txt",
+          "bytes": 232000
+        },
+        {
+          "name": "config.json",
+          "bytes": 285
+        }
+      ],
+      "total_bytes": 18062285,
+      "shared": true,
+      "shared_note": "Identical source ID and cache path to lab 1, baked by a byte-identical fetch_assets.py, so the merged image stores it once."
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "torch",
+      "version": "2.9.1",
+      "index": "https://download.pytorch.org/whl/cpu",
+      "shared": true,
+      "note": "CPU-only. Shares lab 1's pip layer - requirements.txt is byte-identical."
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    },
+    {
+      "name": "picklescan",
+      "version": "1.0.5",
+      "shared": true,
+      "license": "MIT",
+      "note": "The gate's scanner. 58 published CVEs since 2025-02 across 86 advisories, all fixed at or before 1.0.4; nothing outstanding against 1.0.5 as of 2026-09-19. That history is the lab's argument for not resting on it."
+    },
+    {
+      "name": "fickling",
+      "version": "0.1.12",
+      "shared": true,
+      "license": "LGPL-3.0",
+      "note": "Installed and never invoked. Kept so requirements.txt stays byte-identical to lab 1's and the two share a ~185 MB pip layer. Same trade labs 3-8 make with libgomp1."
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "nano",
+      "note": "expert mode edits rules.json in the container"
+    },
+    {
+      "name": "less",
+      "note": "reading LAB.md"
+    }
+  ],
+  "apt_layer_note": "Byte-identical to lab 2's apt line. Lab 1 has no apt layer, so there was nothing to inherit from the lab this one defends.",
+  "generated_at_runtime": [
+    "bert_tiny_clean.pt",
+    "bert_tiny_poisoned.pt",
+    "bert_tiny_beacon.pt",
+    "bert_tiny_corrupt.pt",
+    "bert_tiny_beacon_reupload.pt",
+    "sandbox-log.jsonl",
+    "blocklist.json",
+    "quarantine/",
+    "lab9-results.txt"
+  ],
+  "runtime_disk_note": "About 90 MB of .pt files inside the container, gone when it is removed.",
+  "validated_on": "2026-09-19 - built from lab-dev/lab9 and verified offline under --network none; see INSTRUCTOR-TEST.md",
+  "measured": {
+    "image_on_disk_arm64_bytes": 906000000,
+    "student_pull_if_they_have_lab1_bytes": 368874,
+    "student_pull_clean_machine_note": "~220 MB arm64 / ~305 MB amd64",
+    "shared_layers_with_lab1": 9,
+    "shared_bytes_with_lab1": 192761423,
+    "sharing_precondition": "requires the same 'rm -rf /opt/lab-assets/hf/xet' line in labs 1 and 2; without it the 16.5 MB asset layer is not shared and lab 9 costs 16,929,668 bytes"
+  }
+}
