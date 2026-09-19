@@ -73,8 +73,8 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
  && rm /tmp/requirements.txt \
  && rm -rf /usr/local/lib/python3.11/site-packages/torch/include \
            /usr/local/lib/python3.11/site-packages/torch/test \
- && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
+ && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
+ && find /usr/local/lib/python3.11 -name '*.pyc' -delete
 
 # ---------------------------------------------------------------------------
 # Assets baked at build time. Nothing downloads during class.
@@ -104,8 +104,8 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
 COPY scripts/fetch_assets.py /tmp/fetch_assets.py
 RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
  && rm -rf /opt/lab-assets/hf/xet \
- && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
+ && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
+ && find /usr/local/lib/python3.11 -name '*.pyc' -delete
 
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1

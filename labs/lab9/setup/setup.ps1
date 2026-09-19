@@ -372,7 +372,7 @@ if ($alreadyHave) {
     Write-Host ""
     Write-Host "  If you have done lab 1 on this machine, this is about 28 KB"
     Write-Host "  and takes a second: lab 9 reuses lab 1's model and libraries"
-    Write-Host "  down to the byte. From a clean machine it is about 249 MB on"
+    Write-Host "  down to the byte. From a clean machine it is about 247 MB on"
     Write-Host "  Intel. Measured on the published image."
     Write-Host "  $Tag"
     Hr

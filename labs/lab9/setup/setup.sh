@@ -197,8 +197,8 @@ else
   printf '\n'
   printf '  If you have done lab 1 on this machine, this is about 28 KB and\n'
   printf '  takes a second: lab 9 reuses lab 1 model and libraries down to\n'
-  printf '  the byte. From a clean machine it is about 193 MB on Apple\n'
-  printf '  Silicon, 249 MB on Intel. Measured on the published image.\n'
+  printf '  the byte. From a clean machine it is about 191 MB on Apple\n'
+  printf '  Silicon, 247 MB on Intel. Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

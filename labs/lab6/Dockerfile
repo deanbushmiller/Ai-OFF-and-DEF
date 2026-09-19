@@ -2,7 +2,17 @@
 # Consolidation contract: python:3.11-slim-bookworm, assets baked at build time,
 # everything under /labs/lab6/. It serves on 127.0.0.1 ONLY and publishes no port.
 
-FROM python:3.11-slim-bookworm
+# BASE PINNED BY DIGEST - do not replace with the bare tag.
+#
+# python:3.11-slim-bookworm is a MOVING tag. Measured 2026-09-19: one patch bump of
+# the base broke every layer above it - same Dockerfile, same pinned requirements,
+# 192,760,307 of 192,769,075 bytes stopped being shared. The digest is the only thing
+# that lets labs built weeks apart share layers. It is the multi-arch index, so buildx
+# resolves the right platform. It was 3.11.16-slim-bookworm on 2026-09-19.
+#
+# Bump it deliberately, for security patching, and rebuild EVERY lab in one sitting
+# when you do. See Activity-Labs/lab-build-prompts/REBUILD-PLAN.md.
+FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
 LABEL org.opencontainers.image.title="SecLLM Bootcamp Labs"
@@ -68,17 +78,26 @@ RUN --mount=type=bind,from=wheels,target=/wheels \
       "$(ls /wheels/${TARGETARCH}/llama_cpp_python-*.whl)" \
       -r /tmp/requirements.txt \
  && rm /tmp/requirements.txt \
- && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
+ && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
+ && find /usr/local/lib/python3.11 -name '*.pyc' -delete
 
 # ---------------------------------------------------------------------------
 # Model baked at build time. SHARED with labs 3, 4, 6 and 7 - keep this exact
 # source ID and path so the merged image stores it once. Lab 6 buys no model.
 # ---------------------------------------------------------------------------
+# Two things in this RUN are what make the baked-asset layer identical across builds
+# AND across base versions (measured 2026-09-19, see REBUILD-PLAN.md):
+#   - rm -rf /opt/lab-assets/hf/xet: huggingface_hub 1.31 writes a transfer log whose
+#     filename and contents carry the build time. 40 KB that forced a full re-download.
+#   - the __pycache__ purge covers the WHOLE python3.11 tree, not just site-packages:
+#     running fetch_assets.py byte-compiles stdlib modules, and a .pyc header embeds
+#     the source mtime, which differs between base builds. Seven such files tied this
+#     layer to the base. The base ships no .pyc, so this whiteouts nothing.
 COPY scripts/fetch_assets.py /tmp/fetch_assets.py
 RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
- && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
+ && rm -rf /opt/lab-assets/hf/xet \
+ && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
+ && find /usr/local/lib/python3.11 -name '*.pyc' -delete
 
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1 \

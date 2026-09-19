@@ -19,8 +19,8 @@ only those. Expert mode runs the whole list.
 
 If you have already done lab 1, you are ready — nothing new to install, and the download is
 **about 28 KB**. Lab 9 reuses lab 1's model and libraries down to the byte, so there is
-almost nothing left to fetch. From a clean machine the image is about **193 MB on Apple
-Silicon and 249 MB on Intel**. Both figures measured on the published image, 2026-09-19.
+almost nothing left to fetch. From a clean machine the image is about **191 MB on Apple
+Silicon and 247 MB on Intel**. Both figures measured on the published image, 2026-09-19.
 
 ---
 
