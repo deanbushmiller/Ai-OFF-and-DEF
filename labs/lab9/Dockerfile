@@ -5,7 +5,23 @@
 # TIER: torch, with labs 1 and 2. No llama wheel - nothing here runs a
 # generator. This lab buys NO new bytes: every dependency and the model itself
 # were already paid for by lab 1.
-FROM python:3.11-slim-bookworm
+# BASE PINNED BY DIGEST - do not replace with the bare tag.
+#
+# python:3.11-slim-bookworm is a MOVING tag. It moved between the labs 1-8
+# publish and the lab 9 build, and measured on 2026-09-19 that single patch bump
+# broke every layer above it: same Dockerfile, same pinned requirements, and
+# 192,760,307 of 192,769,075 bytes stopped being shared - including the 128.8 MB
+# pip layer and the 16.6 MB model layer. Only 8,768 bytes still matched.
+#
+# So the digest is the only thing that makes cross-lab layer sharing survive
+# labs being built weeks apart, which is exactly how this course is built.
+# This digest is the index (multi-arch), so buildx resolves the right platform.
+# It was 3.11.16-slim-bookworm on 2026-09-19.
+#
+# Bump it deliberately, for security patching, and when you do, rebuild and
+# republish EVERY lab that carries it in the same sitting. A lab left behind on
+# the old pin shares nothing with the others.
+FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
 LABEL org.opencontainers.image.title="SecLLM Bootcamp Labs"

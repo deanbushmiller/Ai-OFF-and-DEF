@@ -1,7 +1,23 @@
 # SecLLM Bootcamp - Lab 2: RAG and semantic ingestion attacks
 # Consolidation contract: python:3.11-slim-bookworm, CPU-only torch, assets
 # baked at build time, everything under /labs/lab2/, no ports bound.
-FROM python:3.11-slim-bookworm
+# BASE PINNED BY DIGEST - do not replace with the bare tag.
+#
+# python:3.11-slim-bookworm is a MOVING tag. It moved between the labs 1-8
+# publish and the lab 9 build, and measured on 2026-09-19 that single patch bump
+# broke every layer above it: same Dockerfile, same pinned requirements, and
+# 192,760,307 of 192,769,075 bytes stopped being shared - including the 128.8 MB
+# pip layer and the 16.6 MB model layer. Only 8,768 bytes still matched.
+#
+# So the digest is the only thing that makes cross-lab layer sharing survive
+# labs being built weeks apart, which is exactly how this course is built.
+# This digest is the index (multi-arch), so buildx resolves the right platform.
+# It was 3.11.16-slim-bookworm on 2026-09-19.
+#
+# Bump it deliberately, for security patching, and when you do, rebuild and
+# republish EVERY lab that carries it in the same sitting. A lab left behind on
+# the old pin shares nothing with the others.
+FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
 LABEL org.opencontainers.image.title="SecLLM Bootcamp Labs"
@@ -57,8 +73,17 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
 # on every build and every student re-downloads it whole for a rebuild that
 # changed nothing. rewrite-timestamp cannot help: it rewrites mtimes, not file
 # CONTENTS. Added 2026-09-15; labs 3-8 have had it since 2026-09-13.
+#
+# The xet deletion, added 2026-09-19 at lab 9. huggingface_hub 1.31 writes a
+# transfer log to /opt/lab-assets/hf/xet/logs/ whose FILENAME and CONTENTS both
+# carry the build time. It was the only difference between lab 9's 16.5 MB asset
+# layer and lab 1's - all 49 other files, the model included, were already
+# byte-identical - and those 40 KB cost every student a 16.5 MB re-download.
+# Download-time telemetry; nothing reads it at run time and these labs run with
+# HF_HUB_OFFLINE=1.
 COPY scripts/fetch_assets.py /tmp/fetch_assets.py
 RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
+ && rm -rf /opt/lab-assets/hf/xet \
  && find /usr/local/lib/python3.11/site-packages -name '__pycache__' -type d -prune -exec rm -rf {} + \
  && find /usr/local/lib/python3.11/site-packages -name '*.pyc' -delete
 

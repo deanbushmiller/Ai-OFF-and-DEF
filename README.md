@@ -63,11 +63,9 @@ Each lab ends by offering to download the next one. Say yes — the labs share c
 layers, so most labs after the first are a small delta rather than a full download. Lab 8
 closes the attack half by listing the evidence for all eight instead of offering a pre-pull.
 
-**Lab 9 is a full ~193 MB (Apple Silicon) / ~249 MB (Intel) download** even though it uses
-the same model and libraries as lab 1 — it was built on a newer base image than labs 1–8 were
-published with, and Docker only reuses a layer that matches exactly. It is also the first lab
-that runs with `--network none` — no network at all — because egress control is what it
-teaches.
+**Lab 9 costs about 28 KB if you already have lab 1** — it reuses lab 1's model and
+libraries down to the byte. It is also the first lab that runs with `--network none` — no
+network at all — because egress control is what it teaches.
 
 **Lab 3 is the exception: about 1.2 GB.** It runs a real language model locally, and that
 model is reused by several later labs. Take lab 2's offer to pre-fetch it and you will not

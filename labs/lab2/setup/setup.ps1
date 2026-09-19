@@ -432,7 +432,7 @@ if ($NextLab) {
     Write-Host ""
     Info $NextName
     Info "Lab 3 buys the language model that labs 4-7 all reuse, so it is the"
-    Info "biggest download in the course: about 1.1 GB. Every lab after it is"
+    Info "biggest download in the course: about 1.2 GB. Every lab after it is"
     Info "tiny by comparison."
     Write-Host ""
     Info "Doing it now means no waiting at the start of the next session."

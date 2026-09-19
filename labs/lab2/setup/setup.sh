@@ -249,7 +249,7 @@ if [ -n "${NEXT_LAB:-}" ]; then
   printf '\n'
   info "$NEXT_LAB_NAME"
   info "Lab 3 buys the language model that labs 4-7 all reuse, so it is the"
-  info "biggest download in the course: about 1.1 GB. Every lab after it is"
+  info "biggest download in the course: about 1.2 GB. Every lab after it is"
   info "tiny by comparison."
   printf '\n'
   info "Doing it now means no waiting at the start of the next session."

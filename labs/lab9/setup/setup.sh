@@ -193,15 +193,12 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
   ok "No download needed - the previous lab fetched this for you."
   SKIP_PULL=1
 else
-  printf '  Downloading the lab image. About 193 MB on Apple Silicon,\n'
-  printf '  249 MB on Intel. A couple of minutes on a normal connection.\n'
-  printf '  Measured on the published image 2026-09-19.\n'
+  printf '  Downloading the lab image.\n'
   printf '\n'
-  printf '  This lab uses the same model and libraries as lab 1, so it LOOKS\n'
-  printf '  like it should be a small download. It is not, yet: lab 9 was\n'
-  printf '  built on a newer base image than labs 1-8 were, and Docker only\n'
-  printf '  reuses a layer when it matches exactly. That is a rebuild job on\n'
-  printf '  our side, not something wrong on yours.\n'
+  printf '  If you have done lab 1 on this machine, this is about 28 KB and\n'
+  printf '  takes a second: lab 9 reuses lab 1 model and libraries down to\n'
+  printf '  the byte. From a clean machine it is about 193 MB on Apple\n'
+  printf '  Silicon, 249 MB on Intel. Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

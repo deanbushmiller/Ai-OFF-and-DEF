@@ -92,11 +92,13 @@
   "runtime_disk_note": "About 90 MB of .pt files inside the container, gone when it is removed.",
   "validated_on": "2026-09-19 - built from lab-dev/lab9 and verified offline under --network none; see INSTRUCTOR-TEST.md",
   "measured": {
-    "image_on_disk_arm64_bytes": 906000000,
-    "student_pull_if_they_have_lab1_bytes": 368874,
-    "student_pull_clean_machine_note": "~220 MB arm64 / ~305 MB amd64",
-    "shared_layers_with_lab1": 9,
-    "shared_bytes_with_lab1": 192761423,
-    "sharing_precondition": "requires the same 'rm -rf /opt/lab-assets/hf/xet' line in labs 1 and 2; without it the 16.5 MB asset layer is not shared and lab 9 costs 16,929,668 bytes"
+    "measured_on": "2026-09-19, on the published GHCR manifests",
+    "student_pull_if_they_have_lab1_bytes": 27810,
+    "student_pull_clean_machine_bytes": {
+      "arm64": 193110391,
+      "amd64": 248631642
+    },
+    "base_image_pinned": "python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b",
+    "note": "The torch tier (labs 1, 2, 9) was rebuilt together on this pinned base digest on 2026-09-19. Before that lab 9 shared nothing with any lab and cost a full 193 MB (arm64) / 249 MB (amd64). Two things were required: the digest pin, because the moving tag had advanced one patch and that alone broke every layer above it; and an identical apt layer in lab 1, because on amd64 the presence of an apt layer before pip changes the pip layer's tar by 200 bytes."
   }
 }
