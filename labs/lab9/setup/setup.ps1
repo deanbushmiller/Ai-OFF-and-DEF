@@ -457,10 +457,10 @@ if ($NextLab) {
     Hr
     Write-Host ""
     Info $NextName
-    Info "Lab 10 is the second defend lab and sits in the same dependency"
-    Info "tier as this one, so it should reuse most of what you just"
-    Info "downloaded. No promise on the size until it is published and"
-    Info "measured - the last honest number goes here then."
+    Info "Lab 10 is the second defend lab. If you have done lab 2 on this"
+    Info "machine it is about 34 KB and takes a second - it reuses lab 2's"
+    Info "models and libraries down to the byte. Measured on the published"
+    Info "image, both architectures."
     Info "Either way, doing it now beats waiting at the start of class."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"

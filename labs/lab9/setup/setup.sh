@@ -276,10 +276,10 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Lab 10 is the second defend lab and sits in the same dependency"
-  info "tier as this one, so it should reuse most of what you just"
-  info "downloaded. No promise on the size until it is published and"
-  info "measured - the last honest number goes here then."
+  info "Lab 10 is the second defend lab. If you have done lab 2 on this"
+  info "machine it is about 34 KB and takes a second - it reuses lab 2's"
+  info "models and libraries down to the byte. Measured on the published"
+  info "image, both architectures."
   info "Either way, doing it now beats waiting at the start of class."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"

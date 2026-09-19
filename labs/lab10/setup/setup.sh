@@ -195,10 +195,10 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
 else
   printf '  Downloading the lab image.\n'
   printf '\n'
-  printf '  If you have done lab 1 on this machine, this is about 28 KB and\n'
+  printf '  If you have done lab 2 on this machine, this is about 34 KB and\n'
   printf '  takes a second: lab 10 reuses lab 2 models and libraries down to\n'
-  printf '  the byte. From a clean machine it is about 191 MB on Apple\n'
-  printf '  Silicon, 247 MB on Intel. Measured on the published image.\n'
+  printf '  the byte. From a clean machine it is about 572 MB on Apple\n'
+  printf '  Silicon, 628 MB on Intel. Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

@@ -19,7 +19,10 @@ only those. Expert mode runs the whole list.
 > `docker --version` works.
 
 If you have already done lab 2, you are ready — nothing new to install, and almost nothing
-new to download. This lab reuses lab 2's dependencies and both of lab 2's models.
+new to download. This lab reuses lab 2's dependencies and both of lab 2's models down to the
+byte, so the pull is **about 34 KB** and takes a second. From a clean machine it is about
+572 MB on Apple Silicon and 628 MB on Intel. Measured on the published image, both
+architectures.
 
 ---
 
