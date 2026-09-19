@@ -1,0 +1,117 @@
+{
+  "lab": 10,
+  "title": "Defending RAG ingestion",
+  "defends": 2,
+  "tier": "torch (embedding set, with lab 2)",
+  "cache_root": "/opt/lab-assets",
+  "hf_home": "/opt/lab-assets/hf",
+  "offline_at_runtime": true,
+  "ports": [],
+  "interaction": "beginner (11 guided typed commands) or expert (real shell + nano)",
+  "models": [
+    {
+      "source_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "provider": "huggingface",
+      "role": "embeddings",
+      "bytes": 90900000,
+      "shared": true,
+      "shared_note": "Reused from lab 2 at the same source ID and cache path. fetch_assets.py is byte-identical to lab 2's, which is what makes the asset layer shared rather than duplicated."
+    },
+    {
+      "source_id": "google/flan-t5-small",
+      "provider": "huggingface",
+      "role": "answer generation",
+      "bytes": 307900000,
+      "shared": true,
+      "shared_note": "Also lab 2's. Dropping it to use a rule-based answer stub would change fetch_assets.py, break the asset-layer match and cost every student ~370 MB to save nothing."
+    }
+  ],
+  "python_packages": [
+    {
+      "name": "torch",
+      "version": "2.9.1",
+      "index": "https://download.pytorch.org/whl/cpu",
+      "shared": true
+    },
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": true
+    },
+    {
+      "name": "huggingface-hub",
+      "version": "1.31.0",
+      "shared": true
+    },
+    {
+      "name": "transformers",
+      "version": "5.17.0",
+      "shared": true
+    },
+    {
+      "name": "sentencepiece",
+      "version": "0.2.0",
+      "shared": true,
+      "note": "T5 tokenizer."
+    },
+    {
+      "name": "reportlab",
+      "version": "4.2.5",
+      "shared": true,
+      "note": "Shared with lab 2 - builds the white-on-white PDF."
+    },
+    {
+      "name": "pypdf",
+      "version": "5.1.0",
+      "shared": true,
+      "note": "Shared with lab 2. Lab 10 uses it for BOTH the text layer and, via ContentStream, the rendering instructions - which is what rule 1 inspects."
+    }
+  ],
+  "apt_packages": [
+    {
+      "name": "nano",
+      "shared": true,
+      "note": "Required for expert mode."
+    },
+    {
+      "name": "less",
+      "shared": true,
+      "note": "Reading LAB.md in expert mode."
+    }
+  ],
+  "lab_only_files": [
+    "rag.py (lab 2's, plus provenance, a retrieval log and validated ingest)",
+    "validate.py",
+    "canary.py",
+    "purge.py",
+    "tune.py",
+    "check.py",
+    "runner.py",
+    "rules.json",
+    "corpus/PROVENANCE.json",
+    "LAB.md",
+    "assets.json"
+  ],
+  "reused_verbatim_from_lab2": [
+    "requirements.txt",
+    "scripts/fetch_assets.py",
+    "corpus/*.txt",
+    "poison_source.txt"
+  ],
+  "vector_store": "numpy cosine similarity, in memory, saved as .npz (NOT pickle - see lab 1)",
+  "measured": {
+    "note": "PROBE figures, measured 2026-09-19 inside the published lab 2 image with --network none. Image sizes are NOT yet measured - see validated_on.",
+    "canary_clean": "Alexander Graham Bell <- bell.txt 0.7230, identical across 3 runs",
+    "canary_poisoned": "Dean Bushmiller <- poisoned_handbook.pdf 0.7722, identical across 3 runs",
+    "margin": 0.0493,
+    "purge_restores": "0.722955 before, 0.722955 after, drift 0.00000000",
+    "rule1": "5 of 11 text operations flagged; payload luminance 1.0 at 6pt, visible text luminance 0.0 at 11-16pt; zero false positives",
+    "rule3": "every clean document covers 1 canary topic, the poisoned PDF covers 5; separable at thresholds 0.55, 0.60 and 0.65; shipped T=0.60, N=2",
+    "peak_ram": "TBD - target <1 GB, same shape as lab 2",
+    "runs_offline": "probe verified with --network none",
+    "validated_on": "PENDING - image not yet built or published; download figures must come from tools/verify-sharing.py against the registry, never from a local build"
+  },
+  "reused_with_paths_changed": [
+    "make_poison.py - /labs/lab2/ -> /labs/lab10/, nothing else"
+  ]
+}

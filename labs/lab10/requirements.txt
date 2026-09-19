@@ -1,0 +1,13 @@
+# Lab 2 - shared dependency set for the consolidated 8-lab image.
+# torch is installed separately from the PyTorch CPU index (see Dockerfile).
+
+# Shared across labs. transformers 5.x is REQUIRED: 4.x pins huggingface-hub<1.0,
+# which conflicts with the hub 1.31.0 lab 1 already ships.
+numpy==2.3.5
+huggingface-hub==1.31.0
+transformers==5.17.0
+sentencepiece==0.2.0
+
+# Lab 2 specific - build and read the poisoned PDF.
+reportlab==4.2.5
+pypdf==5.1.0

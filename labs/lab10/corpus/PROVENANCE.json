@@ -1,0 +1,101 @@
+{
+  "_comment": "Rule 2 of the validator. Every document that may be embedded has an entry here: where it came from, when it arrived, what trust tier it sits in, and who put it there. A document with no entry has no provenance, and a chunk with no provenance cannot be selectively purged later - the only recovery is to rebuild the whole index. That is why this file is not paperwork.",
+  "_fields": {
+    "source": "where the document came from",
+    "added": "ingestion time",
+    "trust": "reviewed | partner | public",
+    "added_by": "the team accountable for it"
+  },
+  "documents": {
+    "bell.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "bernerslee.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "curie.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "darwin.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "davinci.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "edison.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "fleming.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "franklin.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "gutenberg.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "hopper.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "lovelace.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "newton.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "tesla.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "turing.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    },
+    "wright.txt": {
+      "source": "reference-library",
+      "added": "2026-01-14",
+      "trust": "reviewed",
+      "added_by": "knowledge-team"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "_comment": "The ingestion validator's policy. You edit ONE line of this in the last step of the lab. It is deliberately separate from the pipeline code: a policy you can read and change is a control you own, and a threshold buried in a function is not.",
+
+  "require_provenance": true,
+  "_require_provenance_note": "Rule 2. Refuse any document with no entry in corpus/PROVENANCE.json. Turn this off and the poisoned PDF walks in through the front door - it is the cheapest of the three rules and the one that makes recovery possible, because you cannot purge by a tag that was never written.",
+
+  "flag_invisible_text": true,
+  "_flag_invisible_text_note": "Rule 1. Inspect the PDF content stream and refuse text a human cannot read: ink whose luminance is above invisible_luminance on a white page, or type smaller than min_font_pt. Measured on lab 2's poisoned_handbook.pdf: the visible checklist is luminance 0.0 at 11-16pt, the payload is luminance 1.0 at 6pt. There is no grey area to tune.",
+  "invisible_luminance": 0.9,
+  "min_font_pt": 7.0,
+
+  "max_canary_topics": 2,
+  "canary_similarity": 0.6,
+  "_canary_note": "Rule 3. Count the DISTINCT canary questions any chunk of one document answers above canary_similarity, and refuse a document that claims max_canary_topics or more. A reference document answers one question. The poisoned PDF answers five. Measured: every clean document covers 1, the poison covers 5, and that holds at 0.55, 0.60 and 0.65 - 0.60 is the middle of the plateau, not an edge. Drop canary_similarity to 0.50 and a legitimate document reaches 2, which is the false positive the lab shows you.",
+
+  "blocked_indicators": [],
+  "_blocked_indicators_note": "Your own list, empty on purpose. You add the indicator your own detector produced in the last step of the lab. Rules 1-3 are the ones you were given; this is the one you write."
+}
