@@ -193,11 +193,15 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
   ok "No download needed - the previous lab fetched this for you."
   SKIP_PULL=1
 else
-  printf '  Downloading the lab image.\n'
-  printf '  If you still have lab 1 on this machine, almost all of this is\n'
-  printf '  already here and the download is well under a megabyte. From a\n'
-  printf '  clean machine it is about 220 MB on Apple Silicon, 305 MB on\n'
-  printf '  Intel, and takes a couple of minutes.\n'
+  printf '  Downloading the lab image. About 193 MB on Apple Silicon,\n'
+  printf '  249 MB on Intel. A couple of minutes on a normal connection.\n'
+  printf '  Measured on the published image 2026-09-19.\n'
+  printf '\n'
+  printf '  This lab uses the same model and libraries as lab 1, so it LOOKS\n'
+  printf '  like it should be a small download. It is not, yet: lab 9 was\n'
+  printf '  built on a newer base image than labs 1-8 were, and Docker only\n'
+  printf '  reuses a layer when it matches exactly. That is a rebuild job on\n'
+  printf '  our side, not something wrong on yours.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0
@@ -276,10 +280,10 @@ if [ -n "${NEXT_LAB:-}" ]; then
   printf '\n'
   info "$NEXT_LAB_NAME"
   info "Lab 10 is the second defend lab and sits in the same dependency"
-  info "tier as this one, so it reuses these layers rather than fetching"
-  info "them again. Measured here: a student who already had lab 1"
-  info "downloaded 369 KB for lab 9. Expect lab 10 to be small too -"
-  info "the honest number goes here once lab 10 is published."
+  info "tier as this one, so it should reuse most of what you just"
+  info "downloaded. No promise on the size until it is published and"
+  info "measured - the last honest number goes here then."
+  info "Either way, doing it now beats waiting at the start of class."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."

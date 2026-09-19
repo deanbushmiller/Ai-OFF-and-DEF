@@ -17,10 +17,15 @@ only those. Expert mode runs the whole list.
 > course files, installing Docker, and the extra steps Windows needs. Come back here when
 > `docker --version` works.
 
-If you have already done lab 1, you are ready — nothing new to install, and almost nothing
-new to download. This lab reuses lab 1's dependencies and lab 1's model, so the pull is a
-few hundred kilobytes rather than a few hundred megabytes. From a clean machine it is about
-220 MB on Apple Silicon and 305 MB on Intel.
+If you have already done lab 1, you are ready — there is nothing new to install. The image
+is about **193 MB on Apple Silicon and 249 MB on Intel**, measured on the published image on
+2026-09-19.
+
+That is a full download even though this lab uses the same model and the same libraries as
+lab 1. Docker reuses a layer only when it matches exactly, and lab 9 was built on a newer
+base image than labs 1–8 were published with, so nothing matches yet. Rebuilding the earlier
+labs onto the same base would cut this to a few hundred kilobytes; until that happens, the
+honest number is the one above.
 
 ---
 
