@@ -1,0 +1,72 @@
+{
+  "lab": 14,
+  "title": "Defending MCP tool calls",
+  "tier": "llama",
+  "defends": "attack lab 6 - MCP and interface hijacking",
+  "validated_on": "2026-09-20",
+
+  "assets": [
+    {
+      "name": "Qwen2.5-1.5B-Instruct Q4_K_M",
+      "source_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
+      "file": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "path": "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf",
+      "size_bytes": 1117320864,
+      "size_human": "1.12 GB on disk, 1.09 GB compressed",
+      "shared": true,
+      "shared_with": ["lab3", "lab4", "lab5", "lab6", "lab7", "lab12", "lab13", "lab15"],
+      "note": "Baked at build time by scripts/fetch_assets.py, which is byte-identical to lab 7's. Lab 14 buys no model."
+    },
+    {
+      "name": "llama-cpp-python",
+      "source_id": "prebuilt wheel, Activity-Labs/wheels/",
+      "version": "0.3.35",
+      "size_human": "~49.8 MB, in the shared pip layer",
+      "shared": true,
+      "shared_with": ["lab3", "lab4", "lab5", "lab6", "lab7", "lab12", "lab13", "lab15"],
+      "note": "Installed from the named build context, never compiled in a lab."
+    },
+    {
+      "name": "requirements-llama.txt",
+      "source_id": "Activity-Labs/requirements-llama.txt",
+      "shared": true,
+      "note": "Copied VERBATIM as this lab's requirements.txt and proven with diff -q against lab 7's copy and against the source. numpy and pillow are carried and never imported; that is the price of the shared layer."
+    },
+    {
+      "name": "apt: libgomp1 nano less curl ca-certificates",
+      "size_human": "1.95 MB compressed",
+      "shared": true,
+      "shared_with": ["lab3", "lab4", "lab5", "lab6", "lab7", "lab8", "lab12", "lab13"],
+      "note": "Byte-identical RUN across the llama tier. curl and ca-certificates are carried, not used, to keep the layer identical."
+    },
+    {
+      "name": "lab-6 MCP shape and dummy tools",
+      "source_id": "Activity-Labs/lab-dev/lab6",
+      "shared": false,
+      "note": "The JSON-RPC 2.0 MCP shape, the two stub tools (get_balance, send_payment) and the two fake accounts are carried over from attack lab 6 so the pair line up tool for tool. What changed is WHO is hostile: lab 6's server was honest and an attacker sat on the wire; here mcp_server.py IS the adversary and there is no proxy. Stdlib http.server/socketserver only - no new dependency."
+    },
+    {
+      "name": "lab-14 source files",
+      "source_id": "this repository",
+      "size_human": "~70 KB",
+      "shared": false,
+      "note": "The host (ask.py), the integrity layer (verify.py), the trust list, the tamper-log reader, poison.py, the two recovery scripts, the evidence replay and the runner. The only bytes this lab adds."
+    }
+  ],
+
+  "new_bytes_for_this_lab": "source files only - no model, no apt package, no pip package",
+  "ports": {
+    "8014": "Mock MCP server, 127.0.0.1 ONLY, inside the container. Started and stopped by ask.py as a child process, the way a real MCP host spawns a server it was configured to trust. NEVER published with -p: a loopback bind inside a container cannot be reached from the host (measured at lab 12), so -p would promise a browser view that does not work, and there is nothing to view."
+  },
+  "runtime": {
+    "network": "none - the container runs with --network none, and the lab says so on screen. This lab's subject is what you accept from servers you do not operate, so it is given no route to any of them.",
+    "peak_rss": "1,409,114,112 bytes (1.41 GB) measured with ru_maxrss at --cpus=2 --memory=2g on the lab 14 image, 2026-09-20. NOTE: the cgroup memory.peak for the same run reads 365,395,968 (365 MB) because llama.cpp mmaps the GGUF and the cgroup charges only what it must. Both are correct; quote ru_maxrss, which is what a student sees in Activity Monitor or Task Manager and what every earlier lab in this course quoted.",
+    "generations_per_lab_run": 5,
+    "note": "ONE AGENT RUN PER PROCESS. Each ask.py invocation is its own process: it starts the MCP server, loads the model, runs one exchange and exits. Verdict sequences measured byte-identical across three runs and again at --cpus=2 (same md5). Assertions key on verdict records, the server's own ledger, and whether the poisoned marker reached the system prompt - never on the model's prose."
+  },
+  "deliberately_fails": {
+    "beat": "poison.py --rewrite",
+    "what": "The server returns 'balance is 999999.00 USD'. It matches the declared shape perfectly, so gate 3 passes it and the assistant reports a false balance.",
+    "why_kept": "A schema check catches a malformed message, not a well-formed lie. You checked the shape; nobody checked the source. The production answer is a signed tool call (ATLAS AML.M0013), which lab 6 already demonstrated as an HMAC - so the callback is free and the limit is measured rather than asserted. runner.py FAILS THE LAB if this beat is ever blocked, because that would mean SHAPES in verify.py has drifted and the lab's honest limit is no longer honest."
+  }
+}

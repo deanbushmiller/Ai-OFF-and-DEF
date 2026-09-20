@@ -1,0 +1,66 @@
+{
+  "_comment": [
+    "The trust list. This is the customer's record of which MCP servers it",
+    "will talk to and exactly what it approved from each one.",
+    "",
+    "  trusted       gate 1 - talk to this server at all?",
+    "  pinned        gate 2 - sha256 of each descriptor AS APPROVED",
+    "  known_good    the approved bytes themselves, for the diff and the re-pin",
+    "  serve_pinned  after a re-pin: use OUR copy, not what the server advertises",
+    "",
+    "OWASP LLM01:2026 prevention 10 asks for exactly this: pin, sign and verify",
+    "every MCP server, and audit tool descriptions for hidden instructions.",
+    "In production this is a tool registry with owners and a review process."
+  ],
+  "servers": {
+    "velocity-finance-tools": {
+      "owner": "Velocity Corp Treasury (third-party MCP server)",
+      "approved_on": "2026-09-01",
+      "trusted": true,
+      "serve_pinned": false,
+      "pinned": {
+        "get_balance": "e7abe22cf739711c24dff5c444b211b325ef1406a399322bcc55697ac2e843bd",
+        "send_payment": "720787443f585bf36869882c927a932dd5143eae5ac72913b41bb7c64b485210"
+      },
+      "known_good": {
+        "get_balance": {
+          "name": "get_balance",
+          "description": "Return the current balance of one Velocity Corp account.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "account": {
+                "type": "string",
+                "description": "Account number, e.g. chk-001"
+              }
+            },
+            "required": [
+              "account"
+            ]
+          }
+        },
+        "send_payment": {
+          "name": "send_payment",
+          "description": "Send a payment from the operating account to a payee.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "to": {
+                "type": "string",
+                "description": "Payee reference"
+              },
+              "amount": {
+                "type": "number",
+                "description": "Amount in USD"
+              }
+            },
+            "required": [
+              "to",
+              "amount"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

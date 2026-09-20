@@ -1,0 +1,362 @@
+#!/usr/bin/env bash
+# ===========================================================================
+#  SecLLM Bootcamp - Lab 14 setup  (macOS and Linux)
+#
+#  Windows students: use setup.ps1 instead.
+#
+#  Run it:   bash setup.sh
+#  Hard mode: bash setup.sh --challenge      (commands hidden, work them out)
+#
+#  This script installs nothing on your machine. It checks that Docker is
+#  ready, works out which image your Mac needs, downloads it, runs the lab,
+#  and saves your results next to this file.
+# ===========================================================================
+set -uo pipefail
+
+IMAGE="ghcr.io/deanbushmiller/seclm-labs"
+LAB="lab14"
+NEXT_LAB="lab15"         # set to "" on the final lab
+NEXT_LAB_NAME="Lab 15 - Defending against AI-scaled attacks"
+CONTAINER="seclm-lab14-run"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RESULTS="$HERE/lab14-results.txt"
+TAMPER="$HERE/lab14-tamper-log.jsonl"
+TRUST="$HERE/lab14-trust.json"
+EXTRA_ARGS=("$@")
+
+OS_KIND="$(uname -s | tr '[:upper:]' '[:lower:]')"   # darwin | linux
+
+ok()   { printf '  [ OK ]  %s\n' "$*"; }
+bad()  { printf '  [FAIL]  %s\n' "$*"; }
+warn() { printf '  [WARN]  %s\n' "$*"; }
+info() { printf '          %s\n' "$*"; }
+hr()   { printf '%s\n' "----------------------------------------------------------------"; }
+
+printf '\n'; hr
+printf '  SecLLM Bootcamp - Lab 14: Defending MCP tool calls\n'
+printf '  Setup and launcher (macOS / Linux)\n'
+hr; printf '\n'
+# Where am I? The script resolves its own location, so it does not matter where the
+# course was cloned or which directory it was launched from. Printing it makes a clone
+# that landed somewhere unexpected visible now, not later as a puzzling copy failure.
+info "Course folder : $(cd "$HERE/../../.." 2>/dev/null && pwd || echo '?')"
+info "Results go to : $HERE"
+printf '\n'
+printf '  Checking prerequisites...\n\n'
+
+# --- 1. Docker installed? ---------------------------------------------------
+if ! command -v docker >/dev/null 2>&1; then
+  bad "Docker is not installed."
+  printf '\n'
+  if [ "$OS_KIND" = "linux" ]; then
+    info "Install Docker Engine, then run this script again."
+    info ""
+    info "  Debian / Ubuntu:  sudo apt install docker.io"
+    info "  Fedora / RHEL:    sudo dnf install docker"
+    info "  Arch:             sudo pacman -S docker"
+    info ""
+    info "  Or the official packages:  https://docs.docker.com/engine/install/"
+    info ""
+    info "After installing:"
+    info "    sudo systemctl enable --now docker"
+    info "    sudo usermod -aG docker \$USER"
+    info "    (then log out and back in)"
+  else
+    info "Install Docker Desktop, then run this script again:"
+    info "  https://www.docker.com/products/docker-desktop/"
+  fi
+  printf '\n'
+  exit 1
+fi
+ok "Docker is installed  ($(docker --version 2>/dev/null))"
+
+# --- 2. Docker daemon running? ----------------------------------------------
+if ! docker info >/dev/null 2>&1; then
+  # On Linux the most common cause is NOT a stopped daemon - it is that the
+  # user is not in the docker group. Distinguish them, or students chase the
+  # wrong problem.
+  if [ "$OS_KIND" = "linux" ] && ! groups 2>/dev/null | tr ' ' '\n' | grep -qx docker; then
+    bad "You are not in the 'docker' group."
+    printf '\n'
+    info "Docker is installed, but your user cannot talk to it without sudo."
+    info "Fix it once:"
+    info ""
+    info "    sudo usermod -aG docker \$USER"
+    info ""
+    info "Then LOG OUT AND BACK IN - a new terminal is not enough, the group"
+    info "membership is attached at login. Then run this script again."
+    printf '\n'
+    info "To check it worked:  groups | grep docker"
+    printf '\n'
+    exit 1
+  fi
+  bad "Docker is installed but not running."
+  printf '\n'
+  if [ "$OS_KIND" = "linux" ]; then
+    info "Start the Docker service:"
+    info ""
+    info "    sudo systemctl start docker"
+    info "    sudo systemctl enable docker     # start it at boot"
+    info ""
+    info "Then run this script again."
+  else
+    info "Open Docker Desktop from Applications and wait for the whale icon in"
+    info "your menu bar to stop animating, then run this script again."
+  fi
+  printf '\n'
+  exit 1
+fi
+ok "Docker is running"
+
+# --- 3. Detect operating system and hardware --------------------------------
+HW="$(uname -m)"
+
+# NOTE: macOS reports arm64, Linux reports aarch64. Same chip, different string.
+case "$HW" in
+  arm64|aarch64) DETECTED="arm64" ;;
+  x86_64|amd64)  DETECTED="amd64" ;;
+  *)             DETECTED="" ;;
+esac
+
+if [ "$OS_KIND" = "linux" ]; then
+  OS_VER="$(. /etc/os-release 2>/dev/null && echo "$PRETTY_NAME" || echo 'Linux')"
+  case "$DETECTED" in
+    arm64) CONFIG="Linux on ARM (aarch64)" ;;
+    amd64) CONFIG="Linux on Intel or AMD (x86_64)" ;;
+    *)     CONFIG="unrecognised hardware: $HW" ;;
+  esac
+else
+  OS_VER="macOS $(sw_vers -productVersion 2>/dev/null || echo 'unknown')"
+  case "$DETECTED" in
+    arm64) CONFIG="macOS on Apple Silicon (M-series)" ;;
+    amd64) CONFIG="macOS on Intel" ;;
+    *)     CONFIG="unrecognised hardware: $HW" ;;
+  esac
+fi
+
+# Cross-check against the Docker engine. The engine is the authority.
+ENGINE_ARCH="$(docker version --format '{{.Server.Arch}}' 2>/dev/null || echo '')"
+if [ -n "$ENGINE_ARCH" ] && [ -n "$DETECTED" ] && [ "$ENGINE_ARCH" != "$DETECTED" ]; then
+  warn "Your hardware says $DETECTED but the Docker engine says $ENGINE_ARCH."
+  info "Trusting the Docker engine. Using $ENGINE_ARCH."
+  DETECTED="$ENGINE_ARCH"
+fi
+[ -z "$DETECTED" ] && [ -n "$ENGINE_ARCH" ] && DETECTED="$ENGINE_ARCH"
+
+ok "Detected: $OS_VER  /  $HW"
+info "Configuration: $CONFIG"
+info "Image needed:  $DETECTED"
+
+# --- 4. Confirm or override --------------------------------------------------
+printf '\n'; hr
+printf '  Is this right?\n\n'
+printf '    [Enter]  Yes - use %s   (detected automatically)\n' "$DETECTED"
+if [ "$OS_KIND" = "linux" ]; then
+  printf '    1        ARM (aarch64)                     -> arm64\n'
+  printf '    2        Intel or AMD (x86_64)             -> amd64\n'
+else
+  printf '    1        Mac, Apple Silicon (M1/M2/M3/M4)  -> arm64\n'
+  printf '    2        Mac, Intel                        -> amd64\n'
+fi
+hr
+printf '  Choice: '
+if [ -t 0 ]; then read -r CHOICE || CHOICE=""; else CHOICE=""; fi
+case "${CHOICE:-}" in
+  1) DETECTED="arm64" ;;
+  2) DETECTED="amd64" ;;
+esac
+printf '\n'; ok "Using image architecture: $DETECTED"
+
+# --- 5. Disk space -----------------------------------------------------------
+# df -g is BSD/macOS; Linux needs -BG.
+if [ "$OS_KIND" = "linux" ]; then
+  AVAIL_GB="$(df -BG "$HOME" 2>/dev/null | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
+else
+  AVAIL_GB="$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')"
+fi
+if [ -n "${AVAIL_GB:-}" ]; then
+  if [ "$AVAIL_GB" -lt 2 ]; then
+    warn "Only ${AVAIL_GB} GB free. The lab needs about 1 GB. It may fail."
+  else
+    ok "Disk space: ${AVAIL_GB} GB free (need ~1 GB)"
+  fi
+fi
+
+# --- 6. Pull -----------------------------------------------------------------
+TAG="$IMAGE:$LAB-$DETECTED"
+printf '\n'; hr
+
+# The previous lab offers to pre-pull this image when it finishes. If the
+# student took that offer, it is already here and there is nothing to download.
+if docker image inspect "$TAG" >/dev/null 2>&1; then
+  printf '  Lab image is already on your machine.\n'
+  printf '  %s\n' "$TAG"
+  hr; printf '\n'
+  ok "No download needed - the previous lab fetched this for you."
+  SKIP_PULL=1
+else
+  printf '  Downloading the lab image.\n'
+  printf '\n'
+  printf '  If you have done lab 4 on this machine, this is about 21 MB on\n'
+  printf '  Apple Silicon, 24 MB on Intel: the OCR engine and the base are\n'
+  printf '  already on your disk down to the byte, and this pull is only the\n'
+  printf '  two small libraries this lab carries for itself. From a clean\n'
+  printf '  machine it is about 101 MB on Apple Silicon, 105 MB on Intel -\n'
+  printf '  no language model, the smallest image in the course either way.\n'
+  printf '  Measured on the published image.\n'
+  printf '  %s\n' "$TAG"
+  hr; printf '\n'
+  SKIP_PULL=0
+fi
+
+if [ "$SKIP_PULL" -eq 0 ] && ! docker pull "$TAG"; then
+  printf '\n'; bad "Could not download the lab image."
+  printf '\n'
+  info "Most likely causes, in order:"
+  info "  1. The image is not public yet. Tell the instructor you got"
+  info "     'denied' or 'unauthorized' on $TAG"
+  info "  2. No internet connection, or a workplace VPN blocking ghcr.io."
+  info "  3. Docker Desktop is running but has lost its network - quit and"
+  info "     reopen it, then try again."
+  printf '\n'
+  info "Contact the instructor through GitHub with the error above."
+  printf '\n'
+  exit 1
+fi
+printf '\n'; ok "Image downloaded"
+
+# --- 7. Run ------------------------------------------------------------------
+docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+printf '\n'; hr
+printf '  This lab runs with NO NETWORK AT ALL - --network none, below.\n'
+printf '  That is the lesson, not a precaution: this lab is about what you\n'
+printf '  accept from a third-party server, so it runs with no route to\n'
+printf '  any of them. The mock MCP server, the host, the trust list, the\n'
+printf '  model and the log are all inside the container.\n'
+printf '  The server binds 127.0.0.1:8014 in there. No port is published\n'
+printf '  and none is needed - there is nothing to open in a browser.\n'
+printf '\n'
+printf '  Starting the lab. You will be asked to choose beginner or\n'
+printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
+printf '  a real shell and works from LAB.md.\n'
+printf '\n'
+printf '  If you did labs 3 to 8, 12 or 13 on this machine, the 1.09 GB\n'
+printf '  model layer is already on your disk and is not fetched again.\n'
+printf '\n'
+printf '  A local language model runs five times in this lab. Each answer\n'
+printf '  takes 15-25 seconds, longer on a 2-core machine.\n'
+printf '\n'
+printf '  One step is SUPPOSED to get past the defence. When you reach it\n'
+printf '  the lab says so. That is the most useful step in the lab.\n'
+hr; printf '\n'
+
+# --network none, as labs 9 to 13 do. The addendum's rule is that a defend lab
+# runs under the control it teaches, and this lab's subject is what you accept
+# from servers you do not operate - so it is given no route to any of them.
+#
+# The pre-pull at the end of this script is a separate docker command and is
+# unaffected - it runs after the container has exited.
+#
+# NO -p. Lab 14 runs its mock MCP server on 127.0.0.1:8014 INSIDE the
+# container, started and stopped by the lab itself. A loopback bind inside a
+# container cannot be reached from the host - lab 12 measured that - so -p
+# would promise a browser view that does not work. There is nothing to
+# publish: the server answers one local process and exits with it.
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 14 "${EXTRA_ARGS[@]}"
+RUN_RC=$?
+
+# --- 8. Recover the transcript and the images --------------------------------
+printf '\n'
+if docker cp "$CONTAINER:/labs/lab14/lab14-results.txt" "$RESULTS" >/dev/null 2>&1; then
+  ok "Results saved: $RESULTS"
+  info "Paste the evidence table from the last step into the class chat,"
+  info "together with the descriptor diff. The column that matters is"
+  info "where each refusal happened, while the clean run keeps passing."
+else
+  warn "Could not save the results file (lab exit code $RUN_RC)."
+  info "Scroll up in this window to copy the evidence block instead."
+fi
+
+# The integrity layer's own log comes out too. It is the evidence for this lab
+# and the thing worth re-reading after class: every descriptor and every
+# message, with the verdict on each. Regenerated on every run.
+rm -f "$TAMPER" 2>/dev/null || true
+if docker cp "$CONTAINER:/labs/lab14/tamper-log.jsonl" "$TAMPER" >/dev/null 2>&1; then
+  ok "Tamper log saved: $TAMPER"
+  info "One JSON object per check. Look for the record carrying a diff -"
+  info "that is a tool description that changed after you approved it,"
+  info "which is an incident and not a bad day."
+else
+  info "No tamper log to copy - the lab did not run this time."
+fi
+
+# The trust list as the student left it, so they can see their own two
+# changes next to the log that prompted them.
+rm -f "$TRUST" 2>/dev/null || true
+if docker cp "$CONTAINER:/labs/lab14/trust.json" "$TRUST" >/dev/null 2>&1; then
+  ok "Trust list saved: $TRUST"
+  info "The server re-trusted, serve_pinned true, and each descriptor"
+  info "pinned to the copy YOU approved - not the one it advertises."
+else
+  info "No trust list to copy."
+fi
+
+docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+
+# --- 10. Pre-pull the next lab ----------------------------------------------
+# Done here, while the student is still online and still has the terminal open.
+if [ -n "${NEXT_LAB:-}" ]; then
+  NEXT_TAG="$IMAGE:$NEXT_LAB-$DETECTED"
+  printf '\n'; hr
+  printf '  BEFORE YOU GO - get the next lab now\n'
+  hr
+  printf '\n'
+  info "$NEXT_LAB_NAME"
+  info "Lab 15 is the same dependency tier as this lab, so it shares the"
+  info "1.09 GB model layer you already have on disk. A student who has"
+  info "lab 14 pulls a small delta for lab 15, not the model again."
+  info "No exact size until it is published and measured."
+  printf '\n'
+  info "Doing it now, while you are online, means no waiting at the start"
+  info "of the next session."
+  printf '\n  Pull it now? [Y/n] '
+  if [ -t 0 ]; then read -r GETNEXT || GETNEXT=""; else GETNEXT="n"; fi
+  case "${GETNEXT:-y}" in
+    [Nn]*)
+      printf '\n'
+      info "Skipped. Run this before the next session:"
+      info "    docker pull $NEXT_TAG"
+      ;;
+    *)
+      printf '\n'
+      info "(If $NEXT_LAB is not published yet you will see an error here."
+      info " That is expected and harmless - lab 14 is already complete.)"
+      printf '\n'
+      if docker pull "$NEXT_TAG"; then
+        printf '\n'; ok "$NEXT_LAB_NAME is ready on your machine."
+        # Absolute path: works no matter which directory the student ran from.
+        LABS_DIR="$(cd "$HERE/../.." 2>/dev/null && pwd || true)"
+        NEXT_SCRIPT=""
+        [ -n "$LABS_DIR" ] && NEXT_SCRIPT="$LABS_DIR/$NEXT_LAB/setup/setup.sh"
+        printf '\n'
+        if [ -n "$NEXT_SCRIPT" ] && [ -f "$NEXT_SCRIPT" ]; then
+          info "When you are ready to start it, run:"
+          printf '\n      bash "%s"\n\n' "$NEXT_SCRIPT"
+        else
+          info "The next lab's setup script is not in this folder yet."
+          info "Pull the course repository again before the next session."
+        fi
+      else
+        printf '\n'
+        warn "Could not pull it yet."
+        info "If the instructor has not published $NEXT_LAB, this is expected."
+        info "Try again before the next session:"
+        info "    docker pull $NEXT_TAG"
+      fi
+      ;;
+  esac
+fi
+
+printf '\n'; hr
+printf '  Lab 14 complete. The image stays on your machine for the next lab.\n'
+hr; printf '\n'

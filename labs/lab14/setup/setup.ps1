@@ -1,5 +1,5 @@
 # ===========================================================================
-#  SecLLM Bootcamp - Lab 13 setup  (Windows)
+#  SecLLM Bootcamp - Lab 14 setup  (Windows)
 #
 #  Mac students: use setup.sh instead.
 #
@@ -17,14 +17,14 @@ param([Parameter(ValueFromRemainingArguments = $true)] $ExtraArgs)
 $ErrorActionPreference = 'Continue'
 
 $Image     = 'ghcr.io/deanbushmiller/seclm-labs'
-$Lab       = 'lab13'
-$NextLab   = 'lab14'         # set to '' on the final lab
-$NextName  = 'Lab 14 - Defending MCP tool calls'
-$Container = 'seclm-lab13-run'
+$Lab       = 'lab14'
+$NextLab   = 'lab15'         # set to '' on the final lab
+$NextName  = 'Lab 15 - Defending against AI-scaled attacks'
+$Container = 'seclm-lab14-run'
 $Here      = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Results   = Join-Path $Here 'lab13-results.txt'
-$Audit     = Join-Path $Here 'lab13-audit-log.jsonl'
-$PolicyOut = Join-Path $Here 'lab13-policy.json'
+$Results   = Join-Path $Here 'lab14-results.txt'
+$Tamper    = Join-Path $Here 'lab14-tamper-log.jsonl'
+$TrustOut  = Join-Path $Here 'lab14-trust.json'
 if (-not $ExtraArgs) { $ExtraArgs = @() }
 
 function Ok   ($m) { Write-Host "  [ OK ]  $m" -ForegroundColor Green }
@@ -35,7 +35,7 @@ function Hr        { Write-Host "-----------------------------------------------
 
 Write-Host ""
 Hr
-Write-Host "  SecLLM Bootcamp - Lab 13: Defending AI agents"
+Write-Host "  SecLLM Bootcamp - Lab 14: Defending MCP tool calls"
 Write-Host "  Setup and launcher (Windows)"
 Hr
 Write-Host ""
@@ -408,41 +408,46 @@ Ok "Image downloaded"
 Write-Host ""
 Hr
 Write-Host "  This lab runs with NO NETWORK AT ALL - --network none, below."
-Write-Host "  That is the lesson, not a precaution: this lab is about keeping"
-Write-Host "  an agent away from things it was never meant to reach, so it"
-Write-Host "  runs that way itself. The agent, its tools, the policy file,"
-Write-Host "  the model and the audit log are all inside the container."
-Write-Host "  No port is published and none is needed."
+Write-Host "  That is the lesson, not a precaution: this lab is about what"
+Write-Host "  you accept from a third-party server, so it runs with no route"
+Write-Host "  to any of them. The mock MCP server, the host, the trust list,"
+Write-Host "  the model and the log are all inside the container."
+Write-Host "  The server binds 127.0.0.1:8014 in there. No port is published"
+Write-Host "  and none is needed - there is nothing to open in a browser."
 Write-Host ""
 Write-Host "  Starting the lab. You will be asked to choose beginner or"
 Write-Host "  expert mode. Beginner types 10 checked commands; expert gets"
 Write-Host "  a real shell and works from LAB.md."
 Write-Host ""
-Write-Host "  If you did labs 3 to 8 or lab 12 on this machine, the 1.09 GB"
+Write-Host "  If you did labs 3 to 8, 12 or 13 on this machine, the 1.09 GB"
 Write-Host "  model layer is already on your disk and is not fetched again."
 Write-Host ""
-Write-Host "  A local language model runs four times in this lab. Each"
-Write-Host "  answer takes 10-20 seconds, longer on a 2-core machine. The"
-Write-Host "  model WILL be tricked every time; watch what the broker does"
-Write-Host "  about it."
+Write-Host "  A local language model runs five times in this lab. Each answer"
+Write-Host "  takes 15-25 seconds, longer on a 2-core machine."
+Write-Host ""
+Write-Host "  One step is SUPPOSED to get past the defence. When you reach it"
+Write-Host "  the lab says so. That is the most useful step in the lab."
 Hr
 Write-Host ""
 
-# --network none, as labs 9 to 12 do. The addendum's rule is that a defend lab
-# runs under the control it teaches; ATLAS AML.M0032 names egress restriction as
-# part of the boundary this lab is about, so the lab runs with no route out.
+# --network none, as labs 9 to 13 do. The addendum's rule is that a defend lab
+# runs under the control it teaches, and this lab's subject is what you accept
+# from servers you do not operate - so it is given no route to any of them.
 #
 # The pre-pull at the end of this script is a separate docker command and is
 # unaffected - it runs after the container has exited.
 #
-# NO -p. Lab 13 serves nothing: no port, no background process, nothing to
-# publish. The contract reserves 8013 only if a UI is ever added, and none is.
-& docker run -it --network none --name $Container $Tag lab 13 @ExtraArgs
+# NO -p. Lab 14 runs its mock MCP server on 127.0.0.1:8014 INSIDE the
+# container, started and stopped by the lab itself. A loopback bind inside a
+# container cannot be reached from the host - lab 12 measured that - so -p
+# would promise a browser view that does not work. There is nothing to
+# publish: the server answers one local process and exits with it.
+& docker run -it --network none --name $Container $Tag lab 14 @ExtraArgs
 $runRc = $LASTEXITCODE
 
 # --- 9. Recover the transcript and the images --------------------------------
 Write-Host ""
-& docker cp "$Container`:/labs/lab13/lab13-results.txt" $Results *> $null
+& docker cp "$Container`:/labs/lab14/lab14-results.txt" $Results *> $null
 if ($LASTEXITCODE -eq 0) {
     Ok "Results saved: $Results"
     Info "Paste the evidence table from the last step into the class chat."
@@ -453,30 +458,30 @@ if ($LASTEXITCODE -eq 0) {
     Info "Scroll up in this window to copy the evidence block instead."
 }
 
-# The broker's own tool-call log comes out too. It is the evidence for this
+# The integrity layer's own log comes out too. It is the evidence for this
 # lab and the thing worth re-reading after class: every attempted call, with
 # the verdict on each. Regenerated on every run.
-if (Test-Path $Audit) { Remove-Item -Force $Audit -ErrorAction SilentlyContinue }
-& docker cp "$Container`:/labs/lab13/audit-log.jsonl" $Audit *> $null
+if (Test-Path $Tamper) { Remove-Item -Force $Tamper -ErrorAction SilentlyContinue }
+& docker cp "$Container`:/labs/lab14/tamper-log.jsonl" $Tamper *> $null
 if ($LASTEXITCODE -eq 0) {
-    Ok "Audit log saved: $Audit"
+    Ok "Tamper log saved: $Tamper"
     Info "One JSON object per attempted tool call. Look for the run where"
-    Info "set_role is ALLOW and read_notes:admin is DENY - that is an agent"
+    Info "that is a tool description that changed after you approved it,"
     Info "that was fully compromised and still did not get the data."
 } else {
-    Info "No audit log to copy - the agent did not run this time."
+    Info "No tamper log to copy - the lab did not run this time."
 }
 
-# The policy file as the student left it, so they can see their own two
+# The trust list as the student left it, so they can see their own two
 # changes next to the log that prompted them.
-if (Test-Path $PolicyOut) { Remove-Item -Force $PolicyOut -ErrorAction SilentlyContinue }
-& docker cp "$Container`:/labs/lab13/policy.json" $PolicyOut *> $null
+if (Test-Path $TrustOut) { Remove-Item -Force $TrustOut -ErrorAction SilentlyContinue }
+& docker cp "$Container`:/labs/lab14/trust.json" $TrustOut *> $null
 if ($LASTEXITCODE -eq 0) {
-    Ok "Policy saved: $PolicyOut"
-    Info "active=false on admin-notes-ro, and set_role gone from the"
-    Info "triage allow-list. Two edits, in a file the agent cannot write."
+    Ok "Trust list saved: $TrustOut"
+    Info "The server re-trusted, serve_pinned true, and each descriptor"
+    Info "pinned to the copy YOU approved - not the one it advertises."
 } else {
-    Info "No policy file to copy."
+    Info "No trust list to copy."
 }
 
 & docker rm -f $Container *> $null
@@ -491,9 +496,9 @@ if ($NextLab) {
     Hr
     Write-Host ""
     Info $NextName
-    Info "Lab 14 is the same dependency tier as this lab, so it shares the"
+    Info "Lab 15 is the same dependency tier as this lab, so it shares the"
     Info "1.09 GB model layer you already have on disk. A student who has"
-    Info "lab 13 pulls a small delta for lab 14, not the model again."
+    Info "lab 14 pulls a small delta for lab 15, not the model again."
     Info "No exact size until it is published and measured."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"
@@ -507,7 +512,7 @@ if ($NextLab) {
     } else {
         Write-Host ""
         Info "(If $NextLab is not published yet you will see an error here."
-        Info " That is expected and harmless - lab 13 is already complete.)"
+        Info " That is expected and harmless - lab 14 is already complete.)"
         Write-Host ""
         & docker pull $NextTag
         if ($LASTEXITCODE -eq 0) {
@@ -548,7 +553,7 @@ if ($NextLab) {
 
 Write-Host ""
 Hr
-Write-Host "  Lab 13 complete. The image stays on your machine for the next lab."
+Write-Host "  Lab 14 complete. The image stays on your machine for the next lab."
 Hr
 Write-Host ""
 Read-Host "Press Enter to close"

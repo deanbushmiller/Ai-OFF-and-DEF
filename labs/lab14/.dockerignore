@@ -1,0 +1,40 @@
+# Build context hygiene. Everything here is either irrelevant to the image or
+# student output that would make builds non-reproducible.
+
+# macOS / editor noise
+.DS_Store
+._*
+Thumbs.db
+*~
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Instructor-only - not shipped inside the student image
+instructor/
+INSTRUCTOR-TEST.md
+RISK-GUIDE.md
+publish.sh
+
+# Host-side launcher scripts - students run these OUTSIDE the container
+setup/
+
+# Written at RUN time by the lab and never carried in from the context:
+#   tamper-log.jsonl   the detect beat's log
+#   server-state.json  which poison mode poison.py has armed
+#   *-results.txt      the runner's saved transcript
+#
+# trust.json is NOT here. It is the shipped trust list the student drops from and
+# re-pins, so it must be in the image. The Dockerfile COPYs it twice - once as
+# itself and once as trust.default.json - so every run starts from the shipped
+# state. Lab 13 hit exactly this with its policy file.
+tamper-log.jsonl
+server-state.json
+*-results.txt
+
+# Credentials
+.env
+*.pem
+*.key
