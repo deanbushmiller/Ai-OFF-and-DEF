@@ -19,8 +19,10 @@ only those. Expert mode runs the whole list.
 > `docker --version` works.
 
 If you have already done lab 4, you are ready — nothing new to install, and the OCR engine
-this lab uses is already on your disk from lab 4, down to the byte. No language model runs
-here, so this is the smallest image in the course.
+this lab uses is already on your disk from lab 4, down to the byte. **Lab 11 costs about 21 MB
+on Apple Silicon, 24 MB on Intel if you have lab 4** (about 101 MB / 105 MB from a clean
+machine), measured on the published image. No language model runs here, so this is the
+smallest image in the course.
 
 ---
 

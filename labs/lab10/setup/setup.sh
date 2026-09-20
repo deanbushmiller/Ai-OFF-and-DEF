@@ -277,11 +277,11 @@ if [ -n "${NEXT_LAB:-}" ]; then
   printf '\n'
   info "$NEXT_LAB_NAME"
   info "Lab 11 is a DIFFERENT dependency tier from this one. It does not"
-  info "use the embedding models you just downloaded, so expect a real"
-  info "download rather than a few kilobytes - it shares the base and"
-  info "little else. That is the honest expectation, not a disappointment:"
-  info "you are not paying twice for anything."
-  info "No exact size until it is published and measured."
+  info "use the embedding models you just downloaded, but it reuses lab 4's"
+  info "OCR engine down to the byte. If you did lab 4 on this machine it is"
+  info "about 21 MB on Apple Silicon, 24 MB on Intel; from a clean machine"
+  info "about 101 MB / 105 MB. Measured on the published image. You are"
+  info "not paying twice for anything."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."

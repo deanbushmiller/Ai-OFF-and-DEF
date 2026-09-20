@@ -197,11 +197,13 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
 else
   printf '  Downloading the lab image.\n'
   printf '\n'
-  printf '  If you have done lab 4 on this machine, the OCR engine and the base\n'
-  printf '  are already on your disk down to the byte, and this pull is only\n'
-  printf '  the two small libraries this lab carries for itself. No language\n'
-  printf '  model, so this is the smallest image in the course either way.\n'
-  printf '  The exact size is measured on the published image and goes here.\n'
+  printf '  If you have done lab 4 on this machine, this is about 21 MB on\n'
+  printf '  Apple Silicon, 24 MB on Intel: the OCR engine and the base are\n'
+  printf '  already on your disk down to the byte, and this pull is only the\n'
+  printf '  two small libraries this lab carries for itself. From a clean\n'
+  printf '  machine it is about 101 MB on Apple Silicon, 105 MB on Intel -\n'
+  printf '  no language model, the smallest image in the course either way.\n'
+  printf '  Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

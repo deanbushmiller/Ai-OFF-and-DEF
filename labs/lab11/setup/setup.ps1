@@ -372,11 +372,12 @@ if ($alreadyHave) {
 } else {
     Write-Host "  Downloading the lab image."
     Write-Host ""
-    Write-Host "  If you have done lab 4 on this machine, the OCR engine and the base"
-    Write-Host "  are already on your disk down to the byte, and this pull is only"
-    Write-Host "  the two small libraries this lab carries for itself. No language"
-    Write-Host "  model, so this is the smallest image in the course either way."
-    Write-Host "  The exact size is measured on the published image and goes here."
+    Write-Host "  If you have done lab 4 on this machine, this is about 24 MB on"
+    Write-Host "  Intel: the OCR engine and the base are already on your disk down"
+    Write-Host "  to the byte, and this pull is only the two small libraries this"
+    Write-Host "  lab carries for itself. From a clean machine it is about 105 MB"
+    Write-Host "  on Intel - no language model, the smallest image in the course"
+    Write-Host "  either way. Measured on the published image."
     Write-Host "  $Tag"
     Hr
     Write-Host ""

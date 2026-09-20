@@ -28,44 +28,154 @@
     }
   ],
   "python_packages": [
-    {"name": "numpy", "version": "2.3.5", "shared": false,
-     "note": "Same pin as every other lab, but in a pip layer of this lab's own: numpy + pillow with no llama wheel and no huggingface-hub. Measured compressed: 20,755,171 bytes arm64, 23,469,429 bytes amd64. This layer is the whole of the student's download over lab 4."},
-    {"name": "pillow", "version": "11.3.0", "shared": false,
-     "note": "Same pin as labs 3-7. Renders the invoices and stamps at build; renders the visible view at run time."}
+    {
+      "name": "numpy",
+      "version": "2.3.5",
+      "shared": false,
+      "note": "Same pin as every other lab, but in a pip layer of this lab's own: numpy + pillow with no llama wheel and no huggingface-hub. Measured compressed: 20,755,171 bytes arm64, 23,469,429 bytes amd64. This layer is the whole of the student's download over lab 4."
+    },
+    {
+      "name": "pillow",
+      "version": "11.3.0",
+      "shared": false,
+      "note": "Same pin as labs 3-7. Renders the invoices and stamps at build; renders the visible view at run time."
+    }
   ],
   "apt_packages": [
-    {"name": "libgomp1", "shared": true, "note": "Unused here. Carried so the apt layer is byte-identical to labs 3-8's (1,954,635 bytes compressed, measured identical to lab 4's fresh build)."},
-    {"name": "nano", "shared": true},
-    {"name": "less", "shared": true},
-    {"name": "curl", "shared": true, "note": "Unused. Same reason as libgomp1."},
-    {"name": "ca-certificates", "shared": true},
-    {"name": "tesseract-ocr", "shared": true, "note": "Lab 4's tesseract RUN, byte-identical. 30,906,826 bytes compressed arm64, measured identical to lab 4's fresh build. osd.traineddata deleted in the same RUN, as lab 4 does."},
-    {"name": "tesseract-ocr-eng", "shared": true},
-    {"name": "fonts-dejavu-core", "shared": true, "note": "Needed at run time: expert mode re-renders the attack image from the student's own payload."}
+    {
+      "name": "libgomp1",
+      "shared": true,
+      "note": "Unused here. Carried so the apt layer is byte-identical to labs 3-8's (1,954,635 bytes compressed, measured identical to lab 4's fresh build)."
+    },
+    {
+      "name": "nano",
+      "shared": true
+    },
+    {
+      "name": "less",
+      "shared": true
+    },
+    {
+      "name": "curl",
+      "shared": true,
+      "note": "Unused. Same reason as libgomp1."
+    },
+    {
+      "name": "ca-certificates",
+      "shared": true
+    },
+    {
+      "name": "tesseract-ocr",
+      "shared": true,
+      "note": "Lab 4's tesseract RUN, byte-identical. 30,906,826 bytes compressed arm64, measured identical to lab 4's fresh build. osd.traineddata deleted in the same RUN, as lab 4 does."
+    },
+    {
+      "name": "tesseract-ocr-eng",
+      "shared": true
+    },
+    {
+      "name": "fonts-dejavu-core",
+      "shared": true,
+      "note": "Needed at run time: expert mode re-renders the attack image from the student's own payload."
+    }
   ],
   "lab_assets": [
-    {"file": "invoices/invoice-clean.png", "generated_at": "build", "shared": false, "bytes": 38991, "note": "make_invoices.py --bake, lab 4's script. Byte-identical to lab 4's."},
-    {"file": "invoices/invoice-attack.png", "generated_at": "build", "shared": false, "bytes": 40761, "note": "BAKED here, unlike lab 4, by bake_attacks.py from perturbation.npz. Instructor decision 2026-09-19: the student is the defender receiving a doctored document, not the attacker crafting one."},
-    {"file": "invoices/perturbation.npz", "generated_at": "build", "shared": false, "bytes": 6854, "note": "Lab 4's. Kept so bake_attacks.py and an expert student can see the delta."},
-    {"file": "invoices/stamp.png", "generated_at": "build", "shared": false, "bytes": 880},
-    {"file": "invoices/stamp-attack.png", "generated_at": "build", "shared": false, "bytes": 6152, "note": "BAKED here, unlike lab 4, from stamp-perturbation.npz."},
-    {"file": "invoices/stamp-perturbation.npz", "generated_at": "build", "shared": false, "bytes": 6475},
-    {"file": "invoices/stamp-original-example.png", "generated_at": "build", "shared": false, "bytes": 909},
-    {"file": "gate-weights.npz", "generated_at": "build", "shared": false, "bytes": 95991}
+    {
+      "file": "invoices/invoice-clean.png",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 38991,
+      "note": "make_invoices.py --bake, lab 4's script. Byte-identical to lab 4's."
+    },
+    {
+      "file": "invoices/invoice-attack.png",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 40761,
+      "note": "BAKED here, unlike lab 4, by bake_attacks.py from perturbation.npz. Instructor decision 2026-09-19: the student is the defender receiving a doctored document, not the attacker crafting one."
+    },
+    {
+      "file": "invoices/perturbation.npz",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 6854,
+      "note": "Lab 4's. Kept so bake_attacks.py and an expert student can see the delta."
+    },
+    {
+      "file": "invoices/stamp.png",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 880
+    },
+    {
+      "file": "invoices/stamp-attack.png",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 6152,
+      "note": "BAKED here, unlike lab 4, from stamp-perturbation.npz."
+    },
+    {
+      "file": "invoices/stamp-perturbation.npz",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 6475
+    },
+    {
+      "file": "invoices/stamp-original-example.png",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 909
+    },
+    {
+      "file": "gate-weights.npz",
+      "generated_at": "build",
+      "shared": false,
+      "bytes": 95991
+    }
   ],
   "reused_from_lab4": {
-    "verbatim": ["scripts/stamp_gate.py", "scripts/craft.py", "payload.txt"],
-    "reused_with_edits": [
-      {"file": "scripts/make_invoices.py", "edit": "one line: the closing hint in craft() said 'now run pipeline.py', which does not exist in this lab; it now names compare.py. Verified by diff, nothing else changed."}
+    "verbatim": [
+      "scripts/stamp_gate.py",
+      "scripts/craft.py",
+      "payload.txt"
     ],
-    "not_reused": ["pipeline.py (needs the LLM)", "gate.py (rewritten with the noise control, the threshold and the log)", "apply_perturbation.py (replaced by bake_attacks.py at build time)", "show_extraction.py, evidence.py, check.py (lab 4's)"]
+    "reused_with_edits": [
+      {
+        "file": "scripts/make_invoices.py",
+        "edit": "one line: the closing hint in craft() said 'now run pipeline.py', which does not exist in this lab; it now names compare.py. Verified by diff, nothing else changed."
+      }
+    ],
+    "not_reused": [
+      "pipeline.py (needs the LLM)",
+      "gate.py (rewritten with the noise control, the threshold and the log)",
+      "apply_perturbation.py (replaced by bake_attacks.py at build time)",
+      "show_extraction.py, evidence.py, check.py (lab 4's)"
+    ]
   },
-  "run_time_outputs": ["mismatch-log.jsonl", "views/*-visible.png", "review-queue/", "lab11-results.txt", "rules.json (edited in place by tune.py or nano)"],
+  "run_time_outputs": [
+    "mismatch-log.jsonl",
+    "views/*-visible.png",
+    "review-queue/",
+    "lab11-results.txt",
+    "rules.json (edited in place by tune.py or nano)"
+  ],
   "not_used": [
-    {"name": "torch", "reason": "No model beyond a numpy logistic regression."},
-    {"name": "llama-cpp-python / Qwen", "reason": "No LLM. Every result is arithmetic on pixels and text. This is the first lab in the course with no nondeterministic component."},
-    {"name": "huggingface-hub", "reason": "Nothing is downloaded at build or run time."},
-    {"name": "opencv", "reason": "Pillow plus numpy covers every image operation."}
+    {
+      "name": "torch",
+      "reason": "No model beyond a numpy logistic regression."
+    },
+    {
+      "name": "llama-cpp-python / Qwen",
+      "reason": "No LLM. Every result is arithmetic on pixels and text. This is the first lab in the course with no nondeterministic component."
+    },
+    {
+      "name": "huggingface-hub",
+      "reason": "Nothing is downloaded at build or run time."
+    },
+    {
+      "name": "opencv",
+      "reason": "Pillow plus numpy covers every image operation."
+    }
   ],
   "network": "None at build beyond apt and pip; none at run time. Verified with --network none.",
   "measured": {
@@ -89,6 +199,18 @@
     "hidden_line_ocr_confidence": "87-97 per word, same as the print",
     "visible_contrast_plateau": "MISMATCH holds from 1.2% to 60%; print degrades at 70%",
     "determinism": "compare.py output byte-identical across 3 runs; no sampling anywhere",
-    "validated_on": "macOS arm64 end to end (lab-beta and lab-dev). Windows amd64 pending the instructor's student test."
+    "validated_on": "macOS arm64 end to end (lab-beta, lab-dev, repo copy). Published 2026-09-19. Windows amd64 pending the instructor's student test.",
+    "registry": {
+      "note": "From tools/verify-sharing.py against the PUBLISHED registry, 2026-09-19, after PUSHTOINTERNET. These are the only figures allowed in student files.",
+      "student_with_lab4_downloads_bytes_arm64": 20975419,
+      "student_with_lab4_downloads_bytes_amd64": 23689709,
+      "full_published_bytes_arm64": 101287502,
+      "full_published_bytes_amd64": 104638355,
+      "gate": "--check 11:24518 OK on both; arm64 read against 21,804 KB by hand: OK",
+      "course_total_bytes_labs_1_to_11": {
+        "arm64": 1909238016,
+        "amd64": 2027788031
+      }
+    }
   }
 }
