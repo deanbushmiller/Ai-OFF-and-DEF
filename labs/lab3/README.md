@@ -79,9 +79,10 @@ location.
 bash labs/lab3/setup/setup.sh
 ```
 
-While the lab runs, the mock website is at **<http://localhost:8003>** — open it in your
-own browser to see what a reader sees. It is served from inside your container on loopback
-only; nothing leaves your machine.
+While the lab runs, the mock website is served **inside your container, bound to loopback
+there only**. It is not published to your machine, and nothing leaves it. You read the two
+pages the way the assistant does — with `curl`, inside the lab — which is also the only view
+that shows you the payload a browser would hide.
 
 ### Choose a mode
 

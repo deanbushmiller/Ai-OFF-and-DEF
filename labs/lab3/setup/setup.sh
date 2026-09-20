@@ -218,17 +218,20 @@ printf '\n'; ok "Image downloaded"
 # --- 7. Run ------------------------------------------------------------------
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 printf '\n'; hr
-printf '  The mock website will be at http://localhost:8003 while the lab\n'
-printf '  runs - open it in your browser to see what a reader sees.\n'
+printf '  The mock website runs INSIDE the container, bound to loopback\n'
+printf '  there only. It is not published to your machine and nothing\n'
+printf '  leaves it. You read the pages the way the assistant does, with\n'
+printf '  curl, inside the lab.\n'
 printf '\n'
 printf '  Starting the lab. You will be asked to choose beginner or\n'
 printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
 printf '  a real shell and works from LAB.md.\n'
 hr; printf '\n'
 
-# -p binds the mock website to the student's own loopback so they can open it
-# in their browser. 127.0.0.1 only - never 0.0.0.0.
-docker run -it --name "$CONTAINER" -p 127.0.0.1:8003:8003 "$TAG" lab 3 "${EXTRA_ARGS[@]}"
+# No -p. serve.py binds 127.0.0.1 INSIDE the container, so a published port
+# forwards to a listener that refuses it - measured with a control, 2026-09-19.
+# The pages are read with curl inside the lab instead.
+docker run -it --name "$CONTAINER" "$TAG" lab 3 "${EXTRA_ARGS[@]}"
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

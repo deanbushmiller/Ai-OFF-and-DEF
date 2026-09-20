@@ -398,8 +398,10 @@ Ok "Image downloaded"
 & docker rm -f $Container *> $null
 Write-Host ""
 Hr
-Write-Host "  The mock website will be at http://localhost:8003 while the lab"
-Write-Host "  runs - open it in your browser to see what a reader sees."
+Write-Host "  The mock website runs INSIDE the container, bound to loopback"
+Write-Host "  there only. It is not published to your machine and nothing"
+Write-Host "  leaves it. You read the pages the way the assistant does, with"
+Write-Host "  curl, inside the lab."
 Write-Host ""
 Write-Host "  Starting the lab. You will be asked to choose beginner or"
 Write-Host "  expert mode. Beginner types 10 checked commands; expert gets"
@@ -407,9 +409,10 @@ Write-Host "  a real shell and works from LAB.md."
 Hr
 Write-Host ""
 
-# -p binds the mock website to the student's own loopback so they can open it
-# in their browser. 127.0.0.1 only - never 0.0.0.0.
-& docker run -it --name $Container -p 127.0.0.1:8003:8003 $Tag lab 3 @ExtraArgs
+# No -p. serve.py binds 127.0.0.1 INSIDE the container, so a published port
+# forwards to a listener that refuses it - measured with a control, 2026-09-19.
+# The pages are read with curl inside the lab instead.
+& docker run -it --name $Container $Tag lab 3 @ExtraArgs
 $runRc = $LASTEXITCODE
 
 # --- 9. Recover the transcript ----------------------------------------------

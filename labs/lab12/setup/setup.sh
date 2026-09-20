@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ===========================================================================
-#  SecLLM Bootcamp - Lab 11 setup  (macOS and Linux)
+#  SecLLM Bootcamp - Lab 12 setup  (macOS and Linux)
 #
 #  Windows students: use setup.ps1 instead.
 #
@@ -14,14 +14,13 @@
 set -uo pipefail
 
 IMAGE="ghcr.io/deanbushmiller/seclm-labs"
-LAB="lab11"
-NEXT_LAB="lab12"         # set to "" on the final lab
-NEXT_LAB_NAME="Lab 12 - Defending against prompt injection"
-CONTAINER="seclm-lab11-run"
+LAB="lab12"
+NEXT_LAB="lab13"         # set to "" on the final lab
+NEXT_LAB_NAME="Lab 13 - Defending AI agents"
+CONTAINER="seclm-lab12-run"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RESULTS="$HERE/lab11-results.txt"
-INVOICES="$HERE/lab11-invoices"
-QUEUE="$HERE/lab11-review-queue"
+RESULTS="$HERE/lab12-results.txt"
+FWLOG="$HERE/lab12-firewall-log.jsonl"
 EXTRA_ARGS=("$@")
 
 OS_KIND="$(uname -s | tr '[:upper:]' '[:lower:]')"   # darwin | linux
@@ -33,7 +32,7 @@ info() { printf '          %s\n' "$*"; }
 hr()   { printf '%s\n' "----------------------------------------------------------------"; }
 
 printf '\n'; hr
-printf '  SecLLM Bootcamp - Lab 11: Defending multimodal input\n'
+printf '  SecLLM Bootcamp - Lab 12: Defending against prompt injection\n'
 printf '  Setup and launcher (macOS / Linux)\n'
 hr; printf '\n'
 # Where am I? The script resolves its own location, so it does not matter where the
@@ -229,57 +228,62 @@ printf '\n'; ok "Image downloaded"
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 printf '\n'; hr
 printf '  This lab runs with NO NETWORK AT ALL - --network none, below.\n'
-printf '  Nothing in it needs one, and running without one proves the point:\n'
-printf '  the hidden text you are about to find is in a file on your own\n'
-printf '  disk, not fetched from anywhere.\n'
+printf '  That is the lesson, not a precaution: this lab is about the\n'
+printf '  boundary between a model and content it did not write, so it\n'
+printf '  runs under one. The website it reads is served inside the\n'
+printf '  container, on loopback there only, and is not published to\n'
+printf '  your machine. You read the pages with curl, from inside.\n'
 printf '\n'
 printf '  Starting the lab. You will be asked to choose beginner or\n'
 printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
 printf '  a real shell and works from LAB.md.\n'
 printf '\n'
-printf '  No language model runs in this lab, so nothing is slow. Every\n'
-printf '  command returns in a second or two.\n'
+printf '  If you did labs 3 to 8 on this machine, this download is about\n'
+printf '  30 KB - 29,895 bytes, measured on the published image. The 1.09 GB\n'
+printf '  model layer is already on your disk and is not fetched again.\n'
+printf '\n'
+printf '  A local language model runs three times in this lab. Each\n'
+printf '  answer takes 10-15 seconds. Blocked requests are instant -\n'
+printf '  the model is never called for those, which is the point.\n'
 hr; printf '\n'
 
-# --network none, as labs 9 and 10 do. Lab 11 does not teach an isolation
-# control, so the flag is here as the control group rather than the subject:
-# every result the student sees is produced with no route out, which is what
-# proves the doctored invoice is on their own disk.
+# --network none, as labs 9, 10 and 11 do - and here the flag IS the subject.
+# The addendum's rule is that a defend lab runs under the control it teaches,
+# and this lab teaches a content boundary, so it runs with no route out at all.
 #
 # The pre-pull at the end of this script is a separate docker command and is
 # unaffected - it runs after the container has exited.
 #
-# No -p: lab 11 serves nothing. The contract reserves 8011 and it stays unclaimed.
-docker run -it --network none --name "$CONTAINER" "$TAG" lab 11 "${EXTRA_ARGS[@]}"
+# NO -p, and this one is worth reading twice. serve.py binds 127.0.0.1 INSIDE
+# the container, so a published port would forward to a listener that refuses
+# every connection - measured with a control on 2026-09-19, which is how we
+# found lab 3 had been telling students to open a browser at a port that never
+# answered. The contract's 8012 is bound in-container and published nowhere.
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 12 "${EXTRA_ARGS[@]}"
 RUN_RC=$?
 
 # --- 8. Recover the transcript and the images --------------------------------
 printf '\n'
-if docker cp "$CONTAINER:/labs/lab11/lab11-results.txt" "$RESULTS" >/dev/null 2>&1; then
+if docker cp "$CONTAINER:/labs/lab12/lab12-results.txt" "$RESULTS" >/dev/null 2>&1; then
   ok "Results saved: $RESULTS"
-  info "Paste two things into the class chat: the MISMATCH block from step 5"
-  info "and the HELD block from step 10."
+  info "Paste the evidence table from the last step into the class chat."
+  info "The line that matters is the one where detected is true and"
+  info "filtered is false - the firewall saw it and let it through."
 else
   warn "Could not save the results file (lab exit code $RUN_RC)."
   info "Scroll up in this window to copy the evidence block instead."
 fi
 
-# The invoices and the review queue come out too. Looking at them with your
-# own eyes is half the point of this lab, and you cannot do that from inside
-# the container. Both folders are regenerated on every run, so the previous
-# run's copies are replaced.
-rm -rf "$INVOICES" "$QUEUE" 2>/dev/null || true
-if docker cp "$CONTAINER:/labs/lab11/invoices" "$INVOICES" >/dev/null 2>&1; then
-  ok "Invoices saved: $INVOICES"
+# The firewall's own request log comes out too. It is the evidence for this
+# lab and the thing worth re-reading after class: every request, both
+# directions, with the verdict on each. Regenerated on every run.
+rm -f "$FWLOG" 2>/dev/null || true
+if docker cp "$CONTAINER:/labs/lab12/firewall-log.jsonl" "$FWLOG" >/dev/null 2>&1; then
+  ok "Firewall log saved: $FWLOG"
+  info "One JSON object per request. Look for detected=true with"
+  info "filtered=false - that is the request the firewall waved through."
 else
-  warn "Could not copy the invoice images out."
-fi
-if docker cp "$CONTAINER:/labs/lab11/review-queue" "$QUEUE" >/dev/null 2>&1; then
-  ok "Review queue saved: $QUEUE"
-  info "Open lab11-invoices/invoice-clean.png and"
-  info "lab11-review-queue/invoice-attack.png side by side."
-else
-  info "No review queue to copy - nothing was routed this run."
+  info "No firewall log to copy - no request was made this run."
 fi
 
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
@@ -293,10 +297,10 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Lab 12 runs the same local language model as labs 3 to 8. If you did"
-  info "those on this machine the download is about 30 KB - 29,895 bytes,"
-  info "measured on the published image - because the 1.09 GB model layer"
-  info "is already on your disk. If you did not, expect about 1.14 GB."
+  info "Lab 13 is the same dependency tier as this lab, so it shares the"
+  info "1.09 GB model layer you already have on disk. A student who has"
+  info "lab 12 pulls a small delta for lab 13, not the model again."
+  info "No exact size until it is published and measured."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."
@@ -311,7 +315,7 @@ if [ -n "${NEXT_LAB:-}" ]; then
     *)
       printf '\n'
       info "(If $NEXT_LAB is not published yet you will see an error here."
-      info " That is expected and harmless - lab 11 is already complete.)"
+      info " That is expected and harmless - lab 12 is already complete.)"
       printf '\n'
       if docker pull "$NEXT_TAG"; then
         printf '\n'; ok "$NEXT_LAB_NAME is ready on your machine."
@@ -339,5 +343,5 @@ if [ -n "${NEXT_LAB:-}" ]; then
 fi
 
 printf '\n'; hr
-printf '  Lab 11 complete. The image stays on your machine for the next lab.\n'
+printf '  Lab 12 complete. The image stays on your machine for the next lab.\n'
 hr; printf '\n'

@@ -1,0 +1,69 @@
+{
+  "_comment": "The firewall's rule file. This is the only thing you edit in this lab.",
+
+  "block_at": "CRITICAL",
+
+  "_block_at_note": [
+    "Severity is the NUMBER OF DETECTOR FAMILIES that matched, nothing cleverer:",
+    "    1 family = MEDIUM    2 families = HIGH    3 or more = CRITICAL",
+    "block_at is the lowest severity the firewall will actually stop.",
+    "It ships as CRITICAL on purpose. That is the vulnerable configuration, and",
+    "it is copied from a real one: CVE-2026-60086 (PraisonAI < 4.6.78, July 2026)",
+    "blocked only what it rated CRITICAL, which needed three or more detector",
+    "families at once, so single and double-vector injections rated HIGH went",
+    "straight through to the model."
+  ],
+
+  "inbound_families": {
+    "override": [
+      "\\bignore (?:the |all )?(?:text|instructions?|content)\\b",
+      "\\bdisregard\\b",
+      "\\binstead of (?:summari[sz]ing|the above)\\b"
+    ],
+    "authority": [
+      "\\bsystem (?:directive|note|message|prompt)\\b",
+      "\\byou are now\\b",
+      "\\bnew instructions?\\b"
+    ],
+    "exfil": [
+      "\\breply with exactly\\b",
+      "\\bfrom your (?:instructions|configuration|system prompt)\\b",
+      "\\bappend (?:your|the) .{0,30}key\\b",
+      "\\brequired output format\\b"
+    ]
+  },
+
+  "_concealment_note": [
+    "The fourth family, 'concealment', is structural: it is computed from the raw",
+    "HTML, not from the extracted text, because it is about how the payload is",
+    "hidden rather than what it says. Two checks, and both are real techniques:",
+    "  - CSS that hides the element from a reader but not from a scraper",
+    "  - Unicode characters that are invisible in every browser and legible to a",
+    "    tokenizer. Microsoft measured a phishing campaign using exactly these in",
+    "    2026, peaking at 2.3 million messages a day (2026-09-03)."
+  ],
+  "concealment_css": [
+    "display\\s*:\\s*none",
+    "font-size\\s*:\\s*0",
+    "visibility\\s*:\\s*hidden"
+  ],
+  "concealment_invisible_chars": true,
+
+  "_outbound_note": [
+    "The outbound side. Note what is here and what is NOT: this is a PATTERN, the",
+    "shape of the credential, not its value. That is how a real DLP rule is written,",
+    "and for the same reason - a rule file is read, copied, diffed and pasted into",
+    "tickets, so putting the secret in it just moves the leak somewhere quieter.",
+    "",
+    "The key this matches is FAKE and exists only inside this container. It is a",
+    "canary, which is what MITRE ATLAS AML.M0035 recommends against LLM Data",
+    "Leakage: 'place synthetic secrets or canary records in representative data",
+    "sources and attempt extraction'. If a value matching this pattern appears in a",
+    "model response, the response is suppressed and the attempt is logged with the",
+    "value redacted. It is never printed, never written to the log in full, and",
+    "never sent anywhere - there is nowhere to send it."
+  ],
+  "outbound_patterns": {
+    "sensitive_marker": "ACME-SUPPORT-[A-Z0-9]{4}-[A-Z0-9]{4}"
+  }
+}
