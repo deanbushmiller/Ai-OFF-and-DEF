@@ -371,12 +371,11 @@ if ($alreadyHave) {
 } else {
     Write-Host "  Downloading the lab image."
     Write-Host ""
-    Write-Host "  If you have done lab 4 on this machine, this is about 24 MB on"
-    Write-Host "  Intel: the OCR engine and the base are already on your disk down"
-    Write-Host "  to the byte, and this pull is only the two small libraries this"
-    Write-Host "  lab carries for itself. From a clean machine it is about 105 MB"
-    Write-Host "  on Intel - no language model, the smallest image in the course"
-    Write-Host "  either way. Measured on the published image."
+    Write-Host "  If you have done labs 3 to 8 on this machine, this is about"
+    Write-Host "  30 KB - 29,895 bytes, measured on the published image. This lab"
+    Write-Host "  and those share the same base, the same Python packages and the"
+    Write-Host "  same 1.09 GB language model, byte for byte, so none of it is"
+    Write-Host "  downloaded twice. From a clean machine it is about 1.14 GB."
     Write-Host "  $Tag"
     Hr
     Write-Host ""

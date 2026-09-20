@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ===========================================================================
-#  SecLLM Bootcamp - Lab 8 setup  (macOS and Linux)
+#  SecLLM Bootcamp - Lab 15 setup  (macOS and Linux)
 #
 #  Windows students: use setup.ps1 instead.
 #
@@ -14,14 +14,18 @@
 set -uo pipefail
 
 IMAGE="ghcr.io/deanbushmiller/seclm-labs"
-LAB="lab8"
-NEXT_LAB=""              # EMPTY: lab 8 is the final lab of part 1.
-                         # No pre-pull is offered; the run ends by asking
-                         # the student to confirm evidence for all eight.
-NEXT_LAB_NAME=""
-CONTAINER="seclm-lab8-run"
+LAB="lab15"
+# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is the red-team
+# process intro: instructor demo material and a take-home runbook, run against
+# targets in the student's own authorised environment after class, not an
+# offline container. There is nothing to pre-pull, so this script points at
+# lab 16's runbook instead. See section 10.
+NEXT_LAB=""
+CONTAINER="seclm-lab15-run"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-RESULTS="$HERE/lab8-results.txt"
+RESULTS="$HERE/lab15-results.txt"
+DETECTLOG="$HERE/lab15-detect-log.jsonl"
+DETECTOR="$HERE/lab15-detector.json"
 EXTRA_ARGS=("$@")
 
 OS_KIND="$(uname -s | tr '[:upper:]' '[:lower:]')"   # darwin | linux
@@ -33,7 +37,7 @@ info() { printf '          %s\n' "$*"; }
 hr()   { printf '%s\n' "----------------------------------------------------------------"; }
 
 printf '\n'; hr
-printf '  SecLLM Bootcamp - Lab 8: Offensive recap and transition to defense\n'
+printf '  SecLLM Bootcamp - Lab 15: Defending against AI-scaled attacks\n'
 printf '  Setup and launcher (macOS / Linux)\n'
 hr; printf '\n'
 # Where am I? The script resolves its own location, so it does not matter where the
@@ -175,10 +179,10 @@ else
   AVAIL_GB="$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')"
 fi
 if [ -n "${AVAIL_GB:-}" ]; then
-  if [ "$AVAIL_GB" -lt 3 ]; then
-    warn "Only ${AVAIL_GB} GB free. The lab needs about 3 GB. It may fail."
+  if [ "$AVAIL_GB" -lt 2 ]; then
+    warn "Only ${AVAIL_GB} GB free. The lab needs about 1 GB. It may fail."
   else
-    ok "Disk space: ${AVAIL_GB} GB free (need ~3 GB)"
+    ok "Disk space: ${AVAIL_GB} GB free (need ~1 GB)"
   fi
 fi
 
@@ -195,8 +199,13 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
   ok "No download needed - the previous lab fetched this for you."
   SKIP_PULL=1
 else
-  printf '  Downloading the lab image. Lab 8 has no model, so this is small\n'
-  printf '  and quick - most of it you already have from the earlier labs.\n'
+  printf '  Downloading the lab image.\n'
+  printf '\n'
+  printf '  If you have done any of labs 3 to 8, 12, 13 or 14 on this\n'
+  printf '  machine, this is a small delta - tens of kilobytes. Those labs\n'
+  printf '  and this one share the same base, the same Python packages and\n'
+  printf '  the same 1.09 GB language model, byte for byte, so none of it\n'
+  printf '  is downloaded twice. From a clean machine it is about 1.2 GB.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0
@@ -221,83 +230,130 @@ printf '\n'; ok "Image downloaded"
 # --- 7. Run ------------------------------------------------------------------
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 printf '\n'; hr
-printf '  This lab serves nothing and needs no network once the image is\n'
-printf '  here. Everything happens inside the container.\n'
+printf '  This lab runs with NO NETWORK AT ALL - --network none, below.\n'
+printf '  That is the lesson, not a precaution: this lab is about spotting\n'
+printf '  traffic leaving a network, so it is given no network to leave.\n'
+printf '  The estate telemetry, the mock collector, the detector, the\n'
+printf '  model and the log are all inside the container.\n'
+printf '  The collector binds 127.0.0.1:8015 in there. No port is\n'
+printf '  published and none is needed - nothing to open in a browser.\n'
 printf '\n'
 printf '  Starting the lab. You will be asked to choose beginner or\n'
-printf '  expert mode. Beginner types 7 checked commands; expert gets\n'
+printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
 printf '  a real shell and works from LAB.md.\n'
 printf '\n'
-printf '  Four of the seven commands run a language model on your CPU.\n'
-printf '  Every step is instant. There is no model in this lab and nothing\n'
-printf '  to wait for - the time is reading time.\n'
+printf '  If you did labs 3 to 8 or 12 to 14 on this machine, the 1.09 GB\n'
+printf '  model layer is already on your disk and is not fetched again.\n'
+printf '\n'
+printf '  A local language model runs ONCE in this lab, for about 20\n'
+printf '  seconds on two cores. Everything else is plain Python and runs\n'
+printf '  in well under a second.\n'
+printf '\n'
+printf '  One step is SUPPOSED to get past your detector. When you reach\n'
+printf '  it the lab says so. That is the most useful step in the lab.\n'
 hr; printf '\n'
 
-# No -p, and nothing to publish: lab 8 is the only lab that serves nothing at
-# all. No model, no listener, no port. The consolidation contract reserved 8008
-# for a worksheet UI; it is deliberately unclaimed, so 8008 is free for whatever
-# part 2 needs. No --network flag either - the lab needs no network, but forcing
-# "none" would only confuse a student reading the output.
-docker run -it --name "$CONTAINER" "$TAG" lab 8 "${EXTRA_ARGS[@]}"
+# --network none, as labs 9 to 14 do. The addendum's rule is that a defend lab
+# runs under the control it teaches, and this lab is about detecting traffic
+# leaving a network - so it is given no network to leave.
+#
+# NO -p. Lab 15 runs its mock collector on 127.0.0.1:8015 INSIDE the container,
+# started and stopped by the lab itself. A loopback bind inside a container
+# cannot be reached from the host - lab 12 measured that - so -p would promise
+# a browser view that does not work. There is nothing to publish: the collector
+# answers one local process and exits with it.
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 15 "${EXTRA_ARGS[@]}"
 RUN_RC=$?
 
-# --- 8. Recover the transcript ----------------------------------------------
+# --- 8. Recover the transcript and the images --------------------------------
 printf '\n'
-# Lab 8 produces a SECOND artifact the student actually submits: the ATLAS
-# Navigator layer. Copy it out too, next to the transcript, or the README's
-# "drop atlas-layer.json into the Navigator" instruction has nothing to drop.
-# docker cp of a directory was proven on Windows at lab 4; a single file is the
-# same call labs 1-7 already make.
-LAYER="$HERE/atlas-layer.json"
-if docker cp "$CONTAINER:/labs/lab8/atlas-layer.json" "$LAYER" >/dev/null 2>&1; then
-  ok "Evidence saved: $LAYER"
-  info "Load it at https://atlas.mitre.org/navigator"
-  info "  Open Existing Layer -> Upload from local"
-else
-  warn "Could not save atlas-layer.json - did the lab reach the last step?"
-fi
-
-if docker cp "$CONTAINER:/labs/lab8/lab8-results.txt" "$RESULTS" >/dev/null 2>&1; then
+if docker cp "$CONTAINER:/labs/lab15/lab15-results.txt" "$RESULTS" >/dev/null 2>&1; then
   ok "Results saved: $RESULTS"
-  info "Submit atlas-layer.json - load it at atlas.mitre.org/navigator"
-  info "and screenshot it, or send the file itself."
+  info "Paste the three numbers from the last step into the class chat:"
+  info "lab 7's detector on a real estate, yours after tuning, and what"
+  info "evasion cost the attacker. The middle one is the achievement."
 else
   warn "Could not save the results file (lab exit code $RUN_RC)."
   info "Scroll up in this window to copy the evidence block instead."
 fi
 
+# The detector's own log comes out too. It is the evidence for this lab and the
+# thing worth re-reading after class: every detector that ran, with its true and
+# false positive counts. Regenerated on every run.
+rm -f "$DETECTLOG" 2>/dev/null || true
+if docker cp "$CONTAINER:/labs/lab15/detect-log.jsonl" "$DETECTLOG" >/dev/null 2>&1; then
+  ok "Detector log saved: $DETECTLOG"
+  info "One JSON object per verdict. The field to follow is 'precision':"
+  info "0.0069 with the detector you inherited from lab 7, 1.0000 with"
+  info "the one you tuned - same estate, same beacon, same day."
+else
+  info "No detector log to copy - the lab did not run this time."
+fi
+
+# The detector configuration as the student left it, so they can see their own
+# two changes next to the log that prompted them.
+rm -f "$DETECTOR" 2>/dev/null || true
+if docker cp "$CONTAINER:/labs/lab15/detector.json" "$DETECTOR" >/dev/null 2>&1; then
+  ok "Detector config saved: $DETECTOR"
+  info "Two edits: the threshold you chose from the sweep, and the"
+  info "matching window you widened after the miss. The second one is"
+  info "the interesting change, because it is not a number."
+else
+  info "No detector config to copy."
+fi
+
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 
-# --- 10. No next lab -------------------------------------------------------
-# Lab 8 is the final lab of part 1, so NEXT_LAB is empty and there is nothing to
-# pre-pull. The whole pre-pull block that labs 1-7 carry has been DELETED rather
-# than left behind an "if NEXT_LAB" guard: dead code with stale text in it is
-# exactly how labs 5 and 6 came to greet Windows students with lab 4's title.
-#
-# What replaces it is the thing the student actually needs at this point -
-# a check that all eight pieces of evidence are in.
+# --- 10. The hand-off, and there is nothing to download ----------------------
+# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is the
+# red-team process intro: instructor demo material plus a take-home runbook the
+# student follows in their OWN authorised environment after class. It is not an
+# offline container and it is the one place the course's offline rule relaxes,
+# so offering "docker pull seclm-labs:lab16" here would promise a tag that will
+# never exist. NEXT_LAB is empty above for exactly this reason.
 printf '\n'; hr
-printf '  BEFORE YOU GO - eight labs, eight pieces of evidence\n'
+printf '  THAT IS THE LAST LAB TO DOWNLOAD\n'
 hr
 printf '\n'
-info "That is the end of part 1. Check you have submitted all eight:"
+info "Labs 1 to 15 are done. There is no lab 16 image and nothing more"
+info "to pull - and that is on purpose."
 printf '\n'
-printf '    lab 1  the scanner output and the backdoored model\n'
-printf '    lab 2  the poisoned answer next to the clean one\n'
-printf '    lab 3  the hijacked summary\n'
-printf '    lab 4  the OCR injection and the flipped classifier\n'
-printf '    lab 5  the tool call that should not have happened\n'
-printf '    lab 6  the wire log next to what the assistant said\n'
-printf '    lab 7  what the model produced, what got missed, the slowdown\n'
-printf '    lab 8  atlas-layer.json\n'
+info "Lab 16 is the red-team process: how you VALIDATE that the controls"
+info "you built in labs 9 to 15 still hold when somebody attacks them."
+info "The instructor demonstrates it live, and you get a take-home"
+info "runbook for setting the workflow up in your own authorised"
+info "environment afterwards."
 printf '\n'
-info "Missing one? Re-run that lab - they are all still on your machine,"
-info "and every one of them is repeatable."
+info "You have already run the one-command version of it. Step 6 of this"
+info "lab generated a variant your detector had never seen and tested"
+info "your own control against it. ATLAS calls that AML.M0035, AI Red"
+info "Team. Lab 16 is that, as a process, with a scope agreement."
 printf '\n'
-info "Load this lab's evidence at  https://atlas.mitre.org/navigator"
-info "  Open Existing Layer -> Upload from local -> atlas-layer.json"
-printf '\n'
+# Absolute path: works no matter which directory the student ran from.
+LABS_DIR="$(cd "$HERE/../.." 2>/dev/null && pwd || true)"
+RUNBOOK=""
+[ -n "$LABS_DIR" ] && RUNBOOK="$LABS_DIR/lab16/RUNBOOK.md"
+if [ -n "$RUNBOOK" ] && [ -f "$RUNBOOK" ]; then
+  info "The runbook is here:"
+  printf '\n      %s\n\n' "$RUNBOOK"
+else
+  info "The runbook ships with lab 16. If it is not in your course folder"
+  info "yet, pull the course repository again before the last session."
+fi
 
 printf '\n'; hr
-printf '  Lab 8 complete. That is the end of part 1.\n'
+printf '  BEFORE THE LAST SESSION\n'
+hr
+printf '\n'
+info "Check you have submitted evidence for every defend lab:"
+info "  lab  9  supply chain        lab 13  agents"
+info "  lab 10  RAG ingestion       lab 14  MCP tool calls"
+info "  lab 11  multimodal          lab 15  AI-scaled attacks  <- this one"
+info "  lab 12  injection firewall"
+printf '\n'
+info "Lab 16 builds on all seven. If one is missing, say so in the class"
+info "chat before the session rather than during it."
+
+printf '\n'; hr
+printf '  Lab 15 complete. Labs 1 to 15 are done.\n'
 hr; printf '\n'

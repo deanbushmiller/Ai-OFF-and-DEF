@@ -1,0 +1,51 @@
+# Build context hygiene. Everything here is either irrelevant to the image or
+# student output that would make builds non-reproducible.
+
+# macOS / editor noise
+.DS_Store
+._*
+Thumbs.db
+*~
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Instructor-only - not shipped inside the student image
+instructor/
+INSTRUCTOR-TEST.md
+RISK-GUIDE.md
+publish.sh
+
+# Host-side launcher scripts - students run these OUTSIDE the container
+setup/
+
+# Written at RUN time by the lab and never carried in from the context:
+#   estate.json        the generated telemetry, ~1.5 MB, rebuilt every run
+#   collector.log      what arrived at the mock collector
+#   detect-log.jsonl   the detect beat's log
+#   limit-result.json  the prevent stub's measurements
+#   evade-result.json  the evasive channel's verdict
+#   *-results.txt      the runner's saved transcript
+#
+# detector.json is NOT here. It is the shipped detector configuration the
+# student tunes - the threshold and the matching window - so it must be in the
+# image. The Dockerfile COPYs it twice, once as itself and once as
+# detector.default.json, so every run starts from the shipped (deliberately
+# wrong) state. Lab 12 hit exactly this with its rule file, lab 13 with its
+# policy file and lab 14 with its trust list.
+#
+# variants.json and record.txt are NOT here either. They are lab 7's measured
+# artefacts, shipped as the evidence the detector reads.
+estate.json
+collector.log
+detect-log.jsonl
+limit-result.json
+evade-result.json
+*-results.txt
+
+# Credentials
+.env
+*.pem
+*.key

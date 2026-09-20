@@ -1,0 +1,29 @@
+{
+  "_note": "The student's tunable. SHIPPED DELIBERATELY WRONG: threshold 1 is 'alert on any limb', which is the instinct lab 7 leaves you with, and it is measured at 144 false positives. Steps 5 and 9 are where you fix it. runner.py restores this file from detector.default.json at the start of every run.",
+
+  "threshold": 1,
+  "window": "message",
+
+  "weights": {
+    "rare_dest": 2,
+    "machine_cadence": 1,
+    "high_volume": 1,
+    "record_values": 2
+  },
+
+  "limits": {
+    "rare_max_hosts": 2,
+    "burst_cv_max": 1.0,
+    "volume_max": 24,
+    "min_fields": 4,
+    "min_events": 12
+  },
+
+  "_limits_note": {
+    "rare_max_hosts": "a destination contacted by this many hosts or fewer is rare",
+    "burst_cv_max": "cv below this is a machine, not a person. NOT lab 7's 0.35 - see limbs() in lab15lib.py",
+    "volume_max": "check-ins per 24 h above this is high volume. Lab 7's number, kept",
+    "min_fields": "how many of the record's 6 values must survive to call it a hit. Lab 7's number, kept",
+    "min_events": "below this there is not enough signal to judge cadence at all"
+  }
+}

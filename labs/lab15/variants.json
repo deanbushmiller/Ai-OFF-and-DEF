@@ -1,0 +1,56 @@
+{
+  "_note": "Lab 7's MEASURED variants, shipped as EVIDENCE, not regenerated. Recorded byte-identical across three runs at temperature 0 on Qwen2.5-1.5B-Instruct Q4_K_M; see lab-research/lab7/probe-transcripts/q1.out. base64 and hex come from two lines of Python because the model cannot perform an exact transform - lab 7 measured that too, and they are the two that beat the signature rule.",
+  "record": "agent_id=LAB-BEACON-7742, host=WKSTN-14, user=jhalloran, ts=2026-09-13T14:02:11Z, seq=1, status=idle",
+  "variants": {
+    "plain": {
+      "source": "none",
+      "seconds": 0.0,
+      "text": "agent_id=LAB-BEACON-7742, host=WKSTN-14, user=jhalloran, ts=2026-09-13T14:02:11Z, seq=1, status=idle"
+    },
+    "json": {
+      "source": "model",
+      "seconds": 9.44,
+      "text": "{\n  \"agent_id\": \"LAB-BEACON-7742\",\n  \"host\": \"WKSTN-14\",\n  \"user\": \"jhalloran\",\n  \"ts\": \"2026-09-13T14:02:11Z\",\n  \"seq\": 1,\n  \"status\": \"idle\"\n}"
+    },
+    "csv": {
+      "source": "model",
+      "seconds": 6.81,
+      "text": "agent_id,LAB-BEACON-7742\nhost,WKSTN-14\nuser,jhalloran\nts,2026-09-13T14:02:11Z\nseq,1\nstatus,idle"
+    },
+    "kv": {
+      "source": "model",
+      "seconds": 5.75,
+      "text": "agent_id=LAB-BEACON-7742;host=WKSTN-14;user=jhalloran;ts=2026-09-13T14:02:11Z;seq=1;status=idle"
+    },
+    "xml": {
+      "source": "model",
+      "seconds": 7.51,
+      "text": "<agent_id>LAB-BEACON-7742</agent_id><host>WKSTN-14</host><user>jhalloran</user><ts>2026-09-13T14:02:11Z</ts><seq>1</seq><status>idle</status>"
+    },
+    "syslog": {
+      "source": "model",
+      "seconds": 5.91,
+      "text": "agent_id=LAB-BEACON-7742, host=WKSTN-14, user=jhalloran, ts=2026-09-13T14:02:11Z, seq=1, status=idle"
+    },
+    "urlq": {
+      "source": "model",
+      "seconds": 6.2,
+      "text": "agent_id=LAB-BEACON-7742&host=WKSTN-14&user=jhalloran&ts=2026-09-13T14%3A02%3A11Z&seq=1&status=idle"
+    },
+    "yaml": {
+      "source": "model",
+      "seconds": 6.6,
+      "text": "agent_id: LAB-BEACON-7742\nhost: WKSTN-14\nuser: jhalloran\nts: 2026-09-13T14:02:11Z\nseq: 1\nstatus: idle"
+    },
+    "base64": {
+      "source": "python",
+      "seconds": 0.0001,
+      "text": "YWdlbnRfaWQ9TEFCLUJFQUNPTi03NzQyLCBob3N0PVdLU1ROLTE0LCB1c2VyPWpoYWxsb3JhbiwgdHM9MjAyNi0wOS0xM1QxNDowMjoxMVosIHNlcT0xLCBzdGF0dXM9aWRsZQ=="
+    },
+    "hex": {
+      "source": "python",
+      "seconds": 0.0001,
+      "text": "6167656e745f69643d4c41422d424541434f4e2d373734322c20686f73743d574b53544e2d31342c20757365723d6a68616c6c6f72616e2c2074733d323032362d30392d31335431343a30323a31315a2c207365713d312c207374617475733d69646c65"
+    }
+  }
+}

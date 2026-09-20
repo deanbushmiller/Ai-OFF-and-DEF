@@ -257,8 +257,9 @@ RUN_RC=$?
 printf '\n'
 if docker cp "$CONTAINER:/labs/lab10/lab10-results.txt" "$RESULTS" >/dev/null 2>&1; then
   ok "Results saved: $RESULTS"
-  info "Paste two things into the class chat: the blocklist.json entry you"
-  info "created, and the sandbox line showing the blocked connection."
+  info "Paste two things into the class chat: the canary pair - the answer"
+  info "before and after the poison - and the retrieval-log line naming"
+  info "poisoned_handbook.pdf with its score and its UNTAGGED provenance."
 else
   warn "Could not save the results file (lab exit code $RUN_RC)."
   info "Scroll up in this window to copy the evidence block instead."

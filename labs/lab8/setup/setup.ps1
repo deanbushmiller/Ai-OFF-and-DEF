@@ -369,7 +369,7 @@ if ($alreadyHave) {
     Ok "No download needed - the previous lab fetched this for you."
 } else {
     Write-Host "  Downloading the lab image. Small - lab 8 has no model."
-    Write-Host "  Most of that is the language model, which labs 5-7 reuse."
+    Write-Host "  Most of it you already have from the earlier labs."
     Write-Host "  $Tag"
     Hr
     Write-Host ""

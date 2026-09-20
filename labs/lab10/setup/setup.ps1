@@ -437,8 +437,9 @@ Write-Host ""
 & docker cp "$Container`:/labs/lab10/lab10-results.txt" $Results *> $null
 if ($LASTEXITCODE -eq 0) {
     Ok "Results saved: $Results"
-    Info "Paste the three numbers from the evidence block: what the model"
-    Info "produced, what the signature rule missed, and the slowdown."
+    Info "Paste two things into the class chat: the canary pair - the answer"
+    Info "before and after the poison - and the retrieval-log line naming"
+    Info "poisoned_handbook.pdf with its score and its UNTAGGED provenance."
 } else {
     Warn "Could not save the results file (lab exit code $runRc)."
     Info "Scroll up in this window to copy the evidence block instead."

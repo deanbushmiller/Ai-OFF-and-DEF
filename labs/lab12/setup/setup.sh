@@ -196,12 +196,11 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
 else
   printf '  Downloading the lab image.\n'
   printf '\n'
-  printf '  If you have done lab 4 on this machine, this is about 21 MB on\n'
-  printf '  Apple Silicon, 24 MB on Intel: the OCR engine and the base are\n'
-  printf '  already on your disk down to the byte, and this pull is only the\n'
-  printf '  two small libraries this lab carries for itself. From a clean\n'
-  printf '  machine it is about 101 MB on Apple Silicon, 105 MB on Intel -\n'
-  printf '  no language model, the smallest image in the course either way.\n'
+  printf '  If you have done labs 3 to 8 on this machine, this is about\n'
+  printf '  30 KB - 29,895 bytes, on both Apple Silicon and Intel. This lab\n'
+  printf '  and those share the same base, the same Python packages and the\n'
+  printf '  same 1.09 GB language model, byte for byte, so none of it is\n'
+  printf '  downloaded twice. From a clean machine it is about 1.14 GB.\n'
   printf '  Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'

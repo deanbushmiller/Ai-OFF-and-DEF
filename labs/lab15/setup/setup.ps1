@@ -1,5 +1,5 @@
 # ===========================================================================
-#  SecLLM Bootcamp - Lab 13 setup  (Windows)
+#  SecLLM Bootcamp - Lab 15 setup  (Windows)
 #
 #  Mac students: use setup.sh instead.
 #
@@ -17,14 +17,17 @@ param([Parameter(ValueFromRemainingArguments = $true)] $ExtraArgs)
 $ErrorActionPreference = 'Continue'
 
 $Image     = 'ghcr.io/deanbushmiller/seclm-labs'
-$Lab       = 'lab13'
-$NextLab   = 'lab14'         # set to '' on the final lab
-$NextName  = 'Lab 14 - Defending MCP tool calls'
-$Container = 'seclm-lab13-run'
+$Lab       = 'lab15'
+# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is the red-team
+# process intro: instructor demo material and a take-home runbook, run in the
+# student's own authorised environment after class, not an offline container.
+# There is nothing to pre-pull, so section 10 points at the runbook instead.
+$NextLab   = ''
+$Container = 'seclm-lab15-run'
 $Here      = Split-Path -Parent $MyInvocation.MyCommand.Path
-$Results   = Join-Path $Here 'lab13-results.txt'
-$Audit     = Join-Path $Here 'lab13-audit-log.jsonl'
-$PolicyOut = Join-Path $Here 'lab13-policy.json'
+$Results   = Join-Path $Here 'lab15-results.txt'
+$DetectLog = Join-Path $Here 'lab15-detect-log.jsonl'
+$DetectCfg = Join-Path $Here 'lab15-detector.json'
 if (-not $ExtraArgs) { $ExtraArgs = @() }
 
 function Ok   ($m) { Write-Host "  [ OK ]  $m" -ForegroundColor Green }
@@ -35,7 +38,7 @@ function Hr        { Write-Host "-----------------------------------------------
 
 Write-Host ""
 Hr
-Write-Host "  SecLLM Bootcamp - Lab 13: Defending AI agents"
+Write-Host "  SecLLM Bootcamp - Lab 15: Defending against AI-scaled attacks"
 Write-Host "  Setup and launcher (Windows)"
 Hr
 Write-Host ""
@@ -372,11 +375,11 @@ if ($alreadyHave) {
 } else {
     Write-Host "  Downloading the lab image."
     Write-Host ""
-    Write-Host "  If you have done any of labs 3 to 8 or lab 12 on this"
+    Write-Host "  If you have done any of labs 3 to 8, 12, 13 or 14 on this"
     Write-Host "  machine, this is a small delta - tens of kilobytes. Those labs"
     Write-Host "  and this one share the same base, the same Python packages and"
     Write-Host "  the same 1.09 GB language model, byte for byte, so none of it"
-    Write-Host "  is downloaded twice. From a clean machine it is about 1.14 GB."
+    Write-Host "  is downloaded twice. From a clean machine it is about 1.2 GB."
     Write-Host "  $Tag"
     Hr
     Write-Host ""
@@ -407,147 +410,140 @@ Ok "Image downloaded"
 Write-Host ""
 Hr
 Write-Host "  This lab runs with NO NETWORK AT ALL - --network none, below."
-Write-Host "  That is the lesson, not a precaution: this lab is about keeping"
-Write-Host "  an agent away from things it was never meant to reach, so it"
-Write-Host "  runs that way itself. The agent, its tools, the policy file,"
-Write-Host "  the model and the audit log are all inside the container."
-Write-Host "  No port is published and none is needed."
+Write-Host "  That is the lesson, not a precaution: this lab is about spotting"
+Write-Host "  traffic leaving a network, so it is given no network to leave."
+Write-Host "  The estate telemetry, the mock collector, the detector, the"
+Write-Host "  model and the log are all inside the container."
+Write-Host "  The collector binds 127.0.0.1:8015 in there. No port is"
+Write-Host "  published and none is needed - nothing to open in a browser."
 Write-Host ""
 Write-Host "  Starting the lab. You will be asked to choose beginner or"
 Write-Host "  expert mode. Beginner types 10 checked commands; expert gets"
 Write-Host "  a real shell and works from LAB.md."
 Write-Host ""
-Write-Host "  If you did labs 3 to 8 or lab 12 on this machine, the 1.09 GB"
+Write-Host "  If you did labs 3 to 8 or 12 to 14 on this machine, the 1.09 GB"
 Write-Host "  model layer is already on your disk and is not fetched again."
 Write-Host ""
-Write-Host "  A local language model runs four times in this lab. Each"
-Write-Host "  answer takes 10-20 seconds, longer on a 2-core machine. The"
-Write-Host "  model WILL be tricked every time; watch what the broker does"
-Write-Host "  about it."
+Write-Host "  A local language model runs ONCE in this lab, for about 20"
+Write-Host "  seconds on two cores. Everything else is plain Python and runs"
+Write-Host "  in well under a second."
+Write-Host ""
+Write-Host "  One step is SUPPOSED to get past your detector. When you reach"
+Write-Host "  it the lab says so. That is the most useful step in the lab."
 Hr
 Write-Host ""
 
-# --network none, as labs 9 to 12 do. The addendum's rule is that a defend lab
-# runs under the control it teaches; ATLAS AML.M0032 names egress restriction as
-# part of the boundary this lab is about, so the lab runs with no route out.
+# --network none, as labs 9 to 14 do. The addendum's rule is that a defend lab
+# runs under the control it teaches, and this lab is about detecting traffic
+# leaving a network - so it is given no network to leave.
 #
-# The pre-pull at the end of this script is a separate docker command and is
-# unaffected - it runs after the container has exited.
-#
-# NO -p. Lab 13 serves nothing: no port, no background process, nothing to
-# publish. The contract reserves 8013 only if a UI is ever added, and none is.
-& docker run -it --network none --name $Container $Tag lab 13 @ExtraArgs
+# NO -p. Lab 15 runs its mock collector on 127.0.0.1:8015 INSIDE the container,
+# started and stopped by the lab itself. A loopback bind inside a container
+# cannot be reached from the host - lab 12 measured that - so -p would promise
+# a browser view that does not work. There is nothing to publish: the collector
+# answers one local process and exits with it.
+& docker run -it --network none --name $Container $Tag lab 15 @ExtraArgs
 $runRc = $LASTEXITCODE
 
 # --- 9. Recover the transcript and the images --------------------------------
 Write-Host ""
-& docker cp "$Container`:/labs/lab13/lab13-results.txt" $Results *> $null
+& docker cp "$Container`:/labs/lab15/lab15-results.txt" $Results *> $null
 if ($LASTEXITCODE -eq 0) {
     Ok "Results saved: $Results"
-    Info "Paste the evidence table from the last step into the class chat."
-    Info "The column that matters is the gate the privileged call died at,"
-    Info "walking 3 -> 2 -> 1 while the clean run keeps passing."
+    Info "Paste the three numbers from the last step into the class chat:"
+    Info "lab 7's detector on a real estate, yours after tuning, and what"
+    Info "evasion cost the attacker. The middle one is the achievement."
 } else {
     Warn "Could not save the results file (lab exit code $runRc)."
     Info "Scroll up in this window to copy the evidence block instead."
 }
 
-# The broker's own tool-call log comes out too. It is the evidence for this
-# lab and the thing worth re-reading after class: every attempted call, with
-# the verdict on each. Regenerated on every run.
-if (Test-Path $Audit) { Remove-Item -Force $Audit -ErrorAction SilentlyContinue }
-& docker cp "$Container`:/labs/lab13/audit-log.jsonl" $Audit *> $null
+# The detector's own log comes out too. It is the evidence for this lab and the
+# thing worth re-reading after class: every detector that ran, with its true and
+# false positive counts. Regenerated on every run.
+if (Test-Path $DetectLog) { Remove-Item -Force $DetectLog -ErrorAction SilentlyContinue }
+& docker cp "$Container`:/labs/lab15/detect-log.jsonl" $DetectLog *> $null
 if ($LASTEXITCODE -eq 0) {
-    Ok "Audit log saved: $Audit"
-    Info "One JSON object per attempted tool call. Look for the run where"
-    Info "set_role is ALLOW and read_notes:admin is DENY - that is an agent"
-    Info "that was fully compromised and still did not get the data."
+    Ok "Detector log saved: $DetectLog"
+    Info "One JSON object per verdict. The field to follow is 'precision':"
+    Info "0.0069 with the detector you inherited from lab 7, 1.0000 with"
+    Info "the one you tuned - same estate, same beacon, same day."
 } else {
-    Info "No audit log to copy - the agent did not run this time."
+    Info "No detector log to copy - the lab did not run this time."
 }
 
-# The policy file as the student left it, so they can see their own two
-# changes next to the log that prompted them.
-if (Test-Path $PolicyOut) { Remove-Item -Force $PolicyOut -ErrorAction SilentlyContinue }
-& docker cp "$Container`:/labs/lab13/policy.json" $PolicyOut *> $null
+# The detector configuration as the student left it, so they can see their own
+# two changes next to the log that prompted them.
+if (Test-Path $DetectCfg) { Remove-Item -Force $DetectCfg -ErrorAction SilentlyContinue }
+& docker cp "$Container`:/labs/lab15/detector.json" $DetectCfg *> $null
 if ($LASTEXITCODE -eq 0) {
-    Ok "Policy saved: $PolicyOut"
-    Info "active=false on admin-notes-ro, and set_role gone from the"
-    Info "triage allow-list. Two edits, in a file the agent cannot write."
+    Ok "Detector config saved: $DetectCfg"
+    Info "Two edits: the threshold you chose from the sweep, and the"
+    Info "matching window you widened after the miss. The second one is"
+    Info "the interesting change, because it is not a number."
 } else {
-    Info "No policy file to copy."
+    Info "No detector config to copy."
 }
 
 & docker rm -f $Container *> $null
 
-# --- 10. Pre-pull the next lab ----------------------------------------------
-# Done here, while the student is still online with the terminal open.
-if ($NextLab) {
-    $NextTag = "$Image`:$NextLab-$Detected"
+# --- 10. The hand-off, and there is nothing to download ----------------------
+# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is the
+# red-team process intro: instructor demo material plus a take-home runbook the
+# student follows in their OWN authorised environment after class. It is not an
+# offline container and it is the one place the course's offline rule relaxes,
+# so offering "docker pull seclm-labs:lab16" here would promise a tag that will
+# never exist. $NextLab is empty above for exactly this reason.
+Write-Host ""
+Hr
+Write-Host "  THAT IS THE LAST LAB TO DOWNLOAD"
+Hr
+Write-Host ""
+Info "Labs 1 to 15 are done. There is no lab 16 image and nothing more"
+Info "to pull - and that is on purpose."
+Write-Host ""
+Info "Lab 16 is the red-team process: how you VALIDATE that the controls"
+Info "you built in labs 9 to 15 still hold when somebody attacks them."
+Info "The instructor demonstrates it live, and you get a take-home"
+Info "runbook for setting the workflow up in your own authorised"
+Info "environment afterwards."
+Write-Host ""
+Info "You have already run the one-command version of it. Step 6 of this"
+Info "lab generated a variant your detector had never seen and tested"
+Info "your own control against it. ATLAS calls that AML.M0035, AI Red"
+Info "Team. Lab 16 is that, as a process, with a scope agreement."
+Write-Host ""
+# Absolute path: works no matter which directory the student ran from.
+$LabsDir = $null
+try { $LabsDir = (Resolve-Path (Join-Path $Here "..\..")).Path } catch { }
+$Runbook = $null
+if ($LabsDir) { $Runbook = Join-Path $LabsDir (Join-Path "lab16" "RUNBOOK.md") }
+if ($Runbook -and (Test-Path $Runbook)) {
+    Info "The runbook is here:"
     Write-Host ""
-    Hr
-    Write-Host "  BEFORE YOU GO - get the next lab now"
-    Hr
+    Write-Host "      $Runbook"
     Write-Host ""
-    Info $NextName
-    Info "Lab 14 is the same dependency tier as this lab, so it shares the"
-    Info "1.09 GB model layer you already have on disk. A student who has"
-    Info "lab 13 pulls a small delta for lab 14, not the model again."
-    Info "No exact size until it is published and measured."
-    Write-Host ""
-    Info "Doing it now, while you are online, means no waiting at the start"
-    Info "of the next session."
-    Write-Host ""
-    $getNext = Read-Host "  Pull it now? [Y/n]"
-    if ($getNext -match '^[Nn]') {
-        Write-Host ""
-        Info "Skipped. Run this before the next session:"
-        Info "    docker pull $NextTag"
-    } else {
-        Write-Host ""
-        Info "(If $NextLab is not published yet you will see an error here."
-        Info " That is expected and harmless - lab 13 is already complete.)"
-        Write-Host ""
-        & docker pull $NextTag
-        if ($LASTEXITCODE -eq 0) {
-            Write-Host ""
-            Ok "$NextName is ready on your machine."
-            # Absolute path: -File does NOT change the working directory, and we
-            # cannot assume which folder the student launched from.
-            # Walk up: setup -> labN -> labs. Guard every step; if the folder
-            # layout is not what we expect, say so plainly rather than throwing
-            # a PowerShell error at the student.
-            $NextScript = $null
-            try {
-                $labDir  = Split-Path -Parent $Here
-                $LabsDir = if ($labDir) { Split-Path -Parent $labDir } else { $null }
-                if ($LabsDir) {
-                    $NextScript = Join-Path $LabsDir (Join-Path $NextLab (Join-Path "setup" "setup.ps1"))
-                }
-            } catch { $NextScript = $null }
-            Write-Host ""
-            if ($NextScript -and (Test-Path $NextScript)) {
-                Info "When you are ready to start it, run:"
-                Write-Host ""
-                Write-Host "      powershell -ExecutionPolicy Bypass -File `"$NextScript`""
-                Write-Host ""
-            } else {
-                Info "The next lab's setup script is not in this folder yet."
-                Info "Pull the course repository again before the next session."
-            }
-        } else {
-            Write-Host ""
-            Warn "Could not pull it yet."
-            Info "If the instructor has not published $NextLab, this is expected."
-            Info "Try again before the next session:"
-            Info "    docker pull $NextTag"
-        }
-    }
+} else {
+    Info "The runbook ships with lab 16. If it is not in your course folder"
+    Info "yet, pull the course repository again before the last session."
 }
 
 Write-Host ""
 Hr
-Write-Host "  Lab 13 complete. The image stays on your machine for the next lab."
+Write-Host "  BEFORE THE LAST SESSION"
 Hr
 Write-Host ""
-Read-Host "Press Enter to close"
+Info "Check you have submitted evidence for every defend lab:"
+Info "  lab  9  supply chain        lab 13  agents"
+Info "  lab 10  RAG ingestion       lab 14  MCP tool calls"
+Info "  lab 11  multimodal          lab 15  AI-scaled attacks  <- this one"
+Info "  lab 12  injection firewall"
+Write-Host ""
+Info "Lab 16 builds on all seven. If one is missing, say so in the class"
+Info "chat before the session rather than during it."
+
+Write-Host ""
+Hr
+Write-Host "  Lab 15 complete. Labs 1 to 15 are done."
+Hr
+Write-Host ""
