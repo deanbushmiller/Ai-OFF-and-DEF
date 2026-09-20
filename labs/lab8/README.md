@@ -210,3 +210,14 @@ the lot.
 
 Part 2 is the other half — seven defender labs, starting with semantic firewalls and RAG
 validation and ending with automated red teaming. Same ground, from the other side.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

@@ -149,3 +149,14 @@ Nothing here is malware and nothing leaves your machine. The doctored invoice is
 line of plain English drawn at 1.2% contrast, asking for an approval. The perturbed stamp is
 lab 4's too: a change of 7 in 255. No commands, no code, no network, and no language model —
 every result is arithmetic on pixels and text, identical on every machine.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

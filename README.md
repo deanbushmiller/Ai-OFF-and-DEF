@@ -99,10 +99,10 @@ Each defend lab pairs with an attack lab and turns it into a control you build, 
 | 9 | [Defending the model supply chain](labs/lab9/) | lab 1 | LLM04, LLM05 | **published** |
 | 10 | [Defending RAG ingestion](labs/lab10/) | lab 2 | LLM09, LLM07 | **published** |
 | 11 | [Defending multimodal input](labs/lab11/) | lab 4 | LLM01, LLM02 | **published** |
-| 12 | Defending against prompt injection | lab 3 | — | planned |
-| 13 | Defending agents | lab 5 | — | planned |
-| 14 | Defending MCP interfaces | lab 6 | — | planned |
-| 15 | Defending against orchestration | lab 7 | — | planned |
+| 12 | [Defending against prompt injection](labs/lab12/) | lab 3 | LLM01, LLM02 | **published** |
+| 13 | [Defending AI agents](labs/lab13/) | lab 5 | LLM01, LLM03 | **published** |
+| 14 | [Defending MCP tool calls](labs/lab14/) | lab 6 | LLM01, LLM08, ASI04 | **published** |
+| 15 | [Defending against AI-scaled attacks](labs/lab15/) | lab 7 | LLM10, LLM02, LLM06 | **published** |
 | 16 | Red-team process | — | — | planned |
 
 ## Course materials

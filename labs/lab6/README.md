@@ -229,3 +229,14 @@ and two presentations, and this model ignored it **15 times out of 15**.
 That is not reassurance. The MCPTox benchmark measures over **60% success across 45+
 real-world MCP servers**, with the best model at 72.8%. **The attack scales with model
 capability** — a smarter agent is a more obedient one. Ask your instructor for the demo.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

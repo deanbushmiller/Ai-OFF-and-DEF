@@ -32,13 +32,13 @@ If you have already done labs 3 to 8 or 12 to 14, you are ready — nothing new 
 and the download is small. This lab runs the same local language model as those labs and
 buys no model, no system package and no Python package of its own, so the pull is the lab's
 own source files and nothing else. The big model layer is already on your disk and is not
-fetched again. From a clean machine, expect about **1.14 GB** — the language model itself,
+fetched again. From a clean machine, expect about **1.2 GB** — the language model itself,
 the one-time cost that labs 3 to 8, 12 to 14 and this lab all share.
 
-<!-- DOWNLOAD FIGURE: deliberately absent. Instructor decision 2026-09-20, REBUILD-PLAN.md
-     Phase C item 2 - every student-facing download number is written once, at the end of the
-     course, from a single verify-sharing.py run. The publish gate still runs at every
-     publish as the layer-drift detector. -->
+<!-- DOWNLOAD FIGURE: written 2026-09-20 in the course-wide pass, from one
+     verify-sharing.py run against the published registry. Figures are rounded;
+     the exact byte counts are in the instructor pack. Any rebuild invalidates
+     them, so re-run the pass after a base-digest bump. -->
 
 ---
 
@@ -190,3 +190,14 @@ The detector log records limb verdicts, scores and counts. `python check.py` ass
 the record's values actually reaching the collector are **measured at the collector's own
 store** rather than inferred from any verdict — because a detector that alerts on everything
 scores perfect recall and protects nothing, and that is exactly the failure worth catching.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

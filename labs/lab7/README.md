@@ -291,3 +291,14 @@ operator's endpoint would have received and stops there.
   `LAB-BEACON-7742` comes from conceptually: it tests for **EICAR**, **GTUBE** and
   **GTPHISH**, the standard harmless signatures that exist so detectors can be proven to fire
   without anyone handling real malware.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

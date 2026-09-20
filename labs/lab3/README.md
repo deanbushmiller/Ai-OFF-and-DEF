@@ -262,3 +262,14 @@ fit; arguing which fits better is a good use of five minutes.
 
 Paste the output of `python evidence.py` into the class chat — **both** runs. The clean
 one alone proves nothing.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

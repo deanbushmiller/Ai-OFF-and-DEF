@@ -20,10 +20,10 @@ only those. Expert mode runs the whole list.
 > `docker --version` works.
 
 If you have already done labs 3 to 8, you are ready — nothing new to install, and the
-download is **29,895 bytes. Thirty kilobytes**, on both Apple Silicon and Intel, measured on
+download is **about 30 KB**, on both Apple Silicon and Intel, measured on
 the published image. This lab runs the same local language model as those labs and buys no
 model, no system package and no Python package of its own, so the pull is the lab's own source
-files and nothing else. From a clean machine, expect about **1.14 GB** — the language model
+files and nothing else. From a clean machine, expect about **1.2 GB** — the language model
 itself, the one-time cost labs 3 to 8 all share.
 
 ---
@@ -152,3 +152,14 @@ only inside the container, and is a deliberate plant — a canary, which is what
 recommends for testing exactly this. When the outbound scan fires, the answer is suppressed
 and never shown, and the log records the attempt with the value redacted. `python check.py`
 asserts that nothing matching it appears in your transcript or your log.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

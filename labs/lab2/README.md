@@ -274,3 +274,14 @@ Paste the output of `python rag.py evidence` into the class chat — the **BEFOR
 and AFTER** block. Both halves, or it proves nothing.
 
 Your full transcript is saved as `lab2-results.txt` next to the setup script.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

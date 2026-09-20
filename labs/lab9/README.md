@@ -138,3 +138,14 @@ Nothing here is real malware and nothing leaves your machine. One payload runs a
 The other opens a socket to `203.0.113.10`, an address reserved for documentation that
 routes nowhere — and the lab refuses the call before it is made, inside a container that has
 no network in the first place.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

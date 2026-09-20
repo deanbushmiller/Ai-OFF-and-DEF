@@ -198,10 +198,10 @@ else
   printf '  Downloading the lab image.\n'
   printf '\n'
   printf '  If you have done any of labs 3 to 8, 12 or 13 on this machine,\n'
-  printf '  this is a small delta - tens of kilobytes. Those labs and this\n'
+  printf '  this is a small delta - about 34 KB. Those labs and this\n'
   printf '  one share the same base, the same Python packages and the same\n'
   printf '  1.09 GB language model, byte for byte, so none of it is\n'
-  printf '  downloaded twice. From a clean machine it is about 1.14 GB.\n'
+  printf '  downloaded twice. From a clean machine it is about 1.2 GB.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

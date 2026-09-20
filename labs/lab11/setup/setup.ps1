@@ -479,9 +479,9 @@ if ($NextLab) {
     Write-Host ""
     Info $NextName
     Info "Lab 12 runs the same local language model as labs 3 to 8. If you did"
-    Info "those on this machine the download is about 30 KB - 29,895 bytes,"
+    Info "those on this machine the download is about 30 KB,"
     Info "measured on the published image - because the 1.09 GB model layer"
-    Info "is already on your disk. If you did not, expect about 1.14 GB."
+    Info "is already on your disk. If you did not, expect about 1.2 GB."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"
     Info "of the next session."

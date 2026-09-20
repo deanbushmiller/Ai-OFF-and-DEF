@@ -376,7 +376,7 @@ if ($alreadyHave) {
     Write-Host "  Downloading the lab image."
     Write-Host ""
     Write-Host "  If you have done any of labs 3 to 8, 12, 13 or 14 on this"
-    Write-Host "  machine, this is a small delta - tens of kilobytes. Those labs"
+    Write-Host "  machine, this is a small delta - about 56 KB. Those labs"
     Write-Host "  and this one share the same base, the same Python packages and"
     Write-Host "  the same 1.09 GB language model, byte for byte, so none of it"
     Write-Host "  is downloaded twice. From a clean machine it is about 1.2 GB."

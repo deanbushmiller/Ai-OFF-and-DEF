@@ -194,10 +194,16 @@ follows.
 
 ## MITRE ATLAS mapping
 
+> **Note on the first ID.** ATLAS retired `AML.T0058` *Publish Poisoned Models* and replaced
+> it with **`AML.T0115` Publish Poisoned AI Artifacts**, which is what lab 9 cites. The
+> chain below is corrected. **The lab's own on-screen text still prints the retired
+> `AML.T0058`** — it is baked into the published image, and correcting it would cost a
+> rebuild and republish for a label change. Cite `AML.T0115`.
+
 ```
-AML.T0058          →  AML.T0018.000  →  AML.T0010.003   →  AML.T0011.000
+AML.T0115          →  AML.T0018.000  →  AML.T0010.003   →  AML.T0011.000
 Publish Poisoned      Poison AI          AI Supply Chain    User Execution:
-Models                Model              Compromise: Model  Unsafe AI Artifacts
+AI Artifacts          Model              Compromise: Model  Unsafe AI Artifacts
 (Resource Dev)        (Persistence)      (Initial Access)   (Execution)
 ```
 
@@ -284,3 +290,14 @@ that lab is not published yet — harmless, just try again later.
 | [fickling](https://github.com/trailofbits/fickling) 0.1.12 | LGPL-3.0 | Allowlist scanner and pickle decompiler |
 | [PyTorch](https://pytorch.org) 2.9.1 (CPU) | BSD-3 | `torch.save` / `torch.load` |
 | [prajjwal1/bert-tiny](https://huggingface.co/prajjwal1/bert-tiny) | MIT | The genuine 17.8 MB model |
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

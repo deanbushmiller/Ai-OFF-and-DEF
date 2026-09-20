@@ -405,6 +405,10 @@ Write-Host ""
 Write-Host "  Starting the lab. You will be asked to choose beginner or"
 Write-Host "  expert mode. Beginner types 10 checked commands; expert gets"
 Write-Host "  a real shell and works from LAB.md."
+Write-Host ""
+Write-Host "  Three of the six commands run a language model on your CPU."
+Write-Host "  Each takes roughly a minute, and up to two on a slow machine."
+Write-Host "  That is the lab working, not the lab hanging."
 Hr
 Write-Host ""
 

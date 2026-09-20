@@ -294,9 +294,9 @@ if [ -n "${NEXT_LAB:-}" ]; then
   printf '\n'
   info "$NEXT_LAB_NAME"
   info "Lab 12 runs the same local language model as labs 3 to 8. If you did"
-  info "those on this machine the download is about 30 KB - 29,895 bytes,"
+  info "those on this machine the download is about 30 KB,"
   info "measured on the published image - because the 1.09 GB model layer"
-  info "is already on your disk. If you did not, expect about 1.14 GB."
+  info "is already on your disk. If you did not, expect about 1.2 GB."
   printf '\n'
   info "Doing it now, while you are online, means no waiting at the start"
   info "of the next session."

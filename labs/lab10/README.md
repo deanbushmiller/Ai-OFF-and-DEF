@@ -144,3 +144,14 @@ Nothing here is malware and nothing leaves your machine. The payload is the same
 lab 2: five sentences, drawn in white on a white page, that simply state things which are
 false. No commands, no code, no network. That is the point — a content filter looking for
 malicious instructions would not see this document at all.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>

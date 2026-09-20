@@ -25,12 +25,13 @@ only those. Expert mode runs the whole list.
 If you have already done labs 3 to 8 or lab 12, you are ready — nothing new to install, and
 the download is small. This lab runs the same local language model as those labs and buys no
 model, no system package and no Python package of its own, so the pull is the lab's own source
-files and nothing else. From a clean machine, expect about **1.14 GB** — the language model
+files and nothing else. From a clean machine, expect about **1.2 GB** — the language model
 itself, the one-time cost that labs 3 to 8, 12 and this lab all share.
 
-<!-- DOWNLOAD FIGURE: filled in from verify-sharing.py at the publish gate. Until then no
-     number appears here, because a local build measures a local build and the two have
-     disagreed by 193 MB before. -->
+<!-- DOWNLOAD FIGURE: written 2026-09-20 in the course-wide pass, from one
+     verify-sharing.py run against the published registry. Figures are rounded;
+     the exact byte counts are in the instructor pack. Any rebuild invalidates
+     them, so re-run the pass after a base-digest bump. -->
 
 ---
 
@@ -162,3 +163,14 @@ inside the container.
 The broker's log records what was *asked for* and what was *decided*, never what a tool
 returned — which is how a real tool audit log is written, and it means the fake password
 cannot reach the file you send your instructor. `python check.py` asserts exactly that.
+
+---
+
+## Reference
+
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+The authoritative, always-current definitions are at
+<https://atlas.mitre.org/>, and the underlying data is at
+<https://github.com/mitre-atlas/atlas-data>.
+
+OWASP GenAI LLM Top 10 (2026): <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/>
