@@ -97,8 +97,8 @@ Each defend lab pairs with an attack lab and turns it into a control you build, 
 | # | Lab | Defends | OWASP 2026 | Status |
 |---|---|---|---|---|
 | 9 | [Defending the model supply chain](labs/lab9/) | lab 1 | LLM04, LLM05 | **published** |
-| 10 | Defending RAG ingestion | lab 2 | — | planned |
-| 11 | Defending multimodal input | lab 4 | — | planned |
+| 10 | [Defending RAG ingestion](labs/lab10/) | lab 2 | LLM09, LLM07 | **published** |
+| 11 | [Defending multimodal input](labs/lab11/) | lab 4 | LLM01, LLM02 | **published** |
 | 12 | Defending against prompt injection | lab 3 | — | planned |
 | 13 | Defending agents | lab 5 | — | planned |
 | 14 | Defending MCP interfaces | lab 6 | — | planned |

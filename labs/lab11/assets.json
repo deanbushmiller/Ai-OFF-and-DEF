@@ -1,0 +1,94 @@
+{
+  "lab": 11,
+  "title": "Defending multimodal input",
+  "defends": "lab 4 - multimodal and vision-based exploits",
+  "tier": "ocr-light",
+  "tier_note": "The only lab in this tier. Preamble copied verbatim from tier-templates/ocr-light.Dockerfile: pinned base, the llama tier's apt line (shared with labs 3-8), lab 4's tesseract RUN (shared with lab 4), then a pip layer of its own. No torch, no llama wheel, no Hub download, no fetch_assets.py.",
+  "cache_root": "/opt/lab-assets",
+  "cache_note": "Nothing is placed there. HF_HOME is set by the template preamble and unused.",
+  "offline_at_runtime": true,
+  "ports": [],
+  "ports_note": "This lab does not serve. Port 8011 stays unallocated. The setup scripts run it with --network none.",
+  "interaction": "beginner (10 guided typed commands: OCR, check, OCR, check, compare, log, gate, route, tune, gate) or expert (real shell + nano rules.json + nano payload.txt + craft.py + check.py)",
+  "models": [
+    {
+      "source_id": "trained at build time by scripts/stamp_gate.py (lab 4's script, verbatim)",
+      "file": "gate-weights.npz",
+      "path": "/labs/lab11/gate-weights.npz",
+      "bytes": 95991,
+      "shared": false,
+      "shared_note": "Retrained at build from lab 4's fixed seed; the 0.607 attack confidence reproduced exactly. Same 800 synthetic stamps, ~24 s on arm64.",
+      "measured": {
+        "held_out_accuracy": 0.95,
+        "clean_stamp": "DUPLICATE at 1.000",
+        "perturbed_stamp": "ORIGINAL at 0.607, 7/255, 13,110 pixels",
+        "random_control": "0 of 30 random perturbations of the same magnitude flipped it",
+        "auto_accept_threshold": "ships 0.50 (ALLOWED); tune.py writes 0.90 (HELD); anything 0.61-0.99 holds the attack and still blocks the clean duplicate"
+      }
+    }
+  ],
+  "python_packages": [
+    {"name": "numpy", "version": "2.3.5", "shared": false,
+     "note": "Same pin as every other lab, but in a pip layer of this lab's own: numpy + pillow with no llama wheel and no huggingface-hub. Measured compressed: 20,755,171 bytes arm64, 23,469,429 bytes amd64. This layer is the whole of the student's download over lab 4."},
+    {"name": "pillow", "version": "11.3.0", "shared": false,
+     "note": "Same pin as labs 3-7. Renders the invoices and stamps at build; renders the visible view at run time."}
+  ],
+  "apt_packages": [
+    {"name": "libgomp1", "shared": true, "note": "Unused here. Carried so the apt layer is byte-identical to labs 3-8's (1,954,635 bytes compressed, measured identical to lab 4's fresh build)."},
+    {"name": "nano", "shared": true},
+    {"name": "less", "shared": true},
+    {"name": "curl", "shared": true, "note": "Unused. Same reason as libgomp1."},
+    {"name": "ca-certificates", "shared": true},
+    {"name": "tesseract-ocr", "shared": true, "note": "Lab 4's tesseract RUN, byte-identical. 30,906,826 bytes compressed arm64, measured identical to lab 4's fresh build. osd.traineddata deleted in the same RUN, as lab 4 does."},
+    {"name": "tesseract-ocr-eng", "shared": true},
+    {"name": "fonts-dejavu-core", "shared": true, "note": "Needed at run time: expert mode re-renders the attack image from the student's own payload."}
+  ],
+  "lab_assets": [
+    {"file": "invoices/invoice-clean.png", "generated_at": "build", "shared": false, "bytes": 38991, "note": "make_invoices.py --bake, lab 4's script. Byte-identical to lab 4's."},
+    {"file": "invoices/invoice-attack.png", "generated_at": "build", "shared": false, "bytes": 40761, "note": "BAKED here, unlike lab 4, by bake_attacks.py from perturbation.npz. Instructor decision 2026-09-19: the student is the defender receiving a doctored document, not the attacker crafting one."},
+    {"file": "invoices/perturbation.npz", "generated_at": "build", "shared": false, "bytes": 6854, "note": "Lab 4's. Kept so bake_attacks.py and an expert student can see the delta."},
+    {"file": "invoices/stamp.png", "generated_at": "build", "shared": false, "bytes": 880},
+    {"file": "invoices/stamp-attack.png", "generated_at": "build", "shared": false, "bytes": 6152, "note": "BAKED here, unlike lab 4, from stamp-perturbation.npz."},
+    {"file": "invoices/stamp-perturbation.npz", "generated_at": "build", "shared": false, "bytes": 6475},
+    {"file": "invoices/stamp-original-example.png", "generated_at": "build", "shared": false, "bytes": 909},
+    {"file": "gate-weights.npz", "generated_at": "build", "shared": false, "bytes": 95991}
+  ],
+  "reused_from_lab4": {
+    "verbatim": ["scripts/stamp_gate.py", "scripts/craft.py", "payload.txt"],
+    "reused_with_edits": [
+      {"file": "scripts/make_invoices.py", "edit": "one line: the closing hint in craft() said 'now run pipeline.py', which does not exist in this lab; it now names compare.py. Verified by diff, nothing else changed."}
+    ],
+    "not_reused": ["pipeline.py (needs the LLM)", "gate.py (rewritten with the noise control, the threshold and the log)", "apply_perturbation.py (replaced by bake_attacks.py at build time)", "show_extraction.py, evidence.py, check.py (lab 4's)"]
+  },
+  "run_time_outputs": ["mismatch-log.jsonl", "views/*-visible.png", "review-queue/", "lab11-results.txt", "rules.json (edited in place by tune.py or nano)"],
+  "not_used": [
+    {"name": "torch", "reason": "No model beyond a numpy logistic regression."},
+    {"name": "llama-cpp-python / Qwen", "reason": "No LLM. Every result is arithmetic on pixels and text. This is the first lab in the course with no nondeterministic component."},
+    {"name": "huggingface-hub", "reason": "Nothing is downloaded at build or run time."},
+    {"name": "opencv", "reason": "Pillow plus numpy covers every image operation."}
+  ],
+  "network": "None at build beyond apt and pip; none at run time. Verified with --network none.",
+  "measured": {
+    "note": "Measured 2026-09-19, arm64, Docker Desktop, on the image built from lab-dev/lab11. Layer figures from reproducible OCI builds (SOURCE_DATE_EPOCH=1700000000, rewrite-timestamp) compared against a fresh reproducible build of lab 4.",
+    "disk_mb": 436,
+    "compressed_total_bytes_arm64": 101279320,
+    "compressed_total_bytes_amd64": 104635480,
+    "shared_with_lab4_bytes_arm64": 80312083,
+    "student_with_lab4_downloads_bytes_arm64": 20967237,
+    "pip_layer_bytes_arm64": 20755171,
+    "pip_layer_bytes_amd64": 23469429,
+    "lab_files_and_assets_bytes": 212000,
+    "download_note": "LOCAL BUILD. The figure that reaches a student file comes only from tools/verify-sharing.py against the published registry, after PUSHTOINTERNET. Gate ceiling per the instructor: the measured pip layer plus 1 MB, on each architecture.",
+    "preamble_layers_match_lab4": "all six (rootfs x4, apt, tesseract), both by digest and by size",
+    "peak_ram": "runs under --memory=256m",
+    "ocr_seconds_per_pass": 0.2,
+    "beginner_path_compute_seconds": "under 5",
+    "beginner_commands": 10,
+    "ocr_lines": "11 clean, 12 doctored",
+    "hidden_line_contrast_percent": 1.2,
+    "hidden_line_ocr_confidence": "87-97 per word, same as the print",
+    "visible_contrast_plateau": "MISMATCH holds from 1.2% to 60%; print degrades at 70%",
+    "determinism": "compare.py output byte-identical across 3 runs; no sampling anywhere",
+    "validated_on": "macOS arm64 end to end (lab-beta and lab-dev). Windows amd64 pending the instructor's student test."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "_comment": "The policy behind every control in this lab. Deliberately a file and not a constant in a function: a threshold you can read and change is a control you own. tune.py edits two of these; expert mode edits them with nano.",
+
+  "instruction_patterns": [
+    {"name": "directive: reply / respond / answer", "regex": "\\b(reply|respond|answer)\\b"},
+    {"name": "system or policy marker", "regex": "\\b(system (note|message|prompt)|assistant|instruction|directive|policy update|new policy)\\b"},
+    {"name": "claims prior approval", "regex": "\\bpre-?approved\\b"},
+    {"name": "addresses the reader as a model", "regex": "\\b(you are|as an ai|language model|ignore (the|all|previous))\\b"}
+  ],
+  "_instruction_patterns_note": "PREVENT. inspect.py runs each pattern over every line of extracted text. These are somebody else's idea of what an instruction looks like, and OWASP LLM01:2026 prevention 3 says the quiet part: semantic filters are evadable by rephrasing. Write your own payload in expert mode and see.",
+
+  "max_line_chars": 70,
+  "_max_line_chars_note": "PREVENT. No field on this invoice is longer than 44 characters. A line far longer than any field on the form is not a field. Measured: the doctored line is 82.",
+
+  "visible_contrast_percent": 15,
+  "_visible_contrast_percent_note": "DETECT. compare.py erases every mark fainter than this fraction of the brightness range before the visible-view OCR. Lab 4 measured the scale: 1.2% contrast is invisible on a screen, 29% is plainly visible. Measured on this invoice: the print sits at 92% contrast and the hidden line at 1.2%, so the mismatch holds from 2% all the way to 60% and there is no grey area to tune. Drop it below 1.2% and the hidden line counts as visible - the false negative. Push it past the print's own contrast and the print itself vanishes from the visible view - the false positive. Expert mode: move it and re-run compare.py on BOTH invoices.",
+
+  "auto_accept_confidence": 0.5,
+  "_auto_accept_confidence_note": "RECOVER. gate.py pays an ORIGINAL scan automatically when its confidence meets this; below it, the scan is held for a person. Shipped at 0.50, which is the vulnerable configuration: the perturbed stamp scores about 0.61 and goes straight to payment. tune.py raises it to 0.90. The clean duplicate scores 1.000 either way.",
+
+  "your_indicators": [],
+  "_your_indicators_note": "Your own list, empty on purpose. tune.py adds the first words of the line your comparison caught. The four patterns above were written before your incident; this one exists because your own detector produced it."
+}
