@@ -1,0 +1,28 @@
+{
+  "_comment": "The broker's policy. This is the SHIPPED state - what a team deploys when the toolbox was built for the platform rather than for this one job. Three of the values below are wrong, and the audit log is how you find out which.",
+
+  "purpose": "triage",
+
+  "allow": {
+    "triage": ["read_notes", "set_role", "answer"]
+  },
+
+  "credentials": {
+    "helpdesk-notes-ro": {
+      "scope": "read_notes:public",
+      "active": true,
+      "issued": "2026-01-04",
+      "expires": "never"
+    },
+    "admin-notes-ro": {
+      "scope": "read_notes:admin",
+      "active": true,
+      "issued": "2026-01-04",
+      "expires": "never"
+    }
+  },
+
+  "purpose_scope": {
+    "triage": ["read_notes:public", "answer:*", "set_role:*"]
+  }
+}
