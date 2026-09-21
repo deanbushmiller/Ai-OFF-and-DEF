@@ -258,7 +258,7 @@ hr; printf '\n'
 # every connection - measured with a control on 2026-09-19, which is how we
 # found lab 3 had been telling students to open a browser at a port that never
 # answered. The contract's 8012 is bound in-container and published nowhere.
-docker run -it --network none --name "$CONTAINER" "$TAG" lab 12 "${EXTRA_ARGS[@]}"
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 12 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript and the images --------------------------------

@@ -260,7 +260,7 @@ hr; printf '\n'
 # container cannot be reached from the host - lab 12 measured that - so -p
 # would promise a browser view that does not work. There is nothing to
 # publish: the server answers one local process and exits with it.
-docker run -it --network none --name "$CONTAINER" "$TAG" lab 14 "${EXTRA_ARGS[@]}"
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 14 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript and the images --------------------------------

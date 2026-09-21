@@ -222,7 +222,7 @@ printf '  Starting the lab. You will TYPE five commands.\n'
 printf '  Read each one before you run it.\n'
 hr; printf '\n'
 
-docker run -it --name "$CONTAINER" "$TAG" lab 1 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 1 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

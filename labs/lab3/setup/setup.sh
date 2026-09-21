@@ -231,7 +231,7 @@ hr; printf '\n'
 # No -p. serve.py binds 127.0.0.1 INSIDE the container, so a published port
 # forwards to a listener that refuses it - measured with a control, 2026-09-19.
 # The pages are read with curl inside the lab instead.
-docker run -it --name "$CONTAINER" "$TAG" lab 3 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 3 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

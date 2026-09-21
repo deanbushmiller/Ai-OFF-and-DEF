@@ -234,7 +234,7 @@ hr; printf '\n'
 # No -p: lab 5 does not serve. No --network flag either - the lab needs no
 # network, but forcing "none" here would only confuse a student who is about
 # to be offered the next lab's download.
-docker run -it --name "$CONTAINER" "$TAG" lab 5 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 5 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

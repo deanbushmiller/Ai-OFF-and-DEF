@@ -237,7 +237,7 @@ hr; printf '\n'
 # for a worksheet UI; it is deliberately unclaimed, so 8008 is free for whatever
 # part 2 needs. No --network flag either - the lab needs no network, but forcing
 # "none" would only confuse a student reading the output.
-docker run -it --name "$CONTAINER" "$TAG" lab 8 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 8 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

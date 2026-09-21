@@ -242,7 +242,7 @@ hr; printf '\n'
 # MCP server, behind the proxy on 8006). Harmless - neither is published and the
 # two labs never run at the same time - but it will look like a conflict when
 # the images merge, so it is written down in both labs' assets.json.
-docker run -it --name "$CONTAINER" "$TAG" lab 7 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 7 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

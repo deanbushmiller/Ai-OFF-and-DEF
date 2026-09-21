@@ -250,7 +250,7 @@ hr; printf '\n'
 # unaffected - it runs after the container has exited.
 #
 # No -p: lab 9 serves nothing. The contract reserves 8009 and it stays unclaimed.
-docker run -it --network none --name "$CONTAINER" "$TAG" lab 9 "${EXTRA_ARGS[@]}"
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 9 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

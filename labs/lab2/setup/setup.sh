@@ -223,7 +223,7 @@ printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
 printf '  a real shell and works from LAB.md.\n'
 hr; printf '\n'
 
-docker run -it --name "$CONTAINER" "$TAG" lab 2 "${EXTRA_ARGS[@]}"
+docker run -it --name "$CONTAINER" "$TAG" lab 2 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------

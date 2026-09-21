@@ -255,7 +255,7 @@ hr; printf '\n'
 #
 # NO -p. Lab 13 serves nothing: no port, no background process, nothing to
 # publish. The contract reserves 8013 only if a UI is ever added, and none is.
-docker run -it --network none --name "$CONTAINER" "$TAG" lab 13 "${EXTRA_ARGS[@]}"
+docker run -it --network none --name "$CONTAINER" "$TAG" lab 13 ${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}
 RUN_RC=$?
 
 # --- 8. Recover the transcript and the images --------------------------------
