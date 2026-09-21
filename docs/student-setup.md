@@ -5,7 +5,7 @@ work — it is waiting for downloads and one reboot.
 
 The 10 minutes at the start of class covers starting a lab and nothing else.
 
-## This video is for Windows install [ONLY(https://youtu.be/Geykdd26YZo)]
+## This video is for Windows install [ONLY](https://youtu.be/Geykdd26YZo)
 ---
 
 ## Step 0 — Windows only: check you control this machine
