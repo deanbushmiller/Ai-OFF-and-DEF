@@ -77,7 +77,7 @@ machine only.
 Sixteen labs in one continuous numbering. The first eight teach the attack; the second eight
 defend the same ground, one for one.
 
-### Attack labs (1–8)
+### Day 1 Attack labs (1–8)
 
 | # | Lab | OWASP 2026 | Status |
 |---|---|---|---|
@@ -90,7 +90,7 @@ defend the same ground, one for one.
 | 7 | [AI-powered attack orchestration](labs/lab7/) | LLM10, LLM02 | **published** |
 | 8 | [Offensive recap and transition to defense](labs/lab8/) | *all of the above* | **published** |
 
-### Defend labs (9–16)
+### Day 2 Defend labs (9–16)
 
 Each defend lab pairs with an attack lab and turns it into a control you build, run and tune.
 
