@@ -103,7 +103,7 @@ Each defend lab pairs with an attack lab and turns it into a control you build, 
 | 13 | [Defending AI agents](labs/lab13/) | lab 5 | LLM01, LLM03 | **published** |
 | 14 | [Defending MCP tool calls](labs/lab14/) | lab 6 | LLM01, LLM08, ASI04 | **published** |
 | 15 | [Defending against AI-scaled attacks](labs/lab15/) | lab 7 | LLM10, LLM02, LLM06 | **published** |
-| 16 | [Red-team process(Lab-16-After-class)] | — | — | **You build** |
+| 16 | [Red-team process (https://github.com/deanbushmiller/Ai-OFF-and-DEF/wiki/Lab-16-After-class)] | — | — | **You build** |
 
 ## Course materials
 
