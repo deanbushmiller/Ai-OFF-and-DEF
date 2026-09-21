@@ -85,7 +85,7 @@ The script checks Docker, works out whether your machine needs the Intel or ARM 
 downloads it (~190–250 MB, 1–3 minutes), and starts the lab.
 
 **If it fails**, the script tells you why in plain English. Send that message to the
-instructor through GitHub.
+instructor via email or post to class Q&A.
 
 ---
 

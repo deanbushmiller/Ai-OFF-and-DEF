@@ -28,7 +28,7 @@ looks identical to "Docker is broken".
 git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
 ```
 
-No git? [Step 0 of the setup guide](docs/student-setup.md) covers installing it on both
+No git? [Step 1 of the setup guide](docs/student-setup.md) covers installing it on both
 platforms, choosing where to put the labs, and the no-git ZIP alternative.
 
 Run every command below **from inside the course folder**.

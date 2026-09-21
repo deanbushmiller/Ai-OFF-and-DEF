@@ -111,7 +111,7 @@ distilled ATLAS data at `/opt/lab-assets/atlas/atlas.json`. Finish with `python 
 To go straight to expert mode, add `--expert` to the command above.
 
 **If it fails**, the script tells you why in plain English. Send that message to the
-instructor through GitHub.
+instructor via email or post to class Q&A.
 
 ---
 

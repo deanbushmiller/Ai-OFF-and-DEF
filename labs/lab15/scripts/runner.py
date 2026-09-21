@@ -58,7 +58,7 @@ def fail(msg):
         say("   " + line)
     say("")
     say(" This is a problem with the lab, not with anything you did.")
-    say(" Send lab15-results.txt to the instructor through GitHub.")
+    say(" Send lab15-results.txt to the instructor via email or post to class Q&A.")
     rule()
     sys.exit(1)
 

@@ -18,10 +18,10 @@ $ErrorActionPreference = 'Continue'
 
 $Image     = 'ghcr.io/deanbushmiller/seclm-labs'
 $Lab       = 'lab15'
-# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is the red-team
-# process intro: instructor demo material and a take-home runbook, run in the
-# student's own authorised environment after class, not an offline container.
-# There is nothing to pre-pull, so section 10 points at the runbook instead.
+# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is INSTRUCTOR-ONLY:
+# the instructor runs it live in the final session from a multi-container stack
+# that is never published to the student registry. There is no student
+# deliverable and nothing for a student to pre-pull. See section 10.
 $NextLab   = ''
 $Container = 'seclm-lab15-run'
 $Here      = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -397,7 +397,7 @@ if (-not $alreadyHave -and $LASTEXITCODE -ne 0) {
     Info "  3. Docker Desktop is running but has lost its network - quit and"
     Info "     reopen it, then try again."
     Write-Host ""
-    Info "Contact the instructor through GitHub with the error above."
+    Info "Email the error above to the instructor, or post to class Q&A."
     Write-Host ""
     Read-Host "Press Enter to close"
     exit 1
@@ -488,11 +488,11 @@ if ($LASTEXITCODE -eq 0) {
 & docker rm -f $Container *> $null
 
 # --- 10. The hand-off, and there is nothing to download ----------------------
-# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is the
-# red-team process intro: instructor demo material plus a take-home runbook the
-# student follows in their OWN authorised environment after class. It is not an
-# offline container and it is the one place the course's offline rule relaxes,
-# so offering "docker pull seclm-labs:lab16" here would promise a tag that will
+# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is run by
+# the instructor in the final session from a multi-container red-team stack that
+# is never deployed to GitHub and never pushed to the student registry. There is
+# no student runbook and no student image, so offering
+# "docker pull seclm-labs:lab16" here would promise a tag that will
 # never exist. $NextLab is empty above for exactly this reason.
 Write-Host ""
 Hr
@@ -504,29 +504,15 @@ Info "to pull - and that is on purpose."
 Write-Host ""
 Info "Lab 16 is the red-team process: how you VALIDATE that the controls"
 Info "you built in labs 9 to 15 still hold when somebody attacks them."
-Info "The instructor demonstrates it live, and you get a take-home"
-Info "runbook for setting the workflow up in your own authorised"
-Info "environment afterwards."
+Info "Your instructor runs it live in the final session, against a target"
+Info "stack built for it. Nothing to install, nothing to pull, nothing to"
+Info "set up beforehand."
 Write-Host ""
 Info "You have already run the one-command version of it. Step 6 of this"
 Info "lab generated a variant your detector had never seen and tested"
 Info "your own control against it. ATLAS calls that AML.M0035, AI Red"
-Info "Team. Lab 16 is that, as a process, with a scope agreement."
-Write-Host ""
-# Absolute path: works no matter which directory the student ran from.
-$LabsDir = $null
-try { $LabsDir = (Resolve-Path (Join-Path $Here "..\..")).Path } catch { }
-$Runbook = $null
-if ($LabsDir) { $Runbook = Join-Path $LabsDir (Join-Path "lab16" "RUNBOOK.md") }
-if ($Runbook -and (Test-Path $Runbook)) {
-    Info "The runbook is here:"
-    Write-Host ""
-    Write-Host "      $Runbook"
-    Write-Host ""
-} else {
-    Info "The runbook ships with lab 16. If it is not in your course folder"
-    Info "yet, pull the course repository again before the last session."
-}
+Info "Team. In the last session you watch that same move run end to end"
+Info "as a scoped exercise, against a whole stack instead of one detector."
 
 Write-Host ""
 Hr

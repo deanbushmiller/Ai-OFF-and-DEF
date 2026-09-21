@@ -72,20 +72,27 @@ If you only install one tool for this course, install git.
 right-click **Windows PowerShell** → **Run as administrator**. Do it this way every time
 you work on the labs, including in class.
 
-Then check whether you already have git:
+Then install git from your browser: <https://git-scm.com/install/windows>
+
+**Take the build that matches your processor.** The page offers more than one, and the
+wrong one will not run.
+
+| Your CPU | Installer |
+|---|---|
+| Intel / AMD | 64-bit Git for Windows Setup |
+| Windows on ARM (Snapdragon, Surface) | ARM64 Git for Windows Setup |
+
+Not sure which you have? Settings → System → About → **System type**. Or in PowerShell,
+`echo $env:PROCESSOR_ARCHITECTURE`: `AMD64` is Intel or AMD, `ARM64` is ARM.
+
+Run the installer and accept the defaults.
+
+**Close PowerShell and open a new one** after installing, so it picks up the new command.
+Then check it worked:
 
 ```bash
 git --version
 ```
-
-If that errors, install it — this is the recommended path on Windows. Windows does not
-ship git, but it does ship `winget`, so it is one command and no browser:
-
-```bash
-winget install --id Git.Git -e --source winget
-```
-
-**Close PowerShell and open a new one** after installing, so it picks up the new command.
 
 An Administrator window starts inside a Windows system folder, so **move to your own
 folder first**. `$HOME` works whatever your username is:
@@ -169,17 +176,6 @@ Three things to know before you choose this:
    ```
 
 If you hit any of these, installing git is faster than working around them.
-
-### Getting updates later
-
-The course is in beta. If the instructor says to update, from inside the course folder:
-
-```bash
-git pull
-```
-
-**Do this before each session.** A lab script that misbehaves is often just an old copy —
-fixes have shipped mid-course before.
 
 > **Never** paste a command that pipes a downloaded script straight into a shell
 > (`irm ... | iex`, `curl ... | bash`), no matter who suggests it. This is a security
@@ -286,15 +282,16 @@ the group, so a rootless setup passes straight through.
 
 ## Windows — read this, it is not optional
 
-> **Install git first.** See [Step 0](#step-0--get-the-course-files). On Windows it is
-> `winget install --id Git.Git -e --source winget`, and it saves you the Mark-of-the-Web
-> problems that come with a downloaded ZIP.
+> **Install git first.** See [Step 1](#step-1--get-the-course-files). Install it from
+> <https://git-scm.com/install/windows>, taking the build that matches your processor.
+> Cloning with git also saves you the Mark-of-the-Web problems that come with a
+> downloaded ZIP.
 
 Docker Desktop on Windows does not run on its own. Its engine runs inside **WSL2**, which
 needs hardware virtualization. Two extra steps, **in this order**. Installing Docker first
 is the usual reason it will not start.
 
-### Step 1 — Install WSL from GitHub, not the Store
+### Step 2 — Install WSL from GitHub, not the Store
 
 <https://github.com/microsoft/WSL/releases>
 
@@ -305,7 +302,19 @@ Take the newest release **not** marked *Pre-release* — 2.7.14 or later — and
 | Intel / AMD | `wsl.<version>.x64.msi` |
 | Windows on ARM (Snapdragon, Surface) | `wsl.<version>.arm64.msi` |
 
-Run the MSI, then **reboot**. Then, in PowerShell **as Administrator**:
+Run the MSI. Then, **before you reboot**, turn the Windows hypervisor on. Open
+**PowerShell as Administrator** and run:
+
+```bash
+bcdedit /set hypervisorlaunchtype auto
+```
+
+WSL2 runs on the Windows hypervisor, and this is the setting that starts it at boot. It is
+commonly left off on machines that have had VirtualBox or VMware installed, and having
+virtualization enabled in the BIOS is not enough on its own. The change only takes effect
+after a restart, which is why it goes here rather than after one.
+
+Now **reboot**. When Windows is back, in PowerShell **as Administrator**:
 
 ```bash
 wsl --update
@@ -320,7 +329,7 @@ wsl --shutdown
 > unhelpful error. The MSI works in all of those. If `wsl --install` already worked for
 > you, you are fine; this is the route that succeeds when it does not.
 
-### Step 2 — Install Docker Desktop 4.90 or newer
+### Step 3 — Install Docker Desktop 4.90 or newer
 
 <https://www.docker.com/products/docker-desktop/>
 
@@ -328,7 +337,17 @@ wsl --shutdown
 (`ext4.vhdx`) the first time it starts, and the window can look frozen while it does.
 **Let it finish.** This happens once; every later start is quick.
 
-### Step 3 — Running Windows inside a virtual machine?
+> **If Docker still will not run after the reboot, expect to reinstall it.** A first launch
+> that dies partway leaves `ext4.vhdx` half-built, and restarting Docker will not repair
+> it: uninstall Docker Desktop, reboot, install it again.
+>
+> **Fix the cause before you reinstall, or it will fail the same way.** On a virtual
+> machine it is almost always one of the two in
+> [Step 4](#step-4--running-windows-inside-a-virtual-machine) — virtualization running on
+> virtualization without nested virtualization enabled, or a virtual disk that was never
+> preallocated.
+
+### Step 4 — Running Windows inside a virtual machine?
 
 (VMware, VirtualBox, Parallels, Hyper-V)
 
@@ -356,7 +375,7 @@ like Docker has hung.
 
 Give the VM at least **20 GB free**.
 
-### Step 4 — Run the setup script
+### Step 5 — Run the setup script
 
 From inside the course folder, in PowerShell **as Administrator**:
 

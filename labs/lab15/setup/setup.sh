@@ -15,11 +15,10 @@ set -uo pipefail
 
 IMAGE="ghcr.io/deanbushmiller/seclm-labs"
 LAB="lab15"
-# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is the red-team
-# process intro: instructor demo material and a take-home runbook, run against
-# targets in the student's own authorised environment after class, not an
-# offline container. There is nothing to pre-pull, so this script points at
-# lab 16's runbook instead. See section 10.
+# EMPTY ON PURPOSE. Lab 15 is the last PULLED lab. Lab 16 is INSTRUCTOR-ONLY:
+# the instructor runs it live in the final session from a multi-container stack
+# that is never published to the student registry. There is no student
+# deliverable and nothing for a student to pre-pull. See section 10.
 NEXT_LAB=""
 CONTAINER="seclm-lab15-run"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -221,7 +220,7 @@ if [ "$SKIP_PULL" -eq 0 ] && ! docker pull "$TAG"; then
   info "  3. Docker Desktop is running but has lost its network - quit and"
   info "     reopen it, then try again."
   printf '\n'
-  info "Contact the instructor through GitHub with the error above."
+  info "Email the error above to the instructor, or post to class Q&A."
   printf '\n'
   exit 1
 fi
@@ -305,11 +304,11 @@ fi
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 
 # --- 10. The hand-off, and there is nothing to download ----------------------
-# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is the
-# red-team process intro: instructor demo material plus a take-home runbook the
-# student follows in their OWN authorised environment after class. It is not an
-# offline container and it is the one place the course's offline rule relaxes,
-# so offering "docker pull seclm-labs:lab16" here would promise a tag that will
+# DELIBERATELY NOT A PRE-PULL. Lab 15 is the last pulled lab. Lab 16 is run by
+# the instructor in the final session from a multi-container red-team stack that
+# is never deployed to GitHub and never pushed to the student registry. There is
+# no student runbook and no student image, so offering
+# "docker pull seclm-labs:lab16" here would promise a tag that will
 # never exist. NEXT_LAB is empty above for exactly this reason.
 printf '\n'; hr
 printf '  THAT IS THE LAST LAB TO DOWNLOAD\n'
@@ -320,26 +319,15 @@ info "to pull - and that is on purpose."
 printf '\n'
 info "Lab 16 is the red-team process: how you VALIDATE that the controls"
 info "you built in labs 9 to 15 still hold when somebody attacks them."
-info "The instructor demonstrates it live, and you get a take-home"
-info "runbook for setting the workflow up in your own authorised"
-info "environment afterwards."
+info "Your instructor runs it live in the final session, against a target"
+info "stack built for it. Nothing to install, nothing to pull, nothing to"
+info "set up beforehand."
 printf '\n'
 info "You have already run the one-command version of it. Step 6 of this"
 info "lab generated a variant your detector had never seen and tested"
 info "your own control against it. ATLAS calls that AML.M0035, AI Red"
-info "Team. Lab 16 is that, as a process, with a scope agreement."
-printf '\n'
-# Absolute path: works no matter which directory the student ran from.
-LABS_DIR="$(cd "$HERE/../.." 2>/dev/null && pwd || true)"
-RUNBOOK=""
-[ -n "$LABS_DIR" ] && RUNBOOK="$LABS_DIR/lab16/RUNBOOK.md"
-if [ -n "$RUNBOOK" ] && [ -f "$RUNBOOK" ]; then
-  info "The runbook is here:"
-  printf '\n      %s\n\n' "$RUNBOOK"
-else
-  info "The runbook ships with lab 16. If it is not in your course folder"
-  info "yet, pull the course repository again before the last session."
-fi
+info "Team. In the last session you watch that same move run end to end"
+info "as a scoped exercise, against a whole stack instead of one detector."
 
 printf '\n'; hr
 printf '  BEFORE THE LAST SESSION\n'

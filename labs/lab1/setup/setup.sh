@@ -209,7 +209,7 @@ if [ "$SKIP_PULL" -eq 0 ] && ! docker pull "$TAG"; then
   info "  3. Docker Desktop is running but has lost its network - quit and"
   info "     reopen it, then try again."
   printf '\n'
-  info "Contact the instructor through GitHub with the error above."
+  info "Email the error above to the instructor, or post to class Q&A."
   printf '\n'
   exit 1
 fi

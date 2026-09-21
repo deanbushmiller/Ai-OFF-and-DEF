@@ -104,7 +104,7 @@ perturbation trade-off for yourself. Finish with `python check.py`.
 To go straight to expert mode, add `--expert` to the command above.
 
 **If it fails**, the script tells you why in plain English. Send that message to the
-instructor through GitHub.
+instructor via email or post to class Q&A.
 
 ---
 

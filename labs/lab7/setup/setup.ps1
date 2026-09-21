@@ -387,7 +387,7 @@ if (-not $alreadyHave -and $LASTEXITCODE -ne 0) {
     Info "  3. Docker Desktop is running but has lost its network - quit and"
     Info "     reopen it, then try again."
     Write-Host ""
-    Info "Contact the instructor through GitHub with the error above."
+    Info "Email the error above to the instructor, or post to class Q&A."
     Write-Host ""
     Read-Host "Press Enter to close"
     exit 1
