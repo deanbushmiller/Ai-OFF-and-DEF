@@ -188,7 +188,8 @@ If you hit any of these, installing git is faster than working around them.
 
 - A Mac, Windows or Linux computer. No GPU.
 - **Docker Desktop 4.90 or newer.**
-- About **2 GB free disk**, 4 GB free RAM.
+- About **6 GB free disk**, 4 GB free RAM. The whole course is a 2 GB download, and Docker
+  keeps about 5.2 GB on disk once it has unpacked it (measured 2026-09-22).
 - A terminal.
 
 No API key, no ChatGPT or Claude subscription, no Python, no cloud account.
