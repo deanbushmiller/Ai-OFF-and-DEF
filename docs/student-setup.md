@@ -401,7 +401,8 @@ The labs share container layers, so only the first is a full download.
 | | Download |
 |---|---|
 | Lab 1 | ~190 MB (Apple Silicon) / ~250 MB (Intel) |
-| Lab 2 | ~590 MB |
+| Lab 2 | ~520 MB (Apple Silicon) / ~580 MB (Intel) |
+| Lab 3 | ~1.1 GB |
 | Each later lab | a small delta |
 
 Each lab ends by offering to fetch the next one. **Say yes** — doing it while you are

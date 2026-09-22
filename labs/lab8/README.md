@@ -15,7 +15,7 @@ Expert mode runs the whole list.
 > `docker --version` works.
 
 If you have done labs 1 to 7, you are ready — and this one is the lightest of the lot. It
-runs **no model at all**, so there is nothing to download beyond a few hundred kilobytes
+runs **no model at all**, so there is nothing to download beyond about 50 KB
 and nothing to wait for once it starts.
 
 ---

@@ -68,10 +68,34 @@ closes the attack half by listing the evidence for all eight instead of offering
 libraries down to the byte. It is also the first lab that runs with `--network none` — no
 network at all — because egress control is what it teaches.
 
-**Lab 3 is the exception: about 1.2 GB.** It runs a real language model locally, and that
+**Lab 3 is the exception: about 1.1 GB.** It runs a real language model locally, and that
 model is reused by several later labs. Take lab 2's offer to pre-fetch it and you will not
 wait. Lab 3 is also the only lab so far that serves a page — on `127.0.0.1:8003`, your own
 machine only.
+
+## Download sizes
+
+Measured on the published images, walking the labs in order from a clean machine,
+2026-09-22.
+
+| Lab | Apple Silicon | Intel |
+|---|---|---|
+| 1 | 191 MB | 247 MB |
+| 2 | 524 MB | 579 MB |
+| 3 | 1.1 GB | 1.1 GB |
+| 4 | 31 MB | 31 MB |
+| 5 | 25 KB | 25 KB |
+| 6 | 30 KB | 30 KB |
+| 7 | 42 KB | 42 KB |
+| 8 | 50 KB | 50 KB |
+| 9 | 28 KB | 28 KB |
+| 10 | 34 KB | 34 KB |
+| 11 | 21 MB | 24 MB |
+| 12 | 30 KB | 30 KB |
+| 13 | 36 KB | 36 KB |
+| 14 | 34 KB | 34 KB |
+| 15 | 56 KB | 56 KB |
+| **Total** | **1.9 GB** | **2.0 GB** |
 
 ## The labs
 

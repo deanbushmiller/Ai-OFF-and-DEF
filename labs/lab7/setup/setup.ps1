@@ -449,7 +449,7 @@ if ($NextLab) {
     Info $NextName
     Info "Lab 8 reuses the same language model this lab used. Labs 5, 6"
     Info "and 7 all share their layers - measured on the published"
-    Info "images, this lab 7 pull was 41 KB for anyone who already had"
+    Info "images, this lab 7 pull was 42 KB for anyone who already had"
     Info "lab 6 - so expect this one to be quick too."
     Write-Host ""
     Info "Doing it now, while you are online, means no waiting at the start"

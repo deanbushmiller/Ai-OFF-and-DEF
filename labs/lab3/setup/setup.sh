@@ -193,7 +193,7 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
   ok "No download needed - the previous lab fetched this for you."
   SKIP_PULL=1
 else
-  printf '  Downloading the lab image. About 190-600 MB, usually 1-3 minutes.\n'
+  printf '  Downloading the lab image. About 1.1 GB, usually 3-8 minutes.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
   SKIP_PULL=0

@@ -368,7 +368,7 @@ if ($alreadyHave) {
     Write-Host ""
     Ok "No download needed - the previous lab fetched this for you."
 } else {
-    Write-Host "  Downloading the lab image. About 190-600 MB, usually 1-3 minutes."
+    Write-Host "  Downloading the lab image. About 1.1 GB, usually 3-8 minutes."
     Write-Host "  $Tag"
     Hr
     Write-Host ""
