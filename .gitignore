@@ -60,3 +60,13 @@ hf_cache/
 *.key
 *_token
 *.credentials
+
+# Evidence the setup scripts copy OUT of the container and leave beside themselves:
+# labN-results.txt, lab4-invoices/, atlas-layer.json, lab12-firewall-log.jsonl,
+# lab13-policy.json, lab15-detector.json ... one or more per lab, and every new lab
+# adds its own. These are a student's (or the instructor's) local test output and
+# must never be committed. Ignore the whole directory by class rather than by name,
+# then re-allow the only two files that belong there.
+labs/*/setup/*
+!labs/*/setup/setup.sh
+!labs/*/setup/setup.ps1
