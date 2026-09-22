@@ -125,21 +125,6 @@ remove only that document?**
 
 ---
 
-## What you will find
-
-- **Review is not a control against invisible text.** The payload is white on a white page
-  at 6pt: a reviewer approves a clean-looking checklist while the extractor reads every word.
-- **The answer changes and nothing breaks.** No error, no exception, no alert — without the
-  canary you would find out when a user did.
-- **The poisoned chunk does not break the ranking, it wins it** — 0.772 against `bell.txt`'s
-  0.723.
-- **Provenance makes recovery surgical.** Eleven chunks purged by tag, without anyone
-  identifying the attack. Without the tag, the only safe recovery is rebuilding the index.
-- **A canary only ever proves the questions you thought of.** The same document also claimed
-  the light bulb, the Mona Lisa, penicillin and the World Wide Web.
-
----
-
 ## Your evidence
 
 The lab writes the record of what happened: **`canary-log.jsonl`** (every canary answer),
@@ -221,15 +206,6 @@ question that has no answer at all if nobody wrote it down. The tag is what make
 surgical instead of a full rebuild. And whether your company lets anyone contribute documents
 at all, or only a named team, is a decision about appetite rather than tooling — and somebody
 above you makes it before you write a line of the validator.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine. The payload is the same one from
-lab 2: five sentences, drawn in white on a white page, that simply state things which are
-false. No commands, no code, no network. That is the point — a content filter looking for
-malicious instructions would not see this document at all.
 
 ---
 

@@ -135,21 +135,6 @@ the call runs?**
 
 ---
 
-## What you will find
-
-- **The attack walks through the two gates most teams have.** The agent authenticated, the
-  tool was permitted, the credential was valid and active.
-- **Only the third gate stops it** — *is this action within what the run is for?* — and almost
-  nobody has that one.
-- **Revoking limits the compromise; tightening prevents it.** After `revoke.py` the agent still
-  escalates to `admin`. Only after `tighten.py` does the role stay `analyst`.
-- **The same call, with the same credential, on the same data, is allowed for a different
-  purpose.** Nothing about the agent, the model or the tool changed.
-- **The agent's own account of what it did is not evidence.** It claims it verified the admin
-  box after being refused at the first gate. The log kept by the broker is the evidence.
-
----
-
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab13-audit-log.jsonl`**, the
@@ -223,21 +208,6 @@ That gap has a name, **confused deputy**, and in 2026 it cost a coding assistant
 four thousand compromised machines. Whether your company lets an agent act with its
 credentials at all, and who owns the allow-list afterwards, is a decision about appetite rather
 than tooling — and somebody above you makes it before you write a line of the broker.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine — there is nowhere for it to go, as
-the container runs with no network at all. The attacker's payload is one plain English sentence
-appended to a notes file: no commands, no code, nothing hidden. The agent's tools are fake and
-local — two text files — and no tool in this lab runs a shell command, sends a message or
-touches a network. The "admin notes" and the password in them are **fake** and exist only
-inside the container.
-
-The broker's log records what was *asked for* and what was *decided*, never what a tool
-returned — which is how a real tool audit log is written, and it means the fake password
-cannot reach the file you send your instructor. `python check.py` asserts exactly that.
 
 ---
 

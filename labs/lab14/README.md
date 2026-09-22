@@ -139,21 +139,6 @@ is still the one you approved?**
 
 ---
 
-## What you will find
-
-- **A poisoned tool result is blocked at gate 3. With the control off, the payment is made.**
-- **A well-formed lie passes every gate** — a different balance, 999,999.00, nothing appended
-  and nothing malformed. You checked the shape; nobody checked the source.
-- **A changed description is blocked at gate 2, and that is also an outage.** The tool is
-  gone until you recover.
-- **Tool-description poisoning does not work on this model — 0 out of 24.** That is not a
-  reason to skip the control: MCPTox measured 36.5% average success across 20 models, and the
-  attack scales with model capability.
-- **ATLAS maps no mitigation to `AML.T0110` yet.** Every control here is borrowed from a
-  neighbouring technique, and the lab says so.
-
----
-
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab14-tamper-log.jsonl`**, the
@@ -239,22 +224,6 @@ production answer to that gap is a *signed* tool call rather than a better regex
 Whether your company connects agents to third-party MCP servers at all, and who reviews the
 diff when one changes, is a decision about appetite rather than tooling — and somebody above
 you makes it before you write a line of the validator.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine — there is nowhere for it to go, as
-the container runs with no network at all. The "compromised" MCP server is a local Python
-file you can read; its payload is one plain English sentence added to a tool description. The
-accounts are two lines of fake data, and the "payment" is an entry appended to a list in
-memory — no shell command, no message, no network call anywhere in this lab. The MCP server
-binds `127.0.0.1:8014` inside the container and is started and stopped by the lab itself.
-
-The tamper log records descriptor hashes, verdicts and the diff. `python check.py` asserts
-that the poisoned text never reached the model on any run where the control was on — and it
-measures that in the system prompt itself rather than trusting the verdicts, because a
-control that logs a block and leaks anyway is exactly the failure worth catching.
 
 ---
 

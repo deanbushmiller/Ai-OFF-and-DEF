@@ -130,21 +130,6 @@ who decides what happens next?**
 
 ---
 
-## What you will find
-
-- **The OCR reads a line you cannot see.** It is printed at 1.2% contrast — grey 252 on white
-  255 — and the OCR reads it as cleanly as the total.
-- **The content check catches it, until the payload is reworded.** OWASP says so in the same
-  sentence that recommends it.
-- **The comparison never reads the words, so it cannot be rephrased past.** Clean: 11 and 11.
-  Doctored: 11 and 12 — one line the model read that no reviewer could have.
-- **The stamp gate was not fragile, it was pushed.** Thirty random changes of the same size
-  flipped it 0 times. At 0.61 it went to payment anyway.
-- **One number in `rules.json` holds the attack at no cost.** Same stamp, same score; the
-  clean duplicate still scores 1.000 and is still blocked.
-
----
-
 ## Your evidence
 
 The lab writes the record of every decision: **`mismatch-log.jsonl`** (every check, in order),
@@ -228,15 +213,6 @@ the lab. The log is how you answer "which document did that?" The queue is what 
 detection into a decision by a person. And whether your company lets a model act on anything
 it reads out of a picture at all, or only suggest, is a decision about appetite rather than
 tooling — and somebody above you makes it before you write a line of the check.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine. The doctored invoice is lab 4's: one
-line of plain English drawn at 1.2% contrast, asking for an approval. The perturbed stamp is
-lab 4's too: a change of 7 in 255. No commands, no code, no network, and no language model —
-every result is arithmetic on pixels and text, identical on every machine.
 
 ---
 

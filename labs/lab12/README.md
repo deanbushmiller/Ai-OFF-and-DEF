@@ -126,22 +126,6 @@ The question is **not** "does the firewall work". It is:
 
 ---
 
-## What you will find
-
-- **The obvious attack is blocked.** Three separate families fire on lab 3's page, plus the
-  concealment check.
-- **The quiet one is not.** `memo-leak.html` matches two families, scores HIGH, and the gate
-  only blocks at CRITICAL — so the model runs and leaks.
-- **That threshold shipped in a real product.** CVE-2026-60086 blocked only what it rated
-  CRITICAL, which needed three detector families at once.
-- **Only the log shows you the miss.** It records every request in both directions, including
-  the ones it allowed. A firewall that only records what it blocked cannot tell you what it
-  missed.
-- **One field closes the gap, and the clean page still gets through.** A tighter rule that
-  breaks real traffic is not a fix.
-
----
-
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab12-firewall-log.jsonl`**, the
@@ -223,18 +207,6 @@ point:** it is the only reason you can discover, after the fact, that a control 
 relying on had been quietly waving an attack through. Whether your company lets a model read
 the open web at all, and who owns the threshold once it does, is a decision about appetite
 rather than tooling — and somebody above you makes it before you write a line of the scanner.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine — there is nowhere for it to go, as
-the container runs with no network at all. The payloads are plain English sentences hidden in
-a web page: no commands, no code. The "support key" the assistant protects is **fake**, exists
-only inside the container, and is a deliberate plant — a canary, which is what MITRE ATLAS
-recommends for testing exactly this. When the outbound scan fires, the answer is suppressed
-and never shown, and the log records the attempt with the value redacted. `python check.py`
-asserts that nothing matching it appears in your transcript or your log.
 
 ---
 

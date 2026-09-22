@@ -148,22 +148,6 @@ The question is **not** "does behavioural detection work". It is:
 
 ---
 
-## What you will find
-
-- **Lab 7's detector finds the beacon, and 144 other things.** 1 true positive, 144 false
-  positives, precision 0.0069. It is not broken; nobody reads 144 alerts a day twice.
-- **Four independent questions take that to 0 false positives.** You did not turn anything
-  up. A threshold on one dimension cannot buy precision at any setting.
-- **A variant nobody predicted is still caught.** The record is what the attacker needed to
-  send, so the record is what survives every rendering.
-- **The rate limit throttles 90% of the traffic, and the record leaves anyway.** All 6 of its
-  values reach the collector, and 120 legitimate channels pay for it.
-- **The fix for the slow beacon is not a number, it is where you look.** Reassemble the
-  channel's whole day before matching: caught, still 0 false positives, and the attacker paid
-  864× in throughput for nothing.
-
----
-
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab15-detect-log.jsonl`**, the
@@ -250,29 +234,6 @@ before matching it, instead of judging each message alone.
 Finally you **measure the cost** — in both directions. What evasion cost the attacker (864×
 slower), and what your own wrong answer would have cost you (144 alerts a day). A defender
 who can only quote the first number loses the budget meeting.
-
----
-
-## Safety
-
-Nothing here is malware and nothing leaves your machine — there is nowhere for it to go, as
-the container runs with no network at all. The "beacon" is one line of inert text with a
-harmless marker in it, the same convention as EICAR. The ten renderings of it were generated
-once, during lab 7, and ship as a data file; **this lab does not generate attack variants
-and does not contain a loop that searches for one that evades**. The estate is synthetic
-telemetry the lab writes itself. The collector binds `127.0.0.1:8015` inside the container,
-accepts a POST, appends it to a file and answers 200 — there is no command channel, no
-session and no protocol.
-
-The one model call sends a prompt that asks for a record to be re-encoded into JSON. That is
-all it asks, no content filter would refuse it, and lifting it out of this image gets you a
-format converter. **That is the lesson rather than an oversight:** a detector keyed on
-wording loses to a format converter, so the one you build is not keyed on wording.
-
-The detector log records limb verdicts, scores and counts. `python check.py` asserts that
-the record's values actually reaching the collector are **measured at the collector's own
-store** rather than inferred from any verdict — because a detector that alerts on everything
-scores perfect recall and protects nothing, and that is exactly the failure worth catching.
 
 ---
 

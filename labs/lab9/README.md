@@ -120,22 +120,6 @@ your build?**
 
 ---
 
-## What you will find
-
-- **Your own rule blocks lab 1's file, not the scanner's.** `posix.system` was in
-  `rules.json` before the scan even ran.
-- **A file the scanner cannot read is blocked, not waved through.** No verdict is not a clean
-  verdict. Two models sat on Hugging Face for eight months in 2025 because a scanner errored
-  and a gate read that as fine.
-- **A broken file is not a safe file.** Pickle executes as it reads, so the corrupt file's
-  payload runs *before* the load falls over.
-- **The sandbox hands you an indicator without letting a packet leave** — the address and
-  port the artifact wanted, `203.0.113.10:4444`.
-- **One changed byte beats a block list.** picklescan has had 58 published CVEs since
-  February 2025. A rule of your own is what still stands.
-
----
-
 ## Your evidence
 
 The lab writes the record of what it caught: **`blocklist.json`** (the quarantined file's
@@ -209,15 +193,6 @@ happened. The quarantine and the rule are how an organisation remembers. Whether
 first, build the second, or decide the whole class of artifact is not allowed through the
 door, that is a decision about appetite, not about tooling — and somebody above you makes it
 before you write a line of the gate.
-
----
-
-## Safety
-
-Nothing here is real malware and nothing leaves your machine. One payload runs an `echo`.
-The other opens a socket to `203.0.113.10`, an address reserved for documentation that
-routes nowhere — and the lab refuses the call before it is made, inside a container that has
-no network in the first place.
 
 ---
 
