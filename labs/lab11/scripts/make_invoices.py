@@ -120,7 +120,8 @@ def craft():
     print(f"\nWrote invoices/invoice-attack.png")
     print(f"  {s['changed']} pixels changed ({s['percent']:.3f}% of the image), "
           f"max delta {s['max_delta']}/255 ({s['max_percent']:.1f}%)")
-    print("\nNow run:  python compare.py invoices/invoice-attack.png")
+    print("\nNow run:  python inspect.py invoices/invoice-attack.png")
+    print("     then:  python compare.py invoices/invoice-attack.png")
 
 
 if __name__ == "__main__":

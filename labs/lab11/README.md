@@ -102,9 +102,9 @@ own eyes.
 **Beginner** — the default, and the right choice if you are not sure. The lab shows each
 command with a short explanation of what it does and why. You type or paste it, and the lab
 checks it before anything runs. Get it wrong and it tells you what the command should have
-been; get it wrong twice and it runs the correct one for you. Ten commands: two through the
-OCR, two through the content check, the comparison and its log, the stamp gate, then route,
-tune and the gate again.
+been; get it wrong twice and it runs the correct one for you. Eleven commands: two through
+the OCR, two through the content check, the comparison and its log, the stamp gate, then
+route, tune, the gate again, and the self-check.
 
 **Expert** — drops you into a real shell in the lab folder. No commands shown, no
 corrections. You work from [`LAB.md`](LAB.md). Expert also adds the steps beginner skips:
@@ -113,7 +113,8 @@ moving the visible-contrast threshold until the hidden line counts as visible at
 the print itself vanishes at the other — writing your own hidden instruction with `nano
 payload.txt` and `python craft.py` and rewording it until the rule check passes it while the
 comparison still catches it, running the clean stamp through the tightened gate, reading the
-log and the queue records yourself, and running `python check.py` at the end.
+log and the queue records yourself, and running `python check.py` at the end — the same
+self-check beginner mode finishes on.
 
 You can re-run the lab to switch modes.
 

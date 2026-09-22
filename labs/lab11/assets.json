@@ -9,7 +9,7 @@
   "offline_at_runtime": true,
   "ports": [],
   "ports_note": "This lab does not serve. Port 8011 stays unallocated. The setup scripts run it with --network none.",
-  "interaction": "beginner (10 guided typed commands: OCR, check, OCR, check, compare, log, gate, route, tune, gate) or expert (real shell + nano rules.json + nano payload.txt + craft.py + check.py)",
+  "interaction": "beginner (11 guided typed commands: OCR, check, OCR, check, compare, log, gate, route, tune, gate, check.py) or expert (real shell + nano rules.json + nano payload.txt + craft.py + check.py)",
   "models": [
     {
       "source_id": "trained at build time by scripts/stamp_gate.py (lab 4's script, verbatim)",
@@ -142,7 +142,7 @@
     "reused_with_edits": [
       {
         "file": "scripts/make_invoices.py",
-        "edit": "one line: the closing hint in craft() said 'now run pipeline.py', which does not exist in this lab; it now names compare.py. Verified by diff, nothing else changed."
+        "edit": "one hint in craft(): it said 'now run pipeline.py', which does not exist in this lab; it now names inspect.py then compare.py, in LAB.md's order. Verified by diff, nothing else changed."
       }
     ],
     "not_reused": [
@@ -193,7 +193,7 @@
     "peak_ram": "runs under --memory=256m",
     "ocr_seconds_per_pass": 0.2,
     "beginner_path_compute_seconds": "under 5",
-    "beginner_commands": 10,
+    "beginner_commands": 11,
     "ocr_lines": "11 clean, 12 doctored",
     "hidden_line_contrast_percent": 1.2,
     "hidden_line_ocr_confidence": "87-97 per word, same as the print",

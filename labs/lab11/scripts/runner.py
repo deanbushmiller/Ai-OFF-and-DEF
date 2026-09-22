@@ -186,6 +186,23 @@ STEPS = [
             "  right. That trade is the one you should be able to explain.",
         ],
     },
+    {
+        "why": [
+            "Prove it. The self-check reads the log, the queue records and",
+            "rules.json - the evidence on disk, not what scrolled past - and",
+            "says whether the defence holds together. Expert mode ends on",
+            "this same command.",
+        ],
+        "cmd": "python check.py",
+        "expect_rc": 0,
+        "expect_contains": "ALL CHECKS PASS",
+        "impact": [
+            "^ Eleven checks, from the clean baseline to the held stamp. Every",
+            "  one of them is a file you can open: the log, a record with a",
+            "  hash, a policy you edited. That is what an auditor asks for,",
+            "  and it is what a detector that writes nothing down cannot give.",
+        ],
+    },
 ]
 
 
@@ -360,7 +377,7 @@ def main():
         return
 
     say("")
-    say("  Ten commands. Read each one before you run it.")
+    say("  Eleven commands. Read each one before you run it.")
     say("  If you mistype, you get told what the command should be.")
 
     total = len(STEPS)

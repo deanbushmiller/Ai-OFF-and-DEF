@@ -141,6 +141,14 @@ list that is yours.
 > scores 1.000 and is still blocked — the tighter threshold cost nothing on the case that was
 > already right. That trade is the one you should be able to explain.
 
+**11 — prove it.** Prove it. The self-check reads the log, the queue records and `rules.json` —
+the evidence on disk, not what scrolled past — and says whether the defence holds together.
+Expert mode ends on this same command.
+
+> ^ Eleven checks, from the clean baseline to the held stamp. Every one of them is a file you
+> can open: the log, a record with a hash, a policy you edited. That is what an auditor asks
+> for, and it is what a detector that writes nothing down cannot give.
+
 ---
 
 ## The command list
@@ -160,6 +168,7 @@ cd /labs/lab11
 🅱️ python route.py
 🅱️ python tune.py
 🅱️ python gate.py invoices/stamp-attack.png
+🅱️ python check.py
 
    nano rules.json                                  instead of tune.py - see below
    python compare.py invoices/invoice-clean.png     after moving visible_contrast_percent
@@ -170,12 +179,12 @@ cd /labs/lab11
    python compare.py invoices/invoice-attack.png    the comparison does, whatever you wrote
    cat mismatch-log.jsonl
    cat review-queue/*.json
-   python check.py
+   python check.py                                  again, after your own edits
 ```
 
 Expert mode edits `rules.json` by hand with `nano` instead of running `tune.py`: raise
 `auto_accept_confidence`, add a phrase to `your_indicators`. Then `python check.py` tells you
-whether the defence holds together.
+whether the defence holds together — the same self-check beginner mode ends on.
 
 **Two expert experiments worth the time.** First, move `visible_contrast_percent` and re-run
 `compare.py` on *both* invoices: below 1.2 the hidden line counts as visible and the mismatch
