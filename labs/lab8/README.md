@@ -193,12 +193,10 @@ Useful links while you are there:
 
 ## Submit
 
-`atlas-layer.json`, or a screenshot of it loaded in the Navigator, through the class chat
-or GitHub.
+Nothing - You have the atlas-layer.json. Review it and prepare to ask questions.
 
-**And check you have submitted evidence for all eight labs.** The setup script lists them
-when the lab exits — if one is missing, the lab is still on your machine and still
-repeatable.
+**And check you have submitted evidence for labs 1–7.** The setup script lists them when
+the lab exits — if one is missing, the lab is still on your machine and still repeatable.
 
 ---
 

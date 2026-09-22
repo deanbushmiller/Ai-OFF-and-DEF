@@ -245,8 +245,8 @@ hex encodings defeat regex and blocklist data-loss filters."* Step 4 measures ex
 ## Evidence to submit
 
 `python evidence.py` prints three numbers: **what the model produced, what the signature rule
-missed, and the slowdown it took to go clean.** Paste those three into the class chat or
-GitHub. The full transcript is in `lab7-results.txt`.
+missed, and the slowdown it took to go clean.** Paste those three into the class chat. The
+full transcript is in `lab7-results.txt`.
 
 ---
 

@@ -152,7 +152,7 @@ def main():
         print()
     print("=" * 68)
     print()
-    print("Submit lab7-results.txt through the class chat or GitHub.")
+    print("Paste these three numbers into the class chat.")
     return 0
 
 

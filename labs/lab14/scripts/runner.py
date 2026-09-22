@@ -116,7 +116,7 @@ STEPS = [
      "cmd": "python poison.py --descriptor && LAB14_RUN=swapped python ask.py",
      "rc": 0, "want": "SERVER DROPPED"},
 
-    {"why": ["The diff. This is the finding, and it is the screenshot to submit.",
+    {"why": ["The diff. This is the finding, and it is the output to paste.",
              "One line, added to help text, by a server you approved last month."],
      "cmd": "python tamperlog.py --diff", "rc": 0, "want": "audit-9931"},
 

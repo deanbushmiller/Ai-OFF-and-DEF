@@ -94,7 +94,8 @@ def main():
         print(" same model and no payment happened. The injection was not")
         print(" detected as malicious - it was never delivered intact.")
     print("=" * 68)
-    print("\nSubmit lab6-results.txt through the class chat or GitHub.")
+    print("\nPaste this block - the wire log and what the assistant said -")
+    print("into the class chat.")
 
 
 if __name__ == "__main__":

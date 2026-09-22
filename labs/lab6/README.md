@@ -215,8 +215,8 @@ attacks: *"modifying parameters or descriptions… or redirecting outputs."*
 ## Evidence to submit
 
 `python evidence.py` prints the wire log next to what the assistant told you. **The
-disagreement between those two is the finding** — submit both through the class chat or
-GitHub. The full transcript is in `lab6-results.txt`.
+disagreement between those two is the finding** — paste both into the class chat. The full
+transcript is in `lab6-results.txt`.
 
 ---
 

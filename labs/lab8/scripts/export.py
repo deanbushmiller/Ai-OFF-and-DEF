@@ -7,7 +7,8 @@ Writes atlas-layer.json: an ATLAS Navigator layer file. Drag it into the Navigat
     https://atlas.mitre.org/navigator
 
 and your seven labs light up on the real matrix, scored and annotated. It is the same
-artifact a security team produces for its own estate, and it is what you submit.
+artifact a security team produces for its own estate. Nothing to submit - review it and
+bring your questions.
 
 THE FORMAT WAS CHECKED AGAINST MITRE'S OWN PUBLISHED LAYERS, NOT GUESSED
 -----------------------------------------------------------------------
@@ -110,8 +111,8 @@ def main():
         got = answers.get(n, lab["core"])
         print(f"   {n:<4} {got:<16} {'+'.join(lab['owasp']):<22} {lab['part2']}")
     print()
-    print("   Submit atlas-layer.json, or a screenshot of it loaded in the")
-    print("   Navigator, through the class chat or GitHub.")
+    print("   Nothing - You have the atlas-layer.json. Review it and prepare")
+    print("   to ask questions.")
     print()
     L.save_score("export", {"techniques": len(freq), "cells": len(entries),
                             "bytes": L.LAYER.stat().st_size})

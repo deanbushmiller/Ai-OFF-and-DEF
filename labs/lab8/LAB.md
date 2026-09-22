@@ -273,8 +273,8 @@ something anyway and say honestly that it is ahead of the standard.
 
 ## Submit
 
-`atlas-layer.json`, or a screenshot of it loaded in the Navigator, through the class chat
-or GitHub. The full transcript is in `lab8-results.txt`.
+Nothing - You have the atlas-layer.json. Review it and prepare to ask questions. The full
+transcript is in `lab8-results.txt`.
 
-**And check you have submitted evidence for all eight labs** — the setup script lists them
-when the lab exits.
+**And check you have submitted evidence for labs 1–7** — the setup script lists them when
+the lab exits.

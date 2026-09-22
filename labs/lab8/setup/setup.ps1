@@ -416,7 +416,7 @@ $runRc = $LASTEXITCODE
 
 # --- 9. Recover the transcript ----------------------------------------------
 Write-Host ""
-# Lab 8 produces a SECOND artifact the student submits: the ATLAS Navigator
+# Lab 8 produces a SECOND artifact the student reviews (not submitted): the ATLAS Navigator
 # layer. Copy it out too, or the README's "drop atlas-layer.json into the
 # Navigator" instruction has nothing to drop.
 $Layer = Join-Path $Here 'atlas-layer.json'
@@ -432,8 +432,8 @@ if (Test-Path $Layer) {
 & docker cp "$Container`:/labs/lab8/lab8-results.txt" $Results *> $null
 if ($LASTEXITCODE -eq 0) {
     Ok "Results saved: $Results"
-    Info "Submit atlas-layer.json - load it at atlas.mitre.org/navigator"
-    Info "and screenshot it, or send the file itself."
+    Info "Nothing - You have the atlas-layer.json. Review it and prepare"
+    Info "to ask questions."
 } else {
     Warn "Could not save the results file (lab exit code $runRc)."
     Info "Scroll up in this window to copy the evidence block instead."
@@ -450,10 +450,10 @@ if ($LASTEXITCODE -eq 0) {
 # title. What replaces it is the evidence check.
 Write-Host ""
 Hr
-Write-Host "  BEFORE YOU GO - eight labs, eight pieces of evidence"
+Write-Host "  BEFORE YOU GO - seven labs, seven pieces of evidence"
 Hr
 Write-Host ""
-Info "That is the end of part 1. Check you have submitted all eight:"
+Info "That is the end of part 1. Check you have submitted labs 1-7:"
 Write-Host ""
 Write-Host "    lab 1  the scanner output and the backdoored model"
 Write-Host "    lab 2  the poisoned answer next to the clean one"
@@ -462,7 +462,7 @@ Write-Host "    lab 4  the OCR injection and the flipped classifier"
 Write-Host "    lab 5  the tool call that should not have happened"
 Write-Host "    lab 6  the wire log next to what the assistant said"
 Write-Host "    lab 7  what the model produced, what got missed, the slowdown"
-Write-Host "    lab 8  atlas-layer.json"
+Write-Host "    lab 8  nothing to submit - review atlas-layer.json, bring questions"
 Write-Host ""
 Info "Missing one? Re-run that lab - they are all still on your machine."
 Write-Host ""

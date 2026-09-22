@@ -1,4 +1,4 @@
-"""Print the tool-call logs side by side. This is the evidence the student submits.
+"""Print the tool-call logs side by side. This is the evidence the student pastes.
 
     python evidence.py
 
@@ -82,7 +82,7 @@ def main():
             print(" With complete mediation the admin box stayed shut.")
 
     print("=" * 68)
-    print("\nSubmit lab5-results.txt through the class chat or GitHub.")
+    print("\nPaste this block - all three columns - into the class chat.")
 
 
 if __name__ == "__main__":

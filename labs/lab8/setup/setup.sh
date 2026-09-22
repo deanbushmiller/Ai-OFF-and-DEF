@@ -242,7 +242,7 @@ RUN_RC=$?
 
 # --- 8. Recover the transcript ----------------------------------------------
 printf '\n'
-# Lab 8 produces a SECOND artifact the student actually submits: the ATLAS
+# Lab 8 produces a SECOND artifact the student reviews (not submitted): the ATLAS
 # Navigator layer. Copy it out too, next to the transcript, or the README's
 # "drop atlas-layer.json into the Navigator" instruction has nothing to drop.
 # docker cp of a directory was proven on Windows at lab 4; a single file is the
@@ -258,8 +258,8 @@ fi
 
 if docker cp "$CONTAINER:/labs/lab8/lab8-results.txt" "$RESULTS" >/dev/null 2>&1; then
   ok "Results saved: $RESULTS"
-  info "Submit atlas-layer.json - load it at atlas.mitre.org/navigator"
-  info "and screenshot it, or send the file itself."
+  info "Nothing - You have the atlas-layer.json. Review it and prepare"
+  info "to ask questions."
 else
   warn "Could not save the results file (lab exit code $RUN_RC)."
   info "Scroll up in this window to copy the evidence block instead."
@@ -276,10 +276,10 @@ docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
 # What replaces it is the thing the student actually needs at this point -
 # a check that all eight pieces of evidence are in.
 printf '\n'; hr
-printf '  BEFORE YOU GO - eight labs, eight pieces of evidence\n'
+printf '  BEFORE YOU GO - seven labs, seven pieces of evidence\n'
 hr
 printf '\n'
-info "That is the end of part 1. Check you have submitted all eight:"
+info "That is the end of part 1. Check you have submitted labs 1-7:"
 printf '\n'
 printf '    lab 1  the scanner output and the backdoored model\n'
 printf '    lab 2  the poisoned answer next to the clean one\n'
@@ -288,7 +288,7 @@ printf '    lab 4  the OCR injection and the flipped classifier\n'
 printf '    lab 5  the tool call that should not have happened\n'
 printf '    lab 6  the wire log next to what the assistant said\n'
 printf '    lab 7  what the model produced, what got missed, the slowdown\n'
-printf '    lab 8  atlas-layer.json\n'
+printf '    lab 8  nothing to submit - review atlas-layer.json, bring questions\n'
 printf '\n'
 info "Missing one? Re-run that lab - they are all still on your machine,"
 info "and every one of them is repeatable."

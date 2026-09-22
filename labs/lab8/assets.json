@@ -71,7 +71,7 @@
       "file": "atlas-layer.json",
       "generated_at": "run",
       "shared": false,
-      "note": "THE EVIDENCE. A real ATLAS Navigator layer file - the same format security teams use for their own coverage maps - which loads unmodified at https://atlas.mitre.org/navigator. Instructor decision 2026-09-14: this is the submitted artifact rather than a table of our own design, and the README carries the link and the three clicks. Both setup scripts copy it out of the container next to lab8-results.txt."
+      "note": "THE EVIDENCE. A real ATLAS Navigator layer file - the same format security teams use for their own coverage maps - which loads unmodified at https://atlas.mitre.org/navigator. Instructor decision 2026-09-14: this is the evidence artifact rather than a table of our own design; instructor decision 2026-09-22: students do NOT submit it (whole files cannot go into the class chat) - they review it and prepare questions, and the README carries the link and the three clicks. Both setup scripts copy it out of the container next to lab8-results.txt."
     }
   ],
   "not_used": [

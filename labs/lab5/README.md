@@ -219,8 +219,8 @@ an agent, and its own description is this exercise:
 
 ## Evidence to submit
 
-`python evidence.py` prints three tool-call chains. **Submit all three** through the class
-chat or GitHub — the escalation proves nothing without the clean run above it and the
+`python evidence.py` prints three tool-call chains. **Paste all three** into the class
+chat — the escalation proves nothing without the clean run above it and the
 mediated run below it. The full transcript is in `lab5-results.txt`.
 
 ---

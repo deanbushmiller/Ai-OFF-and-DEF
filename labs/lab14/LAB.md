@@ -141,8 +141,8 @@ that follows it. Expert runs them one at a time.
 ## Evidence to submit
 
 `python evidence.py` prints every run, where each refusal happened, and the replay. **The
-diff from `python tamperlog.py --diff` is the finding** — submit both through the class chat
-or GitHub. The full transcript is in `lab14-results.txt`.
+diff from `python tamperlog.py --diff` is the finding** — paste both into the class
+chat. The full transcript is in `lab14-results.txt`.
 
 ## Expert mode — the steps beginner skips
 
