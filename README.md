@@ -13,7 +13,8 @@ data, and runs entirely on your own machine.
 - A Mac, Windows or Linux computer. **No GPU.**
 - **Docker Desktop 4.90 or newer** (macOS/Windows), or **Docker Engine** (Linux),
   installed and running before class.
-- About **2 GB of free disk**, and 4 GB of free RAM.
+- About **6 GB of free disk**, and 4 GB of free RAM. The course is a 2 GB download, and
+  Docker keeps about 5.2 GB on disk once it has unpacked it.
 - A terminal: macOS Terminal, Windows PowerShell, or any Linux shell.
 
 You do **not** need an API key, a ChatGPT or Claude subscription, Python, or a cloud
