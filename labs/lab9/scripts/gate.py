@@ -82,7 +82,17 @@ def main():
         return 64
     path = sys.argv[1]
     if not os.path.exists(path):
+        name = os.path.basename(path)
+        held = os.path.join(HERE, "quarantine", name)
         print("No such file: " + path)
+        if os.path.exists(held):
+            print()
+            print("  It is in quarantine - quarantine.py moved it there, which is the point.")
+            print("  To gate the quarantined copy:   python gate.py quarantine/" + name)
+            print("  To rebuild a fresh one:         python make_model.py --all")
+        elif name.startswith("bert_tiny_"):
+            print()
+            print("  Build the artifacts first:      python make_model.py --all")
         return 66
 
     rules = load_json(RULES, {"on_scanner_error": "block", "blocked_globals": []})

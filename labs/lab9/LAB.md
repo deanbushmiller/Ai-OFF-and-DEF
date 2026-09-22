@@ -138,18 +138,22 @@ cd /labs/lab9
 🅱️ python gate.py bert_tiny_clean.pt
 🅱️ python gate.py bert_tiny_poisoned.pt
 🅱️ python gate.py bert_tiny_corrupt.pt
+   python gate.py bert_tiny_beacon.pt
 🅱️ python sandboxed_load.py bert_tiny_clean.pt
 🅱️ python sandboxed_load.py bert_tiny_corrupt.pt
 🅱️ python sandboxed_load.py bert_tiny_beacon.pt
 🅱️ python quarantine.py bert_tiny_beacon.pt
 🅱️ python tune.py --add socket.create_connection
 
-   python gate.py bert_tiny_beacon.pt
    cat sandbox-log.jsonl
    cat blocklist.json
    nano rules.json
    python check.py
 ```
+
+**Order matters for one expert step.** `quarantine.py` *moves* `bert_tiny_beacon.pt` into
+`quarantine/`, so gate the beacon file where the list puts it — before the sandbox — not
+after. Read which line blocks it: the scanner's, not yours. That is what `tune.py` fixes.
 
 Expert mode edits `rules.json` by hand with `nano` instead of running `tune.py`. Add
 `"socket.create_connection"` to `blocked_globals`, and look hard at `on_scanner_error` while
