@@ -277,6 +277,26 @@ Your full transcript is saved as `lab2-results.txt` next to the setup script.
 
 ---
 
+## Want to see the poisoned file yourself?
+
+You cannot open a PDF inside the container — there is no viewer, and `cat` shows you
+compressed binary. Copy it out to your own machine instead, from a **second terminal** while
+the lab is still running:
+
+```
+docker cp seclm-lab2-run:/labs/lab2/poisoned_handbook.pdf ~/Desktop/
+```
+
+Open it. You will see four dull lines about laptops and multi-factor authentication, and
+nothing else — no hint that anything else is on the page. That is what a reviewer approving
+this document would have seen.
+
+Then compare it with what `python peek_pdf.py poisoned_handbook.pdf` printed. Same file, five
+extra lines, and they are the ones that changed the answer. **You built a document whose
+visible content is honest and whose text layer is not.**
+
+---
+
 ## Reference
 
 ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.

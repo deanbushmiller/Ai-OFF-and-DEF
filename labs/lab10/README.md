@@ -147,6 +147,36 @@ malicious instructions would not see this document at all.
 
 ---
 
+## Want to see the poisoned file yourself?
+
+You cannot open a PDF inside the container — there is no viewer, and `cat` shows you
+compressed binary. Copy it out to your own machine instead, from a **second terminal** while
+the lab is still running:
+
+```
+docker cp seclm-lab10-run:/labs/lab10/poisoned_handbook.pdf ~/Desktop/
+```
+
+Open it. You will see four dull lines about laptops and multi-factor authentication, and
+nothing else. That is the whole point: the five lines that change the assistant's answer are
+drawn in white on a white page at 6pt, and **you will not find them by looking.**
+
+To see what the machine reads instead, back in the container:
+
+```
+python -c "
+from pypdf import PdfReader
+for p in PdfReader('poisoned_handbook.pdf').pages:
+    print(p.extract_text())
+"
+```
+
+Eleven lines instead of four. Same file. `python validate.py poisoned_handbook.pdf` goes one
+better and tells you *why* five of them are hidden — the fill colour and the font size each
+one was drawn at.
+
+---
+
 ## Reference
 
 ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
