@@ -135,6 +135,55 @@ the call runs?**
 
 ---
 
+## Architecture
+
+```
+   YOU                                                      /labs/lab13/
+    |
+    |  python agent.py
+    v
+ +------------------------------------------------------------------+
+ |                                                                   |
+ |   notes/public.txt  --------+                                     |
+ |   (the attacker appends      |                                    |
+ |    one line here)            v                                    |
+ |                     Qwen2.5-1.5B-Instruct                         |
+ |                     picks a tool: {"tool": ..., "args": {...}}    |
+ |                              |                                    |
+ |                              v                                    |
+ |                   +---------------------+                         |
+ |                   |    T H E  B R O K E R |  <-- policy.json      |
+ |                   |                      |                        |
+ |                   |  gate 1  allow-list  |                        |
+ |                   |  gate 2  credential  |                        |
+ |                   |  gate 3  purpose     |                        |
+ |                   +----------+-----------+                        |
+ |                        |           |                              |
+ |                  ALLOW |           | DENY                         |
+ |                        v           |                              |
+ |                  tools.py          |   (the agent is told, and    |
+ |                  read_notes        |    decides what to do next)  |
+ |                  set_role          |                              |
+ |                  answer            |                              |
+ |                        |           |                              |
+ |                        +-----+-----+                              |
+ |                              v                                    |
+ |                      audit-log.jsonl                              |
+ |                      one record per ATTEMPTED call, always,       |
+ |                      allowed and denied alike                     |
+ +------------------------------------------------------------------+
+
+   No port. No /etc/hosts entry. No background process.
+   The container runs with --network none.
+```
+
+**`tools.py` is lab 5's, and it is still broken.** Its own privilege check reads
+`session.role` — the variable `set_role` just wrote to. That is deliberate. If the tool were
+fixed, the broker would never be tested, and you would be watching a control succeed against
+nothing.
+
+---
+
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab13-audit-log.jsonl`**, the

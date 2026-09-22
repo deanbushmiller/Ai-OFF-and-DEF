@@ -139,6 +139,39 @@ is still the one you approved?**
 
 ---
 
+## Architecture
+
+Two processes, both inside this container, both on `127.0.0.1`. No port is published and
+there is no network.
+
+```
+   "What is the balance of account chk-001?"
+                │
+                ▼
+   ┌────────────────────────────────────┐
+   │   THE HOST        ask.py           │        ┌──────────────────────┐
+   │   loads the model                  │        │   MCP SERVER         │
+   │                                    │        │   mcp_server.py      │
+   │   ┌────────────────────────────┐   │ JSON-  │   127.0.0.1:8014     │
+   │   │  verify.py                 │◄──┼──RPC──►│                      │
+   │   │  1 trust list              │   │  2.0   │   get_balance        │
+   │   │  2 descriptor pin (sha256) │   │        │   send_payment       │
+   │   │  3 message schema          │   │        │                      │
+   │   └──────────┬─────────────────┘   │        │   ** COMPROMISED **  │
+   │              │                     │        └──────────────────────┘
+   │        tamper-log.jsonl            │
+   └────────────────────────────────────┘
+                  │
+            trust.json  ── the servers you approved, and exactly what you approved
+```
+
+**Read that right-hand box.** In lab 6 the server was honest and an attacker sat on the wire.
+Here there is no attacker on the wire — **the server itself is the adversary**, which is the
+real MCP threat model: you connect an agent to software somebody else operates, and that
+software chooses the text your model reads.
+
+---
+
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab14-tamper-log.jsonl`**, the

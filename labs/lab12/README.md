@@ -126,6 +126,48 @@ The question is **not** "does the firewall work". It is:
 
 ---
 
+## Architecture
+
+```
+   YOU                                                      /labs/lab12/
+    |
+    |  python firewall.py <url>
+    v
+ +------------------------------------------------------------------+
+ |  fetch  ->  to_text()  ->  [ INBOUND SCAN ]  -> gate              |
+ |               ^                    |                              |
+ |        the naive scraper           | families -> severity         |
+ |        keeps display:none          | block if >= rules.json       |
+ |        and comment text            |            block_at          |
+ |                                    v                              |
+ |                           Qwen2.5-1.5B-Instruct                   |
+ |                           system prompt holds a FAKE support key  |
+ |                                    |                              |
+ |                                    v                              |
+ |                            [ OUTBOUND SCAN ]                      |
+ |                            marker found -> suppress the answer    |
+ |                                    |                              |
+ |                                    v                              |
+ |                        firewall-log.jsonl                         |
+ |                        one record per direction, always           |
+ +------------------------------------------------------------------+
+
+   site/ served by serve.py on 127.0.0.1:8012 INSIDE the container ONLY.
+   No port is published. The container runs with --network none.
+   http://news.acme.com:8012/... resolves locally via /etc/hosts.
+```
+
+**Four pages, and they look identical in a browser. That is the point.**
+
+| page | what is in it | families | severity |
+|---|---|---|---|
+| `article.html` | an ordinary business article | — | NONE |
+| `article-poisoned.html` | lab 3's payload: hidden div, "ignore the text above", "reply with exactly" | `override`, `authority`, `exfil`, `concealment` | **CRITICAL** |
+| `memo-leak.html` | a quiet one: a format demand, hidden in a div. No "ignore", no fake system header | `exfil`, `concealment` | **HIGH** |
+| `memo-smuggled.html` | the same demand, concealed with invisible Unicode instead of CSS *(expert)* | `exfil`, `concealment` | **HIGH** |
+
+---
+
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab12-firewall-log.jsonl`**, the

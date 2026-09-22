@@ -125,6 +125,46 @@ remove only that document?**
 
 ---
 
+## Architecture
+
+```
+   a document from somewhere you do not control
+                     |
+                     v
+        +------------------------------+
+        |  validate.py     PREVENT     |  rule 1  invisible text
+        |                              |  rule 2  provenance tag
+        |                              |  rule 3  topic claim count
+        +------------------------------+
+             |                    |
+         passes                refused
+             |
+             v
+        +------------------------------+
+        |  rag.py build / ingest       |  every chunk carries its
+        |                              |  provenance tag
+        +------------------------------+
+             |
+             v
+        +------------------------------+
+        |  canary.py       DETECT      |  one known question,
+        |  retrieval-log.jsonl         |  one known answer,
+        |                              |  asked after every ingest
+        +------------------------------+
+             |                    |
+         holds               CHANGED
+                                  |
+                                  v
+        +------------------------------+
+        |  purge.py        RECOVER     |  delete by provenance tag
+        |  tune.py                     |  verify, then add a rule
+        +------------------------------+
+                                  |
+                                  +---> the validator now catches it at the door
+```
+
+---
+
 ## Your evidence
 
 The lab writes the record of what happened: **`canary-log.jsonl`** (every canary answer),

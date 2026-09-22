@@ -120,6 +120,42 @@ your build?**
 
 ---
 
+## Architecture
+
+```
+   a model file from somewhere you do not control
+                     |
+                     v
+        +------------------------+
+        |   gate.py   PREVENT    |   sha256 -> block list
+        |                        |   picklescan
+        |                        |   rules.json (your own list)
+        +------------------------+
+             |              |
+       allowed           blocked
+             |
+             v
+        +------------------------+
+        | sandboxed_load.py      |   separate process
+        |            DETECT      |   --network none
+        |                        |   audit hook: imports,
+        |                        |   commands, sockets
+        +------------------------+
+             |              |
+        nothing          it acted
+                            |
+                            v
+        +------------------------+
+        | quarantine.py  RECOVER |   move the file aside
+        | tune.py                |   record the hash + evidence
+        |                        |   add the indicator to rules.json
+        +------------------------+
+                            |
+                            +---> the gate now catches it earlier
+```
+
+---
+
 ## Your evidence
 
 The lab writes the record of what it caught: **`blocklist.json`** (the quarantined file's

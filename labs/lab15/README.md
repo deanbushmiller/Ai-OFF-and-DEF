@@ -148,6 +148,44 @@ The question is **not** "does behavioural detection work". It is:
 
 ---
 
+## Architecture
+
+```
+  estate.py --build              24 workstations, 193 host->destination channels,
+      |                          one day of check-ins. A FLOW LOG: who talked to
+      |                          whom and how often. No payloads.
+      v
+  estate.json  <----------------+ the cadence limbs read this
+                                |
+  variants.json                 |   lab 7's TEN measured renderings of one record,
+      |                         |   shipped as evidence. You do not regenerate them.
+      |   inbox.py              |
+      v                         |
+  collector.py  127.0.0.1:8015  |   the mock endpoint. Appends to collector.log.
+      |                         |   Not published. The container has no network.
+      v                         |
+  collector.log  <--------------+ the content limb reads this
+      |
+      +--> detect.py --baseline   the signature rule, and lab 7's detector
+      +--> detect.py --score      four orthogonal limbs, one score
+      +--> detect.py --sweep      where do you put the line, and what does it cost
+      +--> detect.py --window     the recovery move
+      |
+  limit.py --cap N                the prevent stub, in the real request path
+  evade.py                        the operator's next day
+  evidence.py                     both bills
+```
+
+**Two files on purpose.** A SOC does not replay a day of packets — it reads flow records
+and whatever payload inspection it has, separately. The cadence limbs read `estate.json`
+and the content limb reads `collector.log`, and that split is the realistic asymmetry: a
+defender never gets the attacker's working files, only what arrived.
+
+Nothing executes. Nothing persists. Nothing connects out. The container is run with
+`--network none` and the collector binds loopback only.
+
+---
+
 ## Your evidence
 
 **The log is the evidence.** The setup script copies out **`lab15-detect-log.jsonl`**, the

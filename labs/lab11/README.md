@@ -130,6 +130,49 @@ who decides what happens next?**
 
 ---
 
+## Architecture
+
+```
+   a scanned document from somewhere you do not control
+                     |
+                     v
+        +------------------------------+
+        |  ocr.py                      |  lab 4's OCR, unchanged:
+        |  (tesseract, adaptive, psm 4)|  adaptive threshold, --psm 4
+        +------------------------------+
+             |                    |
+             v                    v
+   +---------------------+  +-----------------------------+
+   | inspect.py  PREVENT |  | compare.py         DETECT   |
+   | four patterns,      |  | the same OCR on the image   |
+   | a length limit,     |  | with every faint mark       |
+   | your indicators     |  | erased - what a person sees |
+   +---------------------+  | any extra line = MISMATCH   |
+             |              +-----------------------------+
+             |                    |
+             +--------+-----------+
+                      v
+        +------------------------------+
+        |  mismatch-log.jsonl          |  every decision, in order
+        +------------------------------+
+                      |
+                      v
+        +------------------------------+
+        |  route.py         RECOVER    |  flagged -> review-queue/
+        |  tune.py                     |  tighten, add YOUR rule
+        +------------------------------+
+
+   and, beside it, lab 4's stamp gate with two additions:
+
+        +------------------------------+
+        |  gate.py                     |  label + confidence
+        |  + random-noise control      |  same change, 30 random ways
+        |  + auto-accept threshold     |  below it -> HELD for a person
+        +------------------------------+
+```
+
+---
+
 ## Your evidence
 
 The lab writes the record of every decision: **`mismatch-log.jsonl`** (every check, in order),
