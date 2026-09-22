@@ -165,7 +165,7 @@ correctly. The vulnerability is in what they take on trust.
 
 ---
 
-## Mapping
+## Your evidence
 
 **OWASP LLM01:2026 Prompt Injection — Scenario #9, Trusted-Backend Indirect Injection
 through MCP.** The most incident-backed scenario in the entry: it names a poisoned GitHub
@@ -189,7 +189,7 @@ attacks: *"modifying parameters or descriptions… or redirecting outputs."*
 
 ---
 
-## Every command in the lab
+## Every step in the lab
 
 🅱️ marks the core commands. Beginner mode runs only those.
 
@@ -212,7 +212,7 @@ attacks: *"modifying parameters or descriptions… or redirecting outputs."*
 
 ---
 
-## Evidence to submit
+## Submit
 
 `python evidence.py` prints the wire log next to what the assistant told you. **The
 disagreement between those two is the finding** — paste both into the class chat. The full

@@ -140,6 +140,89 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "does behavioural detection work". It is:
+
+**How many colleagues do you wake up to catch one beacon?**
+
+---
+
+## What you will find
+
+- **Lab 7's detector finds the beacon, and 144 other things.** 1 true positive, 144 false
+  positives, precision 0.0069. It is not broken; nobody reads 144 alerts a day twice.
+- **Four independent questions take that to 0 false positives.** You did not turn anything
+  up. A threshold on one dimension cannot buy precision at any setting.
+- **A variant nobody predicted is still caught.** The record is what the attacker needed to
+  send, so the record is what survives every rendering.
+- **The rate limit throttles 90% of the traffic, and the record leaves anyway.** All 6 of its
+  values reach the collector, and 120 legitimate channels pay for it.
+- **The fix for the slow beacon is not a number, it is where you look.** Reassemble the
+  channel's whole day before matching: caught, still 0 false positives, and the attacker paid
+  864× in throughput for nothing.
+
+---
+
+## Your evidence
+
+**The log is the evidence.** The setup script copies out **`lab15-detect-log.jsonl`**, the
+detector's log — the field to follow is `precision` — **`lab15-results.txt`**, your
+transcript, and **`lab15-detector.json`**, the detector configuration as you left it.
+
+| | |
+|---|---|
+| **Defends** | lab 7 — AI-powered attack orchestration |
+| **OWASP** | LLM10:2026 Improper Output Handling, scenario #2, prevention 7 · LLM02:2026 Sensitive Information Disclosure · LLM06:2026 Unbounded Consumption — cited for its controls, not its risk |
+| **ATLAS techniques** | `AML.T0016.002` → `AML.T0043.003` → **`AML.T0015` Evade AI Model**, the one you are countering |
+| **ATLAS mitigations** | `AML.M0004` the prevent stub · `AML.M0024` `detect-log.jsonl` · `AML.M0006` Predictive AI Ensembles · `AML.M0039` AI Honeypots, named not built · `AML.M0035` AI Red Team |
+
+Five of the seven mitigations ATLAS maps to `AML.T0015` assume you own the model being evaded.
+If the thing being evaded is your signature set, the framework has no entry for you. That gap
+is explained in [`LAB.md`](LAB.md).
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+    cd /labs/lab15                          expert: start here
+    cat record.txt
+    cat detector.json
+    sed -n '/^def limbs/,/^def score/p' lab15lib.py     the four limbs, 20 lines
+🅱️  python estate.py --build                build the estate
+🅱️  python inbox.py                         read the collector's inbox
+    python inbox.py --show
+    python estate.py --show
+🅱️  python detect.py --baseline             what you have today
+🅱️  python detect.py --score                four limbs instead of two
+🅱️  python detect.py --sweep --set 4        where do you put the line
+    python detect.py --rarity-only          the trap. Four booleans, none of them work
+🅱️  python variants.py --live json          red-team your own control
+    python variants.py --live yaml
+    python variants.py --formats
+🅱️  python limit.py --cap 6                 the prevent stub, and its bill
+    python limit.py --cap 1
+🅱️  python evade.py                         the operator's next day
+    python evade.py --split 1
+🅱️  python detect.py --window channel       recovery
+    nano detector.json                      expert: tune the WEIGHTS, not just the threshold
+    python detect.py --score
+🅱️  python check.py && python evidence.py   both bills
+```
+
+---
+
+## Submit
+
+Paste the three numbers from `evidence.py` into the class chat: lab 7's detector on a real
+estate, yours after tuning, and what evasion cost the attacker.
+
+---
+
 ## What you are building
 
 **Limit, detect on behaviour, log, tune, measure the cost.** Five words, and the lab is the

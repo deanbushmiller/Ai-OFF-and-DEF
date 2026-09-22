@@ -61,7 +61,7 @@ mattering — which is the opposite of labs 3 and 4.
 
 ---
 
-## Every command in the lab
+## Every step in the lab
 
 🅱️ marks the core commands. **Beginner mode runs only those. Expert runs the list.**
 
@@ -81,7 +81,7 @@ mattering — which is the opposite of labs 3 and 4.
     python check.py                       confirm the evidence is real
 ```
 
-## Evidence to submit
+## Submit
 
 `python evidence.py` prints three tool-call chains. Paste all three into the class
 chat — the escalation proves nothing without the clean run above

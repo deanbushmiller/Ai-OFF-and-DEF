@@ -180,7 +180,7 @@ changes the rendering beats it — including two lines of Python that need no AI
 
 ---
 
-## Mapping
+## Your evidence
 
 **MITRE ATLAS leads this lab, and OWASP comes second.** That is a deliberate break from labs
 1 to 6, and the reason is worth one sentence: OWASP's Top 10 for LLM Applications describes
@@ -214,7 +214,7 @@ hex encodings defeat regex and blocklist data-loss filters."* Step 4 measures ex
 
 ---
 
-## Every command in the lab
+## Every step in the lab
 
 🅱️ marks the core commands. Beginner mode runs only those.
 
@@ -242,7 +242,7 @@ hex encodings defeat regex and blocklist data-loss filters."* Step 4 measures ex
 
 ---
 
-## Evidence to submit
+## Submit
 
 `python evidence.py` prints three numbers: **what the model produced, what the signature rule
 missed, and the slowdown it took to go clean.** Paste those three into the class chat. The

@@ -168,7 +168,7 @@ Bug 3 is what makes 1 and 2 exploitable, and it is the one the defence fixes.
 
 ---
 
-## Mapping
+## Your evidence
 
 **OWASP LLM03:2026 Excessive Agency**, Common Examples of Risk **#1** and **#4**, triggered
 by **LLM01:2026** indirect prompt injection.
@@ -195,7 +195,7 @@ an agent, and its own description is this exercise:
 
 ---
 
-## Every command in the lab
+## Every step in the lab
 
 🅱️ marks the core commands. Beginner mode runs only those.
 
@@ -217,7 +217,7 @@ an agent, and its own description is this exercise:
 
 ---
 
-## Evidence to submit
+## Submit
 
 `python evidence.py` prints three tool-call chains. **Paste all three** into the class
 chat — the escalation proves nothing without the clean run above it and the

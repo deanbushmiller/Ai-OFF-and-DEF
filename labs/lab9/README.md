@@ -111,6 +111,86 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "does the scanner find it". It is:
+
+**When the scanner can't tell you what a model file does, what decides whether it gets into
+your build?**
+
+---
+
+## What you will find
+
+- **Your own rule blocks lab 1's file, not the scanner's.** `posix.system` was in
+  `rules.json` before the scan even ran.
+- **A file the scanner cannot read is blocked, not waved through.** No verdict is not a clean
+  verdict. Two models sat on Hugging Face for eight months in 2025 because a scanner errored
+  and a gate read that as fine.
+- **A broken file is not a safe file.** Pickle executes as it reads, so the corrupt file's
+  payload runs *before* the load falls over.
+- **The sandbox hands you an indicator without letting a packet leave** — the address and
+  port the artifact wanted, `203.0.113.10:4444`.
+- **One changed byte beats a block list.** picklescan has had 58 published CVEs since
+  February 2025. A rule of your own is what still stands.
+
+---
+
+## Your evidence
+
+The lab writes the record of what it caught: **`blocklist.json`** (the quarantined file's
+hash, with the date, the reason and the evidence), **`sandbox-log.jsonl`** (every import,
+command and socket call the sandbox saw), and **`lab9-results.txt`**, your full transcript,
+copied out next to the setup script.
+
+| | |
+|---|---|
+| **Defends** | lab 1 — data and model supply chain poisoning |
+| **OWASP** | LLM04:2026 Supply Chain (risks 3 and 4) · LLM05:2026 Data and Model Poisoning (scenario 7, prevention 4) |
+| **ATLAS techniques** | `AML.T0115.001` → `AML.T0010.003` → `AML.T0011.000` |
+| **ATLAS mitigations** | `AML.M0016` Vulnerability Scanning · `AML.M0011` Restrict Library Loading · `AML.M0024` AI Telemetry Logging |
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+    cd /labs/lab9                                  expert: start here
+🅱️  python make_model.py --all                     build the four artifacts
+🅱️  python gate.py bert_tiny_clean.pt              gate the clean file
+🅱️  python gate.py bert_tiny_poisoned.pt           gate the poisoned file
+🅱️  python gate.py bert_tiny_corrupt.pt            gate the corrupt file
+    python gate.py bert_tiny_beacon.pt             expert: gate the beacon, before the sandbox
+🅱️  python sandboxed_load.py bert_tiny_clean.pt    sandbox the clean file
+🅱️  python sandboxed_load.py bert_tiny_corrupt.pt  sandbox the corrupt file
+🅱️  python sandboxed_load.py bert_tiny_beacon.pt   sandbox the beacon file
+🅱️  python quarantine.py bert_tiny_beacon.pt       quarantine
+🅱️  python tune.py --add socket.create_connection  tune
+    cat sandbox-log.jsonl
+    cat blocklist.json
+    nano rules.json                                expert: tune by hand instead
+    python check.py                                confirm it all holds together
+```
+
+---
+
+## Submit
+
+Paste **two** things into the class chat:
+
+1. the `blocklist.json` entry you created — the hash, the date, the reason and the evidence
+2. the sandbox line showing the blocked connection, with the address and port
+
+The pair is the proof: something was caught, and something was recorded about it.
+
+Your full transcript is saved to `lab9-results.txt` and copied out to the course folder when
+the lab exits.
+
+---
+
 ## What you are building
 
 Four small pieces, and the lab is the argument for why you need all four.

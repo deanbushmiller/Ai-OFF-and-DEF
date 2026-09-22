@@ -118,6 +118,89 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "does the firewall work". It is:
+
+**When the firewall sees the attack and lets it through anyway, how do you find out?**
+
+---
+
+## What you will find
+
+- **The obvious attack is blocked.** Three separate families fire on lab 3's page, plus the
+  concealment check.
+- **The quiet one is not.** `memo-leak.html` matches two families, scores HIGH, and the gate
+  only blocks at CRITICAL — so the model runs and leaks.
+- **That threshold shipped in a real product.** CVE-2026-60086 blocked only what it rated
+  CRITICAL, which needed three detector families at once.
+- **Only the log shows you the miss.** It records every request in both directions, including
+  the ones it allowed. A firewall that only records what it blocked cannot tell you what it
+  missed.
+- **One field closes the gap, and the clean page still gets through.** A tighter rule that
+  breaks real traffic is not a fix.
+
+---
+
+## Your evidence
+
+**The log is the evidence.** The setup script copies out **`lab12-firewall-log.jsonl`**, the
+firewall's own request log, and **`lab12-results.txt`**, your transcript. `python evidence.py`
+turns the story into one table.
+
+| | |
+|---|---|
+| **Defends** | lab 3 — advanced prompt injection |
+| **OWASP** | LLM01:2026 Prompt Injection — Common Example 2, Scenario #2; preventions 3, 5 and 11 built, 1, 2 and 6 named · LLM02:2026 Sensitive Information Disclosure — Tier 1 preventions 4 and 5 |
+| **ATLAS techniques** | `AML.T0066` → `AML.T0068` → `AML.T0051.001`/`.002` → `AML.T0057` |
+| **ATLAS mitigations** | `AML.M0020` / `AML.M0033` the two-sided scan · `AML.M0024` the log · `AML.M0035` the tune |
+
+`AML.M0021` Generative AI Guidelines and `AML.M0022` Model Alignment are real ATLAS
+mitigations for prompt injection, and lab 3 measured a 3/3 hijack with both of them in place.
+They are not a firewall.
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+🅱️  cat rules.json                                 look at the control before you use it
+🅱️  python firewall.py http://news.acme.com:8012/article.html
+                                                   the baseline: a clean page through the firewall
+🅱️  python log.py                                  every request, both directions
+🅱️  python firewall.py http://news.acme.com:8012/article-poisoned.html
+                                                   the obvious attack
+🅱️  python firewall.py http://news.acme.com:8012/memo-leak.html
+                                                   the quiet one
+🅱️  python log.py                                  find the request that was allowed anyway
+🅱️  python tune.py                                 close the gap
+    nano rules.json                                expert: instead of tune.py, decide what to change
+🅱️  python firewall.py http://news.acme.com:8012/memo-leak.html
+                                                   the same page, the same command
+🅱️  python firewall.py http://news.acme.com:8012/article.html
+                                                   re-check the clean page
+🅱️  python evidence.py                             the whole story in one table
+    curl -s http://news.acme.com:8012/memo-smuggled.html | tail -8
+                                                   expert: the invisible-character page
+    python firewall.py http://news.acme.com:8012/memo-smuggled.html
+    python check.py                                confirm it all holds together
+```
+
+---
+
+## Submit
+
+The table from **`python evidence.py`** — the whole story in one table. This is what you
+submit.
+
+Your full transcript is saved to `lab12-results.txt` and copied out next to the setup script
+when the lab exits.
+
+---
+
 ## What you are building
 
 **Scan in, scan out, log, tune.** Four pieces, and the lab is the argument for why you need

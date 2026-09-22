@@ -129,6 +129,89 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "is the traffic tampered with on the wire". There is no attacker on
+the wire. It is:
+
+**When the MCP server itself is the adversary, how do you know the tool your model is reading
+is still the one you approved?**
+
+---
+
+## What you will find
+
+- **A poisoned tool result is blocked at gate 3. With the control off, the payment is made.**
+- **A well-formed lie passes every gate** — a different balance, 999,999.00, nothing appended
+  and nothing malformed. You checked the shape; nobody checked the source.
+- **A changed description is blocked at gate 2, and that is also an outage.** The tool is
+  gone until you recover.
+- **Tool-description poisoning does not work on this model — 0 out of 24.** That is not a
+  reason to skip the control: MCPTox measured 36.5% average success across 20 models, and the
+  attack scales with model capability.
+- **ATLAS maps no mitigation to `AML.T0110` yet.** Every control here is borrowed from a
+  neighbouring technique, and the lab says so.
+
+---
+
+## Your evidence
+
+**The log is the evidence.** The setup script copies out **`lab14-tamper-log.jsonl`**, the
+integrity layer's log — a record for every gate, pass or block, plus the descriptor hashes and
+the diff — **`lab14-results.txt`**, your transcript, and **`lab14-trust.json`**, the trust
+list as you left it.
+
+| | |
+|---|---|
+| **Defends** | lab 6 — MCP and interface hijacking |
+| **OWASP** | LLM01:2026 Prompt Injection — prevention 10, Scenario #9 · LLM08:2026 Hidden Context Exposure — risks #1 and #4 · Agentic cross-map ASI04 Agentic Supply Chain Vulnerabilities |
+| **ATLAS techniques** | `AML.T0084.001` → `AML.T0110.000` / `AML.T0110.002` → `AML.T0051.001` → `AML.T0053`, with `AML.T0109` AI Supply Chain Rug Pull as the update path |
+| **ATLAS mitigations** | borrowed: `AML.M0014` Verify AI Artifacts the pin · `AML.M0033` Input and Output Validation the schema check · `AML.M0024` AI Telemetry Logging the log · `AML.M0023` AI Bill of Materials the trust list · `AML.M0013` the production answer, signed tool calls |
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+🅱️  LAB14_RUN=clean python ask.py                     a normal question, control on
+🅱️  python tamperlog.py                               three PASS records, one per gate
+🅱️  python poison.py --result                         compromise the server's ANSWER
+🅱️  LAB14_RUN=result python ask.py                    blocked at gate 3
+🅱️  LAB14_RUN=undefended python ask.py --no-verify    the same attack, control OFF
+🅱️  python poison.py --rewrite                        a well-formed LIE
+🅱️  LAB14_RUN=rewrite python ask.py                   the control passes it. On purpose.
+🅱️  python poison.py --descriptor                     compromise the DESCRIPTION
+🅱️  LAB14_RUN=swapped python ask.py                   blocked at gate 2 - and an outage
+🅱️  python tamperlog.py --diff                        THE DIFF. This is the finding.
+🅱️  python drop.py                                    recovery 1: off the trust list
+🅱️  LAB14_RUN=dropped python ask.py --wire-only       refused at gate 1, nothing read
+🅱️  python repin.py                                   recovery 2: re-pin what you approved
+🅱️  LAB14_RUN=repinned python ask.py                  service restored, on YOUR copy
+🅱️  python evidence.py                                the story, plus the free replay
+    cat verify.py                                     ~80 lines; the whole control
+    python ask.py --tools                             the raw descriptors, unchecked
+    python ask.py --ask "How much is in chk-002?"     ask something else
+    python mcp_server.py &                            run the server by hand
+    nano trust.json                                   edit the trust list yourself
+    python check.py                                   confirm the control held
+```
+
+The beginner runner packs these into ten steps by pairing each `poison.py` with the `ask.py`
+that follows it. Expert runs them one at a time.
+
+---
+
+## Submit
+
+`python evidence.py` prints every run, where each refusal happened, and the replay. **The
+diff from `python tamperlog.py --diff` is the finding** — paste both into the class
+chat. The full transcript is in `lab14-results.txt`.
+
+---
+
 ## What you are building
 
 **Validate, pin, diff, drop, re-pin.** Five words, and the lab is the argument for why you

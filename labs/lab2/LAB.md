@@ -59,7 +59,7 @@ Whatever is in the index is treated as true.
 
 ---
 
-## The commands
+## Every step in the lab
 
 ### Set up the knowledge base
 
@@ -118,7 +118,9 @@ Confirms the evidence exists and the attack actually worked.
 
 ---
 
-## OWASP mapping (2026)
+## Your evidence
+
+### OWASP mapping (2026)
 
 | Entry | Why |
 |---|---|
@@ -129,7 +131,7 @@ Confirms the evidence exists and the attack actually worked.
 Not **LLM05:2026 Data and Model Poisoning** — that entry covers *training-time*
 poisoning. Nothing here retrains anything.
 
-## MITRE ATLAS mapping
+### MITRE ATLAS mapping
 
 ```
 AML.T0064  →  AML.T0066   →  AML.T0068   →  AML.T0051.001  →  AML.T0070
@@ -172,7 +174,7 @@ practise here, and the one most people have never heard of.
 
 ---
 
-## Proof of completion
+## Submit
 
 Paste the output of `python rag.py evidence` into the class chat — the **BEFORE
 and AFTER** block. Both halves, or it proves nothing.

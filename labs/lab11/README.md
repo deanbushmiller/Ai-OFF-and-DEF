@@ -120,6 +120,93 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "can a filter spot an injected instruction". Reword it and the filter
+misses. It is:
+
+**When the machine reads a line in an image that no person could see, what catches it, and
+who decides what happens next?**
+
+---
+
+## What you will find
+
+- **The OCR reads a line you cannot see.** It is printed at 1.2% contrast — grey 252 on white
+  255 — and the OCR reads it as cleanly as the total.
+- **The content check catches it, until the payload is reworded.** OWASP says so in the same
+  sentence that recommends it.
+- **The comparison never reads the words, so it cannot be rephrased past.** Clean: 11 and 11.
+  Doctored: 11 and 12 — one line the model read that no reviewer could have.
+- **The stamp gate was not fragile, it was pushed.** Thirty random changes of the same size
+  flipped it 0 times. At 0.61 it went to payment anyway.
+- **One number in `rules.json` holds the attack at no cost.** Same stamp, same score; the
+  clean duplicate still scores 1.000 and is still blocked.
+
+---
+
+## Your evidence
+
+The lab writes the record of every decision: **`mismatch-log.jsonl`** (every check, in order),
+**`review-queue/`** (each flagged document with a record naming the hidden line and the file's
+hash), and **`lab11-results.txt`**, your full transcript. The `invoices/` and `review-queue/`
+folders are copied out next to it when the lab exits.
+
+| | |
+|---|---|
+| **Defends** | lab 4 — multimodal and vision-based exploits |
+| **OWASP** | LLM01:2026 Prompt Injection — risk 4, Scenario 6; preventions 3 and 7 built, 2 and 4 named · LLM02:2026 Sensitive Information Disclosure, risk 4 · LLM06:2026 prevention 7 adjacent |
+| **ATLAS techniques** | `AML.T0068` → `AML.T0051.001` and `AML.T0043` → `AML.T0015` |
+| **ATLAS mitigations** | `AML.M0020` Generative AI Guardrails · `AML.M0033` Input and Output Validation · `AML.M0024` AI Telemetry Logging · `AML.M0015` Predictive AI Adversarial Input Detection |
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+    cd /labs/lab11                                   expert: start here
+🅱️  python ocr.py invoices/invoice-clean.png         OCR the clean invoice
+🅱️  python inspect.py invoices/invoice-clean.png     check the clean text
+🅱️  python ocr.py invoices/invoice-attack.png        OCR the doctored invoice
+🅱️  python inspect.py invoices/invoice-attack.png    check the doctored text
+🅱️  python compare.py invoices/invoice-clean.png invoices/invoice-attack.png
+                                                     compare what a person sees with what the model reads
+🅱️  python log.py                                    read the mismatch log
+🅱️  python gate.py invoices/stamp-attack.png         the stamp gate, with its control
+🅱️  python route.py                                  route to a person
+🅱️  python tune.py                                   tune
+🅱️  python gate.py invoices/stamp-attack.png         the gate again
+🅱️  python check.py                                  prove it
+    nano rules.json                                  expert: instead of tune.py
+    python compare.py invoices/invoice-clean.png     after moving visible_contrast_percent
+    python gate.py invoices/stamp.png                the clean duplicate through the tightened gate
+    nano payload.txt                                 write your own hidden instruction
+    python craft.py                                  render it into invoices/invoice-attack.png
+    python inspect.py invoices/invoice-attack.png    does the rule check catch YOUR wording?
+    python compare.py invoices/invoice-attack.png    the comparison does, whatever you wrote
+    cat mismatch-log.jsonl
+    cat review-queue/*.json
+    python check.py                                  again, after your own edits
+```
+
+---
+
+## Submit
+
+Paste **two** things into the class chat:
+
+1. the **MISMATCH block** from step 5 — the line the model read that a person would not see
+2. the **HELD block** from step 10 — the same 0.607 that was paid at step 7, held at step 10
+
+Your full transcript is saved to `lab11-results.txt`, and the `invoices/` and `review-queue/`
+folders are copied out next to it when the lab exits. Open `invoice-clean.png` and
+`review-queue/invoice-attack.png` side by side. That is worth two minutes of your own eyes.
+
+---
+
 ## What you are building
 
 Five small pieces, and the lab is the argument for why you need all of them.

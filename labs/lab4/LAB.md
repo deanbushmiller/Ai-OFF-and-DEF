@@ -97,7 +97,7 @@ Doing the OCR is not the control.
 
 ---
 
-## The commands
+## Every step in the lab
 
 🅱️ `ls invoices/`
 One invoice, one stamp, two perturbation files. There are no attack images yet — you make
@@ -209,7 +209,9 @@ result that makes injection hard to test for.
 
 ---
 
-## OWASP mapping (2026)
+## Your evidence
+
+### OWASP mapping (2026)
 
 **LLM01:2026 Prompt Injection**, Common Example of Risk #4, quoted:
 
@@ -231,7 +233,7 @@ path straight through the scanner.
 Note what this lab is **not**: the decision is printed, not executed. Nothing is paid.
 **LLM03:2026 Excessive Agency** — the model *doing* the wrong thing — is lab 5.
 
-## MITRE ATLAS mapping
+### MITRE ATLAS mapping
 
 Two chains, one per stage.
 
@@ -303,7 +305,7 @@ found. Same document, same attacker, completely different failure.
 
 ---
 
-## Proof of completion
+## Submit
 
 Paste the output of `python evidence.py` into the class chat — **both stages**. The APPROVE
 proves nothing without the HOLD above it, and the gate's ORIGINAL proves nothing without

@@ -126,6 +126,81 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "does the model get tricked". It does, in every run below. It is:
+
+**Once the agent has been hijacked and is holding a valid credential, what decides whether
+the call runs?**
+
+---
+
+## What you will find
+
+- **The attack walks through the two gates most teams have.** The agent authenticated, the
+  tool was permitted, the credential was valid and active.
+- **Only the third gate stops it** — *is this action within what the run is for?* — and almost
+  nobody has that one.
+- **Revoking limits the compromise; tightening prevents it.** After `revoke.py` the agent still
+  escalates to `admin`. Only after `tighten.py` does the role stay `analyst`.
+- **The same call, with the same credential, on the same data, is allowed for a different
+  purpose.** Nothing about the agent, the model or the tool changed.
+- **The agent's own account of what it did is not evidence.** It claims it verified the admin
+  box after being refused at the first gate. The log kept by the broker is the evidence.
+
+---
+
+## Your evidence
+
+**The log is the evidence.** The setup script copies out **`lab13-audit-log.jsonl`**, the
+broker's record of every attempted call and the verdict on each, **`lab13-results.txt`**, your
+transcript, and **`lab13-policy.json`**, the policy as you left it.
+
+| | |
+|---|---|
+| **Defends** | lab 5 — exploiting AI agents and excessive agency |
+| **OWASP** | LLM03:2026 Excessive Agency — Common Examples of Risk 1 and 4; preventions 7, 8, 1 and 4 built, 5, 6, 3 and 9 named · LLM01:2026 Prompt Injection is the trigger |
+| **ATLAS techniques** | `AML.T0084.001` → `AML.T0051.001` → `AML.T0053` → `AML.T0085.001` |
+| **ATLAS mitigations** | `AML.M0028`/`M0026` the broker · `AML.M0024` the audit log · `AML.M0027` the revocation · `AML.M0035` the tune |
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+🅱️  python agent.py                           a clean task: read_notes:public, ALLOW
+🅱️  python audit.py                           one record, one verdict, the purpose named
+🅱️  python plant.py                           the attacker's line goes into the public notes
+🅱️  python agent.py                           set_role ALLOWED, read_notes:admin DENIED at gate 3
+🅱️  python audit.py                           the jump, in three records
+🅱️  cat policy.json                           why set_role was allowed, which credential was live
+🅱️  python revoke.py                          revoke admin-notes-ro
+🅱️  python agent.py                           the denial moves to gate 2; the agent still escalates
+🅱️  python tighten.py                         set_role off triage's allow-list
+🅱️  python agent.py && python evidence.py     gate 1, role never changes, clean run replayed
+    python agent.py --tools                   expert: what the model is told vs what the broker permits
+    nano policy.json                          expert: make the two changes by hand instead
+    (add a purpose)                           expert: an incident purpose scoped to read_notes:admin
+    cat tools.py                              the three bugs, still there, annotated
+    python plant.py --reset                   put the notes back and start over
+    python check.py                           eleven assertions on the log and the policy
+```
+
+---
+
+## Submit
+
+Paste the output of the last command — `python evidence.py` — into the class chat: the whole
+table. The line that matters is the gate column walking 3 -> 2 -> 1 while the clean run keeps
+passing.
+
+Your full transcript is saved to `lab13-results.txt` on your machine.
+
+---
+
 ## What you are building
 
 **Broker, allow-list, audit, revoke, tighten.** Five words, and the lab is the argument for

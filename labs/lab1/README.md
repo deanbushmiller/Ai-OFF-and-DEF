@@ -105,7 +105,7 @@ passes and a scan that fails.
 > command; the runner then runs its own known-good copy. A security lab should not
 > itself contain an "execute whatever the user typed" bug.
 
-## The seven commands
+## Every step in the lab
 
 | # | Command | Why |
 |---|---|---|
@@ -176,7 +176,9 @@ Scanners like **picklescan**, **fickling** (both used here), and **modelscan** r
 
 ---
 
-## OWASP mapping
+## Your evidence
+
+### OWASP mapping
 
 The numbering **changed between editions**, so both are given.
 
@@ -192,7 +194,7 @@ follows.
 - 2026: <https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/> (PDF also in `Activity-Labs/`, pp. 27–37)
 - 2025: <https://github.com/OWASP/www-project-top-10-for-large-language-model-applications/tree/main/2_0_vulns>
 
-## MITRE ATLAS mapping
+### MITRE ATLAS mapping
 
 > **Note on the first ID.** ATLAS v2026.08 retired `AML.T0058` *Publish Poisoned Models* and
 > replaced it with **`AML.T0115` Publish Poisoned AI Artifacts**, which is what lab 9 cites.
@@ -248,7 +250,7 @@ tool you just ran.
 
 ---
 
-## Proof of completion
+## Submit
 
 Paste **both** scan summaries into the class chat — the clean one and the poisoned one.
 The pair is the proof; either alone means nothing.

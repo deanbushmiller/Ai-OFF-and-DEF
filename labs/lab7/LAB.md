@@ -7,7 +7,7 @@ Expert mode runs the whole list.
 
 ---
 
-## The question
+## The question this lab answers
 
 An LLM can rewrite your beacon a hundred ways in a minute. **What does that actually
 buy you?**
@@ -65,7 +65,7 @@ Python that need no AI at all.
 
 ---
 
-## Mapping
+## Your evidence
 
 **MITRE ATLAS leads this lab**, and that is deliberate. OWASP's Top 10 for LLM
 Applications describes risks in software *you build*. An attacker using an LLM to help
@@ -111,7 +111,7 @@ teach you a false idea of what the Top 10 is for.
 
 ---
 
-## The commands
+## Every step in the lab
 
 🅱️ = core, run by both modes. Unmarked = expert only.
 

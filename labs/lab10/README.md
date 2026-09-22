@@ -115,6 +115,92 @@ You can re-run the lab to switch modes.
 
 ---
 
+## The question this lab answers
+
+The question is **not** "does the validator block the poison". It does, until you override
+it. It is:
+
+**When a poisoned document gets past your validator, how do you find out, and how do you
+remove only that document?**
+
+---
+
+## What you will find
+
+- **Review is not a control against invisible text.** The payload is white on a white page
+  at 6pt: a reviewer approves a clean-looking checklist while the extractor reads every word.
+- **The answer changes and nothing breaks.** No error, no exception, no alert — without the
+  canary you would find out when a user did.
+- **The poisoned chunk does not break the ranking, it wins it** — 0.772 against `bell.txt`'s
+  0.723.
+- **Provenance makes recovery surgical.** Eleven chunks purged by tag, without anyone
+  identifying the attack. Without the tag, the only safe recovery is rebuilding the index.
+- **A canary only ever proves the questions you thought of.** The same document also claimed
+  the light bulb, the Mona Lisa, penicillin and the World Wide Web.
+
+---
+
+## Your evidence
+
+The lab writes the record of what happened: **`canary-log.jsonl`** (every canary answer),
+**`retrieval-log.jsonl`** (every chunk, tag and score behind every answer),
+**`purge-log.json`** (what the purge removed), and **`lab10-results.txt`**, your full
+transcript, copied out next to the setup script.
+
+| | |
+|---|---|
+| **Defends** | lab 2 — RAG and semantic ingestion attacks |
+| **OWASP** | LLM09:2026 Vector and Embedding Weaknesses (risk 3; preventions 2, 4, 5, 6) · LLM07:2026 Misinformation |
+| **ATLAS techniques** | `AML.T0066` → `AML.T0068` → `AML.T0070` |
+| **ATLAS mitigations** | `AML.M0020` Generative AI Guardrails · `AML.M0024` AI Telemetry Logging · `AML.M0033` Input and Output Validation |
+
+---
+
+## Every step in the lab
+
+🅱️ marks the core steps. Beginner mode runs only those. The full walkthrough of each step is
+in [`LAB.md`](LAB.md).
+
+```
+    cd /labs/lab10                                   expert: start here
+🅱️  python validate.py corpus/                       validate the clean corpus
+🅱️  python make_poison.py                            build the poisoned document
+🅱️  python validate.py poisoned_handbook.pdf         validate the poisoned document
+🅱️  python rag.py build                              index the clean corpus
+🅱️  python canary.py ask                             ask the canary
+🅱️  python rag.py ingest poisoned_handbook.pdf --force   ingest the poison, over your own refusal
+🅱️  python canary.py ask                             ask the canary again
+🅱️  python rag.py log                                read the retrieval log
+🅱️  python purge.py --untagged                       purge by tag
+🅱️  python canary.py check                           verify the recovery
+🅱️  python tune.py --add invisible-text              tune
+    python rag.py ingest poisoned_handbook.pdf       expert: no --force, watch it refuse
+    python canary.py second                          expert: BEFORE the purge, then AFTER
+    python purge.py --source poisoned_handbook.pdf
+    cat canary-log.jsonl
+    cat retrieval-log.jsonl
+    cat purge-log.json
+    nano rules.json                                  expert: tune by hand instead
+    python check.py                                  confirm it all holds together
+```
+
+---
+
+## Submit
+
+Paste **two** things into the class chat:
+
+1. the **canary pair** — the answer before the poison and the answer after
+2. the **retrieval-log line** naming `poisoned_handbook.pdf` as the source, with its score and
+   its UNTAGGED provenance
+
+The pair is the proof: something was caught, and something was recorded about why.
+
+Your full transcript is saved to `lab10-results.txt` and copied out to the course folder when
+the lab exits.
+
+---
+
 ## What you are building
 
 Five small pieces, and the lab is the argument for why you need all of them.
