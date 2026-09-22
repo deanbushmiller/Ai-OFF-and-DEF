@@ -220,13 +220,3 @@ invented and exists nowhere else.
 The audit log records what was **asked for** and what was **decided**, never what a tool
 returned. That is how a real tool audit log is written, and it is why nothing you send your
 instructor can contain the fake password.
-
----
-
-## Submit
-
-Paste the output of the last command — `python evidence.py` — into the class chat: the whole
-table. The line that matters is the gate column walking 3 -> 2 -> 1 while the clean run keeps
-passing.
-
-Your full transcript is saved to `lab13-results.txt` on your machine.

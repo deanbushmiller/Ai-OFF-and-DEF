@@ -69,7 +69,7 @@ reassuring. Ask your instructor for the demo.
 
 ---
 
-## Every step in the lab
+## Every command in the lab
 
 🅱️ marks the core commands. **Beginner mode runs only those. Expert runs the list.**
 
@@ -90,7 +90,7 @@ reassuring. Ask your instructor for the demo.
     python check.py                                           confirm the evidence is real
 ```
 
-## Submit
+## Evidence to submit
 
 `python evidence.py` prints the wire log next to what the assistant told you. **The
 disagreement between those two is the finding** — paste both into the class chat. The full

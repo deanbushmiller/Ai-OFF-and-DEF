@@ -57,7 +57,7 @@ inside HTML comments** — because that is what naive scrapers do. A browser pai
 
 ---
 
-## Every step in the lab
+## The commands
 
 🅱️ `ls site/`
 Two pages. In a browser they look identical.
@@ -107,9 +107,7 @@ more phrasings than you can enumerate.
 
 ---
 
-## Your evidence
-
-### OWASP mapping (2026)
+## OWASP mapping (2026)
 
 **LLM01:2026 Prompt Injection**, risk item 2, quoted:
 
@@ -122,7 +120,7 @@ Note what this lab is **not**: the model takes no action, calls no tool and touc
 It just says the wrong thing. **LLM03:2026 Excessive Agency** — the model *doing* the wrong
 thing — is lab 5.
 
-### MITRE ATLAS mapping
+## MITRE ATLAS mapping
 
 ```
 AML.T0066        →  AML.T0068       →  AML.T0051.001 / .002
@@ -164,7 +162,7 @@ fit; arguing which fits better is a good use of five minutes.
 
 ---
 
-## Submit
+## Proof of completion
 
 Paste the output of `python evidence.py` into the class chat — **both** runs. The clean
 one alone proves nothing.
