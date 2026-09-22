@@ -12,7 +12,7 @@ human path for anything flagged, and a threshold you tighten yourself.
 adjacent
 **ATLAS:** defends `AML.T0068` → `AML.T0051.001` and `AML.T0043` → `AML.T0015`, with
 `AML.M0020` Generative AI Guardrails, `AML.M0033` Input and Output Validation, `AML.M0024` AI
-Telemetry Logging, `AML.M0015` Adversarial Input Detection
+Telemetry Logging, `AML.M0015` Predictive AI Adversarial Input Detection
 
 No language model runs in this lab. Every result is arithmetic on pixels and text, and it is
 the same on every machine, every time.

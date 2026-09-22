@@ -194,11 +194,10 @@ follows.
 
 ## MITRE ATLAS mapping
 
-> **Note on the first ID.** ATLAS retired `AML.T0058` *Publish Poisoned Models* and replaced
-> it with **`AML.T0115` Publish Poisoned AI Artifacts**, which is what lab 9 cites. The
-> chain below is corrected. **The lab's own on-screen text still prints the retired
-> `AML.T0058`** — it is baked into the published image, and correcting it would cost a
-> rebuild and republish for a label change. Cite `AML.T0115`.
+> **Note on the first ID.** ATLAS v2026.08 retired `AML.T0058` *Publish Poisoned Models* and
+> replaced it with **`AML.T0115` Publish Poisoned AI Artifacts**, which is what lab 9 cites.
+> This course cites ATLAS v2026.08 throughout, so the chain below and the lab's on-screen
+> text both use `AML.T0115`.
 
 ```
 AML.T0115          →  AML.T0018.000  →  AML.T0010.003   →  AML.T0011.000

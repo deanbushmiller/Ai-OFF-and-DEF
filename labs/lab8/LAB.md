@@ -13,7 +13,7 @@ You have attacked seven things. **What does that add up to?**
 
 This lab takes the seven attacks you ran yourself and turns them into a defender's map:
 an ATLAS coverage picture, the controls MITRE names for them, and an honest account of
-where the published guidance runs out.
+where the published guidance still runs out.
 
 **This is the first half of a two-part course.** Part 2 is seven defender labs covering the
 same ground from the other side. So this lab *names* the controls and stops there. It is an
@@ -26,8 +26,9 @@ introduction — and anything more would feel like enough when it is not.
 No model. No network. No port. Two JSON files and seven scripts.
 
 ```
-  /opt/lab-assets/atlas/atlas.json     MITRE ATLAS, distilled at build time.
-                                       170 techniques, 35 mitigations, 16 tactics.
+  /opt/lab-assets/atlas/atlas.json     MITRE ATLAS v2026.08, distilled at build
+                                       time and checked by sha256. 197 techniques,
+                                       39 mitigations, 16 tactics.
                                        NOT ours - this is MITRE's data.
         │
         │         course.json          What THIS COURSE taught: the chain each of
@@ -67,13 +68,17 @@ which is the only way to build one you actually believe.
 
 This lab does not add a mapping. It **is** the mapping.
 
-**ATLAS coverage across labs 1–7:** 20 distinct techniques, **12 of the 16 tactics**.
+**ATLAS coverage across labs 1–7** (ATLAS v2026.08): 20 distinct techniques, **13 of the
+16 tactics**.
 
 | covered | not covered |
 |---|---|
-| Reconnaissance, Resource Development, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Discovery, Collection, AI Attack Staging, Command and Control, Impact | AI Model Access, Credential Access, Lateral Movement, **Exfiltration** |
+| Reconnaissance, Resource Development, AI Attack Adaptation, Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Discovery, Lateral Movement, Collection, Command and Control, Impact | AI Model Access, Credential Access, **Exfiltration** |
 
-**The four empty ones are answers, not omissions** — and Exfiltration is the one to read
+Lateral Movement is lit only because v2026.08 also files `AML.T0053` AI Agent Tool
+Invocation (labs 5 and 6) under it. Every lab was still one container on your machine.
+
+**The three empty ones are answers, not omissions** — and Exfiltration is the one to read
 twice. An external endpoint was proposed at lab 3, reconsidered at labs 5 and 6, and closed
 permanently at lab 7. You are security professionals on work laptops; a machine that runs a
 hacking lab and then beacons to an unfamiliar domain is the textbook EDR detection, and
@@ -152,12 +157,12 @@ Expert mode does this without multiple choice: `python mapping.py --worksheet`, 
 
 `python coverage.py`
 
-20 techniques, 12 of 16 tactics, laid out in the matrix's own column order.
+20 techniques, 13 of 16 tactics, laid out in the matrix's own column order.
 
 > **^** That is a coverage map, and you built it from attacks you ran rather than from a
-> vendor's slide. 12 of 16 tactics is a lot of ground for eight hours.
+> vendor's slide. 13 of 16 tactics is a lot of ground for eight hours.
 
-## Step 4 · The four tactics you never touched — 🅱️
+## Step 4 · The three tactics you never touched — 🅱️
 
 `python coverage.py --gaps`
 
@@ -184,10 +189,12 @@ Seven labs that felt completely different. Here is how much they actually had in
 Switch sides. These are real ATLAS mitigation IDs read out of MITRE's own data — not our
 advice.
 
-> **^** Two controls cover five of your seven labs, and notice how unglamorous they are:
-> **log what the model and its tools did**, and **validate what crosses every boundary**.
-> Not a product. Not a filter. The two things that have defended every other kind of system
-> for thirty years.
+> **^** The controls that cover the most labs are the broadest ones. `AML.M0035` **AI Red
+> Team** touches all seven — it is what you just spent eight hours doing. `AML.M0020`
+> Generative AI Guardrails touches six. Then the unglamorous pair, five each: **log what the
+> model and its tools did** (`AML.M0024`), and **validate what crosses every boundary**
+> (`AML.M0033`). Not a product. The two things that have defended every other kind of
+> system for thirty years.
 
 Each lab also shows which part-2 lab teaches its control properly. One line each, on
 purpose.
@@ -198,13 +205,20 @@ purpose.
 
 And the honest part.
 
-> **^** Nine of your twenty techniques have **no published mitigation at all**, and the
-> date column shows why: every one of them was added to ATLAS between March 2025 and March
-> 2026. The ones that *do* have controls are the older, classical machine-learning attacks.
+> **^** Two of your twenty techniques have **no published mitigation at all**. When this
+> lab was first built, on ATLAS 5.6.0, it was nine — and in v2026.08 seven of those nine
+> gained one. ATLAS is a living standard, and a coverage map is a snapshot with a release
+> number on it.
 >
-> **^** The defensive literature is roughly a year behind the offensive literature, and you
-> can see the gap by reading the dates. That is not a criticism of MITRE — it is what the
-> field looks like right now, and it is why part 2 exists.
+> **^** But look at *what* closed those gaps: mostly broad controls — Generative AI
+> Guardrails, Limit Public Release of Information, and the new AI Red Team. A broad
+> mitigation mapped to a technique tells you where to start, not what specifically stops
+> the attack.
+>
+> **^** And look at which gap is left. `AML.T0110` **AI Agent Tool Poisoning** — lab 6's
+> core, the agent's tool layer — has no published control at all, not even a broad one. (The
+> other, `AML.T0065` LLM Prompt Crafting, is a supporting step in labs 4 and 5.) That is the
+> edge of the field right now, and it is why part 2 exists.
 
 ## Step 8 · Your evidence — 🅱️
 
@@ -243,31 +257,32 @@ get on Monday.
    ago.** Lab 7.
 5. **And the supply chain was already a solved problem that nobody solved.** Lab 1.
 
-The defensive answer to most of that, today, is: *log what happened, and validate what
-crosses a boundary.* Part 2 is where you build it.
+MITRE now names a control for 18 of your 20 techniques — mostly broad ones. The specific
+answer to most of it is still: *log what happened, and validate what crosses a boundary.*
+Part 2 is where you build it.
 
 ---
 
 ## Part 2 — seven defender labs
 
-**In the order part 2 is taught:**
+**Labs 9 to 15, in the order part 2 is taught.** Each one pairs with one attack you ran:
 
-| | part 2 | closest to |
+| | part 2 | pairs with |
 |---|---|---|
-| 1 | Semantic firewalls and RAG validation | your lab 2 |
-| 2 | Implementing guardrail frameworks — part 1 | your lab 3 |
-| 3 | Implementing guardrail frameworks — part 2 | your lab 4 |
-| 4 | Architectural hardening and data segregation | your lab 1 |
-| 5 | Securing AI agents | your lab 5 |
-| 6 | AI-native incident response and monitoring | your lab 6 |
-| 7 | Automated red teaming | your lab 7 |
+| lab 9 | Defending the model supply chain | your lab 1 |
+| lab 10 | Defending RAG ingestion | your lab 2 |
+| lab 11 | Defending multimodal input | your lab 4 |
+| lab 12 | Defending against prompt injection | your lab 3 |
+| lab 13 | Defending AI agents | your lab 5 |
+| lab 14 | Defending MCP tool calls | your lab 6 |
+| lab 15 | Defending against AI-scaled attacks | your lab 7 |
 
-**The right-hand column is the nearest counterpart, not a day-for-day pairing.** Part 2 is
-taught in its own order and some of it draws on more than one of the attacks you ran — your
-lab 2 is where it starts, and your lab 1 is not picked up until its fourth day.
+The order follows yours except in one place: multimodal input (your lab 4) is taught before
+prompt injection (your lab 3).
 
-Where MITRE has a control, those labs build it. Where MITRE has nothing yet, they build
-something anyway and say honestly that it is ahead of the standard.
+Where MITRE has a control, those labs build it. Where MITRE has nothing yet — lab 14,
+against the tool poisoning you did in lab 6 — they build something anyway and say honestly
+that it is ahead of the standard.
 
 ---
 

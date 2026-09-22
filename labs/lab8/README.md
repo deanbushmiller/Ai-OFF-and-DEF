@@ -127,15 +127,17 @@ introduction — anything more would feel like enough when it is not.
 
 ## What you will find
 
-- **20 ATLAS techniques across 12 of the 16 tactics**, from seven labs.
+- **20 ATLAS techniques across 13 of the 16 tactics**, from seven labs.
 - **One technique in five of the seven labs** — indirect prompt injection is not one attack
   among many, it is how most of the others were *delivered*.
-- **Two controls covering five of the seven labs**, and they are the least glamorous two in
-  security: log what happened, validate what crosses a boundary.
-- **Nine techniques with no published mitigation at all** — every one added to ATLAS
-  between March 2025 and March 2026. The defensive literature is about a year behind the
-  offensive literature, and the lab shows you the dates.
-- **Four tactics you never touched**, including Exfiltration — which was a deliberate
+- **Four controls covering at least five of the seven labs** — and they are the broad ones:
+  AI Red Team (all seven — it is what you spent part 1 doing), guardrails, and the least
+  glamorous two in security: log what happened, validate what crosses a boundary.
+- **Only two techniques with no published mitigation at all** — down from nine when this
+  lab was first built on ATLAS 5.6.0. The standard is catching up fast, mostly with broad
+  controls. The gap that is left is lab 6's core: **AI Agent Tool Poisoning**, the agent's
+  tool layer.
+- **Three tactics you never touched**, including Exfiltration — which was a deliberate
   safety decision taken four separate times, not an oversight.
 
 ---
@@ -176,10 +178,10 @@ Useful links while you are there:
 🅱️  python recap.py                      the seven attacks, one line each
 🅱️  python mapping.py                        name the technique that IS each lab
 🅱️  python coverage.py                   the matrix, with your labs on it
-🅱️  python coverage.py --gaps            the four tactics you never touched
+🅱️  python coverage.py --gaps            the three tactics you never touched
 🅱️  python coverage.py --spine           the one technique in 5 of 7 labs
 🅱️  python defend.py                     the controls MITRE names
-🅱️  python defend.py --gaps              where the published guidance runs out
+🅱️  python defend.py --gaps              where the published guidance still runs out
 🅱️  python export.py                     your ATLAS Navigator layer
     cd /labs/lab8                        expert: start here
     python mapping.py --worksheet            expert: no multiple choice
@@ -206,14 +208,16 @@ Eight labs. You have attacked a model supply chain, a RAG corpus, a web-reading 
 an OCR pipeline, an agent's tool layer, an MCP channel, and a detector — and then mapped
 the lot.
 
-Part 2 is the other half — seven defender labs, starting with semantic firewalls and RAG
-validation and ending with automated red teaming. Same ground, from the other side.
+Part 2 is the other half — seven defender labs, labs 9 to 15, one for each attack you ran,
+starting with defending the model supply chain and ending with defending against AI-scaled
+attacks. Same ground, from the other side.
 
 ---
 
 ## Reference
 
-ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release 2026.09**.
+ATLAS technique and mitigation IDs in this lab are cited **as of ATLAS release v2026.08** —
+the exact release baked into the lab, pinned and checked by sha256 at build time.
 The authoritative, always-current definitions are at
 <https://atlas.mitre.org/>, and the underlying data is at
 <https://github.com/mitre-atlas/atlas-data>.

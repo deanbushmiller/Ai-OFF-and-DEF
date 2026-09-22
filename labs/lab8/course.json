@@ -4,7 +4,7 @@
       "title": "Supply chain poisoning",
       "oneline": "Backdoor a real model file, then let torch.load() run it.",
       "chain": [
-        "AML.T0058",
+        "AML.T0115",
         "AML.T0018.000",
         "AML.T0010.003",
         "AML.T0011.000"
@@ -19,7 +19,8 @@
         "LLM04:2026",
         "LLM05:2026"
       ],
-      "part2": "Architectural hardening and data segregation"
+      "part2": "Defending the model supply chain",
+      "part2_lab": 9
     },
     "2": {
       "title": "RAG ingestion poisoning",
@@ -43,7 +44,8 @@
         "LLM07:2026",
         "LLM09:2026"
       ],
-      "part2": "Semantic firewalls and RAG validation"
+      "part2": "Defending RAG ingestion",
+      "part2_lab": 10
     },
     "3": {
       "title": "Indirect prompt injection",
@@ -65,7 +67,8 @@
         "LLM01:2026",
         "LLM03:2026"
       ],
-      "part2": "Implementing guardrail frameworks - part 1"
+      "part2": "Defending against prompt injection",
+      "part2_lab": 12
     },
     "4": {
       "title": "Multimodal and vision-based exploits",
@@ -89,7 +92,8 @@
         "LLM02:2026",
         "LLM03:2026"
       ],
-      "part2": "Implementing guardrail frameworks - part 2"
+      "part2": "Defending multimodal input",
+      "part2_lab": 11
     },
     "5": {
       "title": "Exploiting AI agents and excessive agency",
@@ -111,7 +115,8 @@
         "LLM03:2026",
         "LLM06:2026"
       ],
-      "part2": "Securing AI agents"
+      "part2": "Defending AI agents",
+      "part2_lab": 13
     },
     "6": {
       "title": "MCP and interface hijacking",
@@ -132,7 +137,8 @@
         "LLM01:2026",
         "LLM08:2026"
       ],
-      "part2": "AI-native incident response and monitoring"
+      "part2": "Defending MCP tool calls",
+      "part2_lab": 14
     },
     "7": {
       "title": "AI-powered attack orchestration",
@@ -154,16 +160,17 @@
         "LLM06:2026",
         "LLM10:2026"
       ],
-      "part2": "Automated red teaming"
+      "part2": "Defending against AI-scaled attacks",
+      "part2_lab": 15
     }
   },
   "part2_order": [
-    "Semantic firewalls and RAG validation",
-    "Implementing guardrail frameworks - part 1",
-    "Implementing guardrail frameworks - part 2",
-    "Architectural hardening and data segregation",
-    "Securing AI agents",
-    "AI-native incident response and monitoring",
-    "Automated red teaming"
+    "Defending the model supply chain",
+    "Defending RAG ingestion",
+    "Defending multimodal input",
+    "Defending against prompt injection",
+    "Defending AI agents",
+    "Defending MCP tool calls",
+    "Defending against AI-scaled attacks"
   ]
 }

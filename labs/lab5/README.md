@@ -181,7 +181,7 @@ The defence is the entry's own **prevention #7, complete mediation**:
 > Implement authorization in logic rather than relying on an LLM to decide if an action is
 > allowed or not.
 
-**MITRE ATLAS** (v5.6.0):
+**MITRE ATLAS** (v2026.08):
 `AML.T0084.001` Tool Definitions → `AML.T0065` LLM Prompt Crafting →
 `AML.T0051.001` Prompt Injection: Indirect → **`AML.T0053` AI Agent Tool Invocation**
 (tactic **`AML.TA0012` Privilege Escalation**) → `AML.T0085.001` Data from AI Agent Tools.

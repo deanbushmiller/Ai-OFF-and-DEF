@@ -12,20 +12,23 @@ bring your questions.
 
 THE FORMAT WAS CHECKED AGAINST MITRE'S OWN PUBLISHED LAYERS, NOT GUESSED
 -----------------------------------------------------------------------
-atlas-navigator-data/dist/default-navigator-layers/ carries two layers MITRE publishes
-itself, and the first draft of this file got three things wrong that would have stopped a
-student's evidence from loading:
+2026-09-14, ATLAS 5.6.0: diffed against the two layers in the (now deprecated)
+atlas-navigator-data/dist/default-navigator-layers/. The first draft got three things
+wrong that would have stopped a student's evidence from loading:
 
   domain      must be "atlas-atlas". The draft said "atlas-mitigations", which is not a
               domain the Navigator knows.
-  versions    MITRE ships layer 4.3 / navigator 4.6.4. The draft claimed 4.5 / 5.1.0,
-              which is newer than the hosted Navigator is known to accept.
+  versions    MITRE then shipped layer 4.3 / navigator 4.6.4.
   tactic      each entry needs the tactic SHORTNAME ("defense-evasion"), and a technique
               that sits under several tactics needs ONE ENTRY PER TACTIC. AML.T0015 is
               under three. Without that it does not place on the matrix properly.
 
-If this ever stops loading, diff it against those two files again before debugging
-anything else.
+2026-09-22, ATLAS v2026.08: re-checked against the layer MITRE publishes WITH that
+release (atlas-data release v2026.08, navigator-atlas_layer_matrix.json). Its domain is
+still "atlas-atlas" and its tactic entries still use shortnames, but its versions are now
+layer 4.5 / navigator 5.3.2, and it carries metadata atlas_data_version = "2026.08". Both
+are matched below. If this ever stops loading, diff it against that file again before
+debugging anything else.
 """
 import json
 import lab8lib as L
@@ -68,12 +71,15 @@ def main():
 
     layer = {
         "name": "SecLLM Bootcamp - labs 1-7",
-        # Matching MITRE's own published ATLAS layers. Do not "modernise" these.
-        "versions": {"layer": "4.3", "navigator": "4.6.4"},
+        # Matching the layer MITRE publishes with ATLAS v2026.08. Change these only
+        # to match what MITRE ships with the release fetch_assets.py is pinned to.
+        "versions": {"layer": "4.5", "navigator": "5.3.2"},
         "domain": "atlas-atlas",
+        "metadata": [{"name": "atlas_data_version",
+                      "value": a.get("atlas_version", "").lstrip("v")}],
         "description": ("Techniques exercised hands-on across labs 1-7 of the SecLLM "
                         "bootcamp. Score = how many labs used the technique. Generated "
-                        "by lab 8."),
+                        f"by lab 8 from MITRE ATLAS {a.get('atlas_version', '')}."),
         "filters": {"platforms": []},
         "sorting": 3,
         "layout": {"layout": "side", "showID": True, "showName": True},
@@ -105,11 +111,11 @@ def main():
     print(" THE MAPPING YOU PRODUCED")
     L.rule("-")
     print()
-    print(f"   {'lab':<4} {'technique':<16} {'OWASP 2026':<22} part 2")
+    print(f"   {'lab':<4} {'technique':<15} {'OWASP 2026':<22} part 2")
     for n in sorted(c, key=int):
         lab = c[n]
         got = answers.get(n, lab["core"])
-        print(f"   {n:<4} {got:<16} {'+'.join(lab['owasp']):<22} {lab['part2']}")
+        print(f"   {n:<4} {got:<15} {'+'.join(lab['owasp']):<22} lab {lab['part2_lab']}")
     print()
     print("   Nothing - You have the atlas-layer.json. Review it and prepare")
     print("   to ask questions.")

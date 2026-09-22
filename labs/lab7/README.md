@@ -189,7 +189,7 @@ threat landscape, not a vulnerability in your application — so this is the one
 course whose topic sits outside it. Forcing a fit would teach you a false idea of what the
 Top 10 is for.
 
-**MITRE ATLAS** (v5.6.0): **`AML.T0016.002` Obtain Capabilities: Generative AI** →
+**MITRE ATLAS** (v2026.08): **`AML.T0016.002` Obtain Capabilities: Generative AI** →
 `AML.T0043.003` Craft Adversarial Data: Manual Modification → **`AML.T0015` Evade AI Model**.
 
 `AML.T0016.002` describes what you are about to do, in its own words: *"obtain generative AI

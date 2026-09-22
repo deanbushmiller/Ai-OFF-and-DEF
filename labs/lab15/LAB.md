@@ -105,7 +105,8 @@ Neither is a control.
 | **`LLM02:2026` Sensitive Information Disclosure** | via OWASP's own ATLAS cross-map: *"Cross-lingual, **Base64, and hex encodings defeat regex and blocklist data-loss filters**."* Step 3 measures it: 8 of 10. |
 | **`LLM06:2026` Unbounded Consumption** | **cited for its CONTROLS, not for its risk.** Prevention 1 is the rate limit; prevention 8 is *"establish baselines of normal tool behavior in order to detect if a particular tool is deviating"*, which is the estate model. Its **risk** points the other way — cost asymmetry against your own inference bill — and this lab is about traffic leaving. The mismatch is stated rather than fudged. |
 
-**MITRE ATLAS (v2026.09)** — this lab is a *counter* to:
+**MITRE ATLAS (v2026.08, the course baseline, plus one v2026.09 addition: `AML.M0039`)** — this
+lab is a *counter* to:
 
 | Stage | Tactic | Technique |
 |---|---|---|
@@ -120,17 +121,17 @@ Neither is a control.
 | **`AML.M0004`** Limit AI Service Query Volume and Rate | the prevent stub — and ATLAS's own text says *"Query limits may not protect against attacks that require few requests."* Step 7 measures exactly that. |
 | **`AML.M0024`** AI Telemetry Logging | `detect-log.jsonl` |
 | **`AML.M0006`** Predictive AI Ensembles | orthogonality in ATLAS's voice: *"prevent an adversarial example that evades one model from controlling the system's predictions"* |
-| **`AML.M0039`** AI Honeypots *(new in 2026.09)* | named, not built. *"any interaction with them is a high-confidence indicator of unauthorized activity"* — the one signal no amount of variation can touch |
+| **`AML.M0039`** AI Honeypots *(added in v2026.09, after the course's v2026.08 baseline)* | named, not built. *"any interaction with them is a high-confidence indicator of unauthorized activity"* — the one signal no amount of variation can touch |
 | **`AML.M0035`** AI Red Team | step 6, and all of lab 16 |
 
 ### The framework gap — say it out loud
 
-**Six of the seven mitigations ATLAS maps to `AML.T0015` begin with the word
+**Five of the seven mitigations ATLAS maps to `AML.T0015` begin with the word
 "Predictive":** Predictive AI Model Hardening, Predictive AI Ensembles, Predictive AI
 Multi-Sensor Fusion, Predictive AI Input Restoration, Predictive AI Adversarial Input
-Detection, plus Deepfake Detection and AI Red Team.
+Detection. The other two are Deepfake Detection and AI Red Team.
 
-Every one of them assumes **you own the model being evaded** and tells you to harden it.
+Every one of the five assumes **you own the model being evaded** and tells you to harden it.
 Not one of them is *"detect on a behavioural invariant outside the model."* If the thing
 being evaded is your **signature set** rather than your classifier, the framework has no
 entry for you. That is what this lab fills, and it is worth knowing that the gap is real

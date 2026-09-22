@@ -355,7 +355,7 @@ def banner():
     say("           with  AML.M0020  Generative AI Guardrails")
     say("                 AML.M0033  Input and Output Validation")
     say("                 AML.M0024  AI Telemetry Logging")
-    say("                 AML.M0015  Adversarial Input Detection")
+    say("                 AML.M0015  Predictive AI Adversarial Input Detection")
     say("")
     say("  No language model runs in this lab. Every result is arithmetic on")
     say("  pixels and text, and it is the same on every machine, every time.")

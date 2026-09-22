@@ -209,7 +209,7 @@ def main():
     say("")
     say("  OWASP  LLM04:2026 Supply Chain  (was LLM03:2025)")
     say("         LLM05:2026 Data and Model Poisoning  (was LLM04:2025)")
-    say("  ATLAS  AML.T0058 > AML.T0018.000 > AML.T0010.003 > AML.T0011.000")
+    say("  ATLAS  AML.T0115 > AML.T0018.000 > AML.T0010.003 > AML.T0011.000")
     say("")
     say("  Nothing leaves this container. The payload runs one echo.")
 

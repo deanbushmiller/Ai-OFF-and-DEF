@@ -242,7 +242,7 @@ AML.T0043.000        →  AML.T0015
 Craft Adversarial       Evade AI Model
 Data: White-Box         (Initial Access / Defense
 Optimization            Evasion / Impact)
-(AI Attack Staging)
+(AI Attack Adaptation)
 ```
 
 White-box because the gate's weights are right there in `gate-weights.npz` — the attack
@@ -257,7 +257,7 @@ AML.T0065      →  AML.T0043.003    →  AML.T0068       →  AML.T0051.001
 LLM Prompt        Craft Adversarial   LLM Prompt         LLM Prompt Injection:
 Crafting          Data: Manual        Obfuscation        Indirect
 (Resource Dev)    Modification        (Defense Evasion)  (Execution)
-                  (AI Attack Staging)
+                  (AI Attack Adaptation)
 ```
 
 `AML.T0068`'s own description names this exact technique: instructions hidden *"in the data

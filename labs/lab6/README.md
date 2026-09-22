@@ -183,7 +183,7 @@ fix in its own words:
 **Secondary: LLM08:2026 Hidden Context Exposure**, new in 2026 — risk #4's own worked
 example is a tool description served by an MCP server.
 
-**MITRE ATLAS** (v5.6.0): `AML.T0084.001` Tool Definitions → **`AML.T0110` AI Agent Tool
+**MITRE ATLAS** (v2026.08): `AML.T0084.001` Tool Definitions → **`AML.T0110` AI Agent Tool
 Poisoning** → `AML.T0051.001` → `AML.T0053`. `AML.T0110` names the protocol and both
 attacks: *"modifying parameters or descriptions… or redirecting outputs."*
 

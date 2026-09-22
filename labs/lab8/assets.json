@@ -5,7 +5,7 @@
   "offline_at_runtime": true,
   "ports": [],
   "ports_note": "NONE. Lab 8 is the only lab in the course that serves nothing at all - no model, no listener, no port. The consolidation contract reserved 8008 for an offline worksheet UI; the instructor chose a terminal runner instead on 2026-09-14, so 8008 is deliberately unclaimed and free for part 2.",
-  "interaction": "beginner (8 guided steps, one of which asks 7 checked questions) or expert (real shell + a blank worksheet filled with nano + map.py --grade + check.py)",
+  "interaction": "beginner (8 guided steps, one of which asks 7 checked questions) or expert (real shell + a blank worksheet filled with nano + mapping.py --grade + check.py)",
   "models": [],
   "models_note": "NO MODEL. Lab 8 is the only lab since lab 2 that runs no inference, and the only one in the course that needs no ML stack whatsoever. It does not carry the 1.09 GB Qwen GGUF that labs 3-7 share.",
   "python_packages": [],
@@ -37,23 +37,25 @@
       "file": "/opt/lab-assets/atlas/atlas.json",
       "generated_at": "build",
       "shared": true,
-      "bytes": 24000,
-      "source": "https://raw.githubusercontent.com/mitre-atlas/atlas-navigator-data/main/dist/stix-atlas.json",
-      "note": "MITRE ATLAS, distilled at build time from the 443 KB STIX bundle to ~24 KB: 170 techniques with their tactics, parents, CREATION DATES and mitigations; 35 mitigations; 16 tactics in matrix order. Descriptions dropped - they are most of the bytes and the lab never prints them. The creation dates are kept deliberately: beat 7 claims the defensive literature lags the offensive literature, and the dates are how the student checks that claim instead of taking it on trust. SHARED CACHE PATH, and lab 8 is the natural home for ATLAS data in the merged 8-lab image. NOTE: labs 1-7 hard-code their technique IDs in their own text and read nothing at run time, so nothing points at this file yet. Retrofitting them would mean republishing seven images for zero student-visible benefit - not done, and not recommended before the tier rebuild.",
-      "rejected_alternative": "atlas-navigator-data/dist/stix-atlas-attack-enterprise.json is 39 MB because it carries all of ATT&CK Enterprise. Lab 8 needs none of it."
+      "bytes": 33000,
+      "source": "https://github.com/mitre-atlas/atlas-data/releases/download/v2026.08/stix-atlas.json",
+      "note": "MITRE ATLAS v2026.08, distilled at build time from the 1,176,189-byte STIX release asset to ~33 KB: 197 techniques with their tactics, parents, CREATION DATES and mitigations; 39 mitigations; 16 tactics in matrix order. PINNED 2026-09-22 (instructor decision): the release-asset URL plus a sha256 that fetch_assets.py verifies, failing the build loudly on mismatch. It previously fetched atlas-navigator-data/main (unpinned), which MITRE deprecated in June 2026 and froze at ATLAS 5.6.0. Descriptions dropped - they are most of the bytes and the lab never prints them. Creation dates kept so beat 7 prints when each unmitigated technique entered ATLAS. SHARED CACHE PATH, and lab 8 is the natural home for ATLAS data in the merged 8-lab image. NOTE: labs 1-7 hard-code their technique IDs in their own text and read nothing at run time, so nothing points at this file yet. Retrofitting them would mean republishing seven images for zero student-visible benefit - not done, and not recommended before the tier rebuild.",
+      "rejected_alternative": "atlas-navigator-data/dist/stix-atlas-attack-enterprise.json is 39 MB because it carries all of ATT&CK Enterprise, and that repo is deprecated and frozen at 5.6.0 anyway. Lab 8 needs none of it.",
+      "sha256": "6550ac8a7322e2d43d7c6c10234f0f381e74734ac6c734255fb1fc467bf16d7c",
+      "atlas_version": "v2026.08"
     },
     {
       "file": "course.json",
       "generated_at": "generated at build-prep, shipped",
       "shared": false,
       "bytes": 4200,
-      "note": "THIS LAB'S ANSWER KEY, AND IT IS GENERATED RATHER THAN TYPED. lab-research/lab8/gen_course.py reads every student-facing file of labs 1-7 (runner.py, LAB.md, README.md) and refuses to emit a key containing a technique the student was never shown. It caught two real problems on its first run: lab 5's AML.T0085.001 and lab 7's AML.T0096 appear in LAB.md but not in the runner banner, so reading the banner alone would have dropped two techniques and two whole tactics from the coverage picture; and lab 3 writes its fourth technique as the shorthand 'AML.T0051.001 / .002' and never spells the second one out. Re-run it if any lab's text changes."
+      "note": "THIS LAB'S ANSWER KEY, AND IT IS GENERATED RATHER THAN TYPED. lab-research/lab8/gen_course.py reads every student-facing file of labs 1-7 (runner.py, LAB.md, README.md) and refuses to emit a key containing a technique the student was never shown. It caught two real problems on its first run: lab 5's AML.T0085.001 and lab 7's AML.T0096 appear in LAB.md but not in the runner banner, so reading the banner alone would have dropped two techniques and two whole tactics from the coverage picture; and lab 3 writes its fourth technique as the shorthand 'AML.T0051.001 / .002' and never spells the second one out. Re-run it if any lab's text changes. 2026-09-22: regenerated for ATLAS v2026.08 - lab 1's chain now starts AML.T0115 (AML.T0058 was retired), and the part-2 pairings are read from and checked against lab-dev/lab9..lab15's READMEs (lab 1->9, 2->10, 3->12, 4->11, 5->13, 6->14, 7->15)."
     },
     {
       "file": "worksheet.txt",
       "generated_at": "run (expert mode only)",
       "shared": false,
-      "note": "Written by map.py --worksheet. The expert path's mapping exercise with no multiple choice."
+      "note": "Written by mapping.py --worksheet. The expert path's mapping exercise with no multiple choice."
     },
     {
       "file": "answers.json",
@@ -71,7 +73,7 @@
       "file": "atlas-layer.json",
       "generated_at": "run",
       "shared": false,
-      "note": "THE EVIDENCE. A real ATLAS Navigator layer file - the same format security teams use for their own coverage maps - which loads unmodified at https://atlas.mitre.org/navigator. Instructor decision 2026-09-14: this is the evidence artifact rather than a table of our own design; instructor decision 2026-09-22: students do NOT submit it (whole files cannot go into the class chat) - they review it and prepare questions, and the README carries the link and the three clicks. Both setup scripts copy it out of the container next to lab8-results.txt."
+      "note": "THE EVIDENCE. A real ATLAS Navigator layer file - the same format security teams use for their own coverage maps - which loads unmodified at https://atlas.mitre.org/navigator. Instructor decision 2026-09-14: this is the evidence artifact rather than a table of our own design; instructor decision 2026-09-22: students do NOT submit it (whole files cannot go into the class chat) - they review it and prepare questions, and the README carries the link and the three clicks. Both setup scripts copy it out of the container next to lab8-results.txt. 2026-09-22: layer versions 4.5 / navigator 5.3.2 and metadata atlas_data_version 2026.08, matching navigator-atlas_layer_matrix.json in MITRE's v2026.08 release."
     }
   ],
   "not_used": [
@@ -81,7 +83,7 @@
     },
     {
       "name": "PyYAML and ATLAS.yaml",
-      "reason": "The friendlier format, but it would add the only pip layer in the lab to save one import. The STIX bundle carries identical content and json is stdlib. VERIFIED: distilling from STIX reproduces the YAML-derived numbers exactly - 20/20 course techniques resolve, 12 of 16 tactics, 9 with no mitigation."
+      "reason": "The friendlier format, but it would add the only pip layer in the lab to save one import. The STIX bundle carries the same content and json is stdlib. Measured 2026-09-22: the v2026.08 STIX release asset parses unchanged with the existing parser - 197 techniques, 39 mitigations, 16 tactics; 20/20 course techniques resolve."
     },
     {
       "name": "the model tier's requirements.txt",
@@ -93,7 +95,7 @@
     },
     {
       "name": "a defensive tutorial",
-      "reason": "INSTRUCTOR DECISION 2026-09-14. This bootcamp is the first half of a two-part course and part 2 carries a one-for-one defender lab for every attack lab. Lab 8 NAMES controls and says what each does in one line - no configuration, no code, no worked examples. A student asking 'yes but HOW?' is told it is a part-2 lab. The temptation is strongest on AML.M0024 and AML.M0033, which cover five of seven labs, and those are precisely the two that deserve a whole lab rather than a paragraph."
+      "reason": "INSTRUCTOR DECISION 2026-09-14. This bootcamp is the first half of a two-part course and part 2 carries a one-for-one defender lab for every attack lab. Lab 8 NAMES controls and says what each does in one line - no configuration, no code, no worked examples. A student asking 'yes but HOW?' is told it is a part-2 lab. The temptation is strongest on AML.M0024 and AML.M0033, which each cover five of seven labs, and those are precisely the two that deserve a whole lab rather than a paragraph."
     },
     {
       "name": "port 8008 and a worksheet UI",
@@ -102,17 +104,17 @@
   ],
   "network": "None at run time. No listener, no port, no outbound. Verified with --network none. The ONLY network access in this lab's whole lifecycle is fetch_assets.py during docker build.",
   "measured": {
-    "note": "Measured 2026-09-14, arm64, Docker 29.7.2, on the image built from lab-beta/lab8.",
+    "note": "Measured 2026-09-14, arm64, Docker 29.7.2, on the image built from lab-beta/lab8. ATLAS-derived numbers below re-measured 2026-09-22 on ATLAS v2026.08 (image seclm-labs:lab8-dev built from lab-dev/lab8).",
     "beginner_steps": 8,
     "generations_in_lab": 0,
     "image_on_disk": "230 MB - against 2.64 GB for labs 5-7. The smallest lab in the course.",
     "lab_seconds_unrestricted": 1,
     "timing_note": "One second, end to end. No model, no inference, no waiting. The 12-15 minute budget is entirely reading time, which is the right shape for a recap and is stated as such in the README.",
-    "atlas_distilled": "443 KB STIX bundle -> 24 KB of JSON. 170 techniques, 35 mitigations, 16 tactics.",
-    "course_coverage": "20 distinct techniques across labs 1-7; 12 of ATLAS's 16 tactics; 8 of the 10 OWASP 2026 entries.",
+    "atlas_distilled": "1,176,189-byte STIX release asset (v2026.08, sha256-checked) -> ~33 KB of JSON. 197 techniques, 39 mitigations, 16 tactics.",
+    "course_coverage": "20 distinct techniques across labs 1-7; 13 of ATLAS's 16 tactics (v2026.08 also files AML.T0053 under Lateral Movement; on 5.6.0 it was 12); 8 of the 10 OWASP 2026 entries.",
     "the_spine": "AML.T0051.001 LLM Prompt Injection: Indirect appears in 5 of the 7 labs. 12 of the 20 techniques appear in exactly one lab.",
-    "top_controls": "AML.M0024 AI Telemetry Logging and AML.M0033 Input and Output Validation for AI Agent Components each touch 5 of the 7 labs.",
-    "the_gap": "9 of the 20 techniques have NO published ATLAS mitigation. Every one was added to ATLAS between 2025-03-12 and 2026-03-30; the 11 that DO have controls are the older classical-ML techniques. This is the lab's ending and the hand-off to part 2.",
+    "top_controls": "ATLAS v2026.08: AML.M0035 AI Red Team touches 7 of 7 labs; AML.M0020 Generative AI Guardrails 6 of 7; AML.M0024 AI Telemetry Logging and AML.M0033 Input and Output Validation for AI Agent Components 5 of 7 each.",
+    "the_gap": "ATLAS v2026.08: 2 of the 20 techniques have NO published mitigation - AML.T0065 LLM Prompt Crafting (added 2025-03-12, supporting step in labs 4 and 5) and AML.T0110 AI Agent Tool Poisoning (added 2026-03-30, lab 6's core). On ATLAS 5.6.0 it was 9; 7 of those 9 gained a mitigation in v2026.08, mostly broad ones (M0020 closes 4, M0000 2, the new M0035 2). Matrix-wide, 73 of 197 techniques still have none. This is the lab's ending and the hand-off to part 2: the standard moved fast, covered is not the same as solved, and the remaining gap is the agent tool layer.",
     "peak_ram": "negligible - Python plus a 24 KB JSON file. Verified at --memory=1200m for consistency with the other labs.",
     "determinism": "trivially deterministic - no model, no randomness, no clock in any output.",
     "runs_offline": "verified with --network none",

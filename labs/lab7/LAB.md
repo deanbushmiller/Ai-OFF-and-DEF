@@ -73,7 +73,7 @@ them work is a fact about the threat landscape, not a vulnerability in your appl
 so this is the one lab in the course whose topic sits outside it. Forcing a fit would
 teach you a false idea of what the Top 10 is for.
 
-**MITRE ATLAS v5.6.0**
+**MITRE ATLAS v2026.08**
 
 | | |
 |---|---|

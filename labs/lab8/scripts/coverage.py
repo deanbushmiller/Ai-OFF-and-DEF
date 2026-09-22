@@ -1,7 +1,7 @@
 """Beats 3, 4 and 5 - the ATLAS coverage picture.
 
     python coverage.py            the matrix, with your labs on it
-    python coverage.py --gaps     the four tactics you never touched, and why
+    python coverage.py --gaps     the tactics you never touched, and why
     python coverage.py --spine    the one technique that runs through the course
 
 Reads MITRE's data (/opt/lab-assets/atlas/atlas.json) and this course's answer key
@@ -12,6 +12,11 @@ import lab8lib as L
 
 # Why each untouched tactic is untouched. These are design decisions with reasons, not
 # omissions, and the Exfiltration one is the most important sentence in the lab.
+#
+# Lateral Movement stays in this table although, on ATLAS v2026.08, it is no longer
+# empty: v2026.08 files AML.T0053 AI Agent Tool Invocation (labs 5 and 6) under Lateral
+# Movement as well as Execution and Privilege Escalation. On 5.6.0 it was empty and the
+# reason below was printed. show_gaps() explains the change when it sees it.
 WHY_NOT = {
     "AML.TA0000": ("AI Model Access",
                    "Every lab already handed you the model, locally, with full access.",
@@ -72,10 +77,13 @@ def show_matrix(a, c):
                               "tactics_total": len(a["tactics"])})
 
 
+WORDS = {0: "NO", 1: "ONE", 2: "TWO", 3: "THREE", 4: "FOUR", 5: "FIVE", 6: "SIX"}
+
+
 def show_gaps(a, c):
     covered = L.covered_tactics(a, c)
     missing = [t for t in a["tactic_order"] if t not in covered]
-    L.head("THE FOUR TACTICS YOU NEVER TOUCHED")
+    L.head(f"THE {WORDS.get(len(missing), len(missing))} TACTICS YOU NEVER TOUCHED")
     print("   An empty column on a coverage map is a question, not a verdict.")
     print("   Here are the answers.\n")
     for tac in missing:
@@ -89,6 +97,23 @@ def show_gaps(a, c):
     if "AML.TA0010" in missing:
         for line in EXFIL:
             print(line)
+        print()
+    lm = "AML.TA0015"
+    if lm in covered:
+        via = [t for t in L.all_course_techniques(c)
+               if lm in a["techniques"].get(t, {}).get("tactics", [])]
+        labs = sorted({int(n) for n in c for t in via if t in c[n]["chain"]})
+        L.rule("-")
+        print(f" WHY {a['tactics'][lm]['name'].upper()} IS NOT EMPTY")
+        L.rule("-")
+        print()
+        print(f"   ATLAS {a.get('atlas_version', '')} files "
+              f"{', '.join(f'{t} {L.tech_name(a, t)}' for t in via)}")
+        print(f"   under {a['tactics'][lm]['name']} as well, so your labs "
+              f"{' and '.join(str(x) for x in labs)} light that column.")
+        print("   Nothing you did moved between machines - every lab was one")
+        print("   container on your laptop. The column filled because MITRE")
+        print("   re-filed a technique, not because the attack changed.")
         print()
     L.save_score("gaps", {"missing": missing})
 

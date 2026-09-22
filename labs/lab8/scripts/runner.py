@@ -83,11 +83,12 @@ STEPS = [
     {"why": ["Now put them on the matrix. This is a coverage map - the same",
              "artifact a security team builds for its own estate."],
      "cmd": "python coverage.py", "rc": 0, "want": "ATLAS tactics",
-     "asserts": [("coverage", "techniques", 20), ("coverage", "tactics", 12)]},
+     "asserts": [("coverage", "techniques", 20), ("coverage", "tactics", 13)]},
 
-    {"why": ["Four columns are empty. An empty column on a coverage map is a",
+    {"why": ["Three columns are empty. An empty column on a coverage map is a",
              "question, not a verdict - so here are the answers."],
-     "cmd": "python coverage.py --gaps", "rc": 0, "want": "Exfiltration"},
+     "cmd": "python coverage.py --gaps", "rc": 0, "want": "Exfiltration",
+     "asserts": [("gaps", "missing", ["AML.TA0000", "AML.TA0013", "AML.TA0010"])]},
 
     {"why": ["Seven labs that felt completely different. Here is how much they",
              "actually had in common."],
@@ -96,12 +97,19 @@ STEPS = [
 
     {"why": ["Switch sides. These are the controls MITRE itself names for the",
              "techniques you used - real ATLAS mitigation IDs, not our advice."],
-     "cmd": "python defend.py", "rc": 0, "want": "AML.M0024"},
+     "cmd": "python defend.py", "rc": 0, "want": "AML.M0024",
+     # The ^ narration names these four, so the data must still say so.
+     "asserts": [("defend", "top",
+                  ["AML.M0035", "AML.M0020", "AML.M0024", "AML.M0033"]),
+                 ("defend", "top_labs", [7, 6, 5, 5])]},
 
-    {"why": ["And the honest part. For a good fraction of what you attacked,",
-             "MITRE publishes no control at all. Look at WHICH ones."],
+    {"why": ["And the honest part. Where does MITRE's published guidance still",
+             "run out - and how much has that changed since this lab was built?"],
      "cmd": "python defend.py --gaps", "rc": 0, "want": "part 2",
-     "asserts": [("gaps_defence", "unmitigated", 9)]},
+     # ATLAS v2026.08. On 5.6.0 this was 9, and the narration was different.
+     "asserts": [("gaps_defence", "unmitigated", 2),
+                 ("gaps_defence", "techniques", ["AML.T0065", "AML.T0110"]),
+                 ("gaps_defence", "atlas_version", "v2026.08")]},
 
     {"why": ["Your evidence, in a format the rest of the industry already reads:",
              "an ATLAS Navigator layer file you can load at atlas.mitre.org."],
@@ -320,15 +328,19 @@ def main():
     say("  There is no attack in this lab. You take the seven attacks you ran")
     say("  yourself and turn them into a defender's map: an ATLAS coverage")
     say("  picture, the controls MITRE names for them, and an honest account of")
-    say("  where the published guidance runs out.")
+    say("  where the published guidance still runs out.")
     say("")
     say("  THIS IS THE FIRST HALF OF A TWO-PART COURSE. Part 2 is seven")
     say("  defender labs over the same ground from the other side. So this lab")
     say("  NAMES the controls and stops there - it is an introduction, and")
     say("  anything more would feel like enough when it is not.")
     say("")
-    say("  ATLAS  the full matrix, at /opt/lab-assets/atlas/atlas.json")
-    say("         20 techniques, 12 of 16 tactics, across your seven labs")
+    a0, c0 = lab8lib.atlas(), lab8lib.course()
+    say(f"  ATLAS  release {a0.get('atlas_version', '?')}, the full matrix, at")
+    say("         /opt/lab-assets/atlas/atlas.json")
+    say(f"         {len(lab8lib.all_course_techniques(c0))} techniques, "
+        f"{len(lab8lib.covered_tactics(a0, c0))} of {len(a0['tactics'])} tactics, "
+        "across your seven labs")
     say("  OWASP  8 of the 10 entries in the 2026 list")
     say("")
     say("  Eight steps. No model, nothing to wait for - the time is reading")
@@ -370,8 +382,9 @@ def main():
             say("    'AML.T0110, AI Agent Tool Poisoning' is something your")
             say("    detection team can actually search for.")
         if i == 3:
+            t = recorded("coverage", "tactics")
             say("  ^ That is a coverage map, and you built it from attacks you ran")
-            say("    rather than from a vendor's slide. 12 of 16 tactics is a lot")
+            say(f"    rather than from a vendor's slide. {t} of 16 tactics is a lot")
             say("    of ground for eight hours.")
         if i == 4:
             say("  ^ Read the Exfiltration one again. Nothing in this course ever")
@@ -384,19 +397,22 @@ def main():
             say("    payload changed every time. The way it arrived did not.")
             say("  ^ If you remember one identifier from this course, that is it.")
         if i == 6:
-            say("  ^ Two controls cover five of your seven labs, and notice how")
-            say("    unglamorous they are: log what the model and its tools did,")
-            say("    and validate what crosses every boundary. Not a product. Not")
-            say("    a filter. The two things that have defended every other kind")
-            say("    of system for thirty years.")
+            say("  ^ The controls that cover the most labs are the broadest ones.")
+            say("    AI Red Team touches all seven - it is what you just did for")
+            say("    eight hours. Guardrails touch six. Then the unglamorous pair:")
+            say("    log what the model and its tools did, and validate what")
+            say("    crosses every boundary. Not a product. The two things that have")
+            say("    defended every other kind of system for thirty years.")
         if i == 7:
             n = recorded("gaps_defence", "unmitigated")
-            say(f"  ^ {n} of your 20 techniques have NO published mitigation, and")
-            say("    every one of them is new. The ones that DO have controls are")
-            say("    the older, classical machine-learning attacks.")
-            say("  ^ The defensive literature is about a year behind the offensive")
-            say("    literature. That is not a criticism of MITRE - it is what the")
-            say("    field looks like right now, and it is why part 2 exists.")
+            was = recorded("gaps_defence", "unmitigated_in_5.6.0")
+            say(f"  ^ {n} of your 20 techniques have NO published mitigation. On")
+            say(f"    ATLAS 5.6.0 it was {was}. The standard is catching up fast - but")
+            say("    most of those gaps closed with BROAD controls, and a broad")
+            say("    control is a place to start, not a specific defence.")
+            say("  ^ The gap that matters is lab 6's: AI Agent Tool Poisoning, the")
+            say("    agent's tool layer. That is the edge of the field right now,")
+            say("    and it is why part 2 exists.")
         if i == 8:
             say("  ^ That file loads into the real ATLAS Navigator at")
             say("    atlas.mitre.org/navigator. It is a professional artifact, it")
@@ -431,7 +447,8 @@ def main():
     say("   5. And the supply chain was already a solved problem that nobody")
     say("      solved. Lab 1.")
     say("")
-    say("   The defensive answer to most of that, today, is: log what happened,")
+    say("   MITRE now names a control for 18 of your 20 techniques - mostly broad")
+    say("   ones. The specific answer to most of it is still: log what happened,")
     say("   and validate what crosses a boundary. Part 2 is where you build it.")
     say("")
     say(f"   You typed {typed} of {total} commands correctly.")
@@ -455,9 +472,9 @@ def main():
     say("")
     say("  Check you have submitted evidence for labs 1-7 before you go.")
     say("")
-    say("  Part 2 is the other half: seven defender labs, starting with")
-    say("  semantic firewalls and RAG validation and ending with automated")
-    say("  red teaming.")
+    say("  Part 2 is the other half: seven defender labs, labs 9 to 15, one for")
+    say("  each attack you ran - starting with defending the model supply chain")
+    say("  and ending with defending against AI-scaled attacks.")
     say("")
 
 

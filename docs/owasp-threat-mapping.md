@@ -10,13 +10,14 @@ Every technique below links to its page on <https://atlas.mitre.org>. Each lab's
 also printed in that lab's own runner, so what you saw on screen and what you read here are
 the same identifiers.
 
-> **One ATLAS ID in this course is out of date, and it is lab 1's first.**
-> The labs are pinned to ATLAS **v5.6.0**. The live site has since moved to **v2026.08**, in
-> which `AML.T0058 Publish Poisoned Models` was superseded by
+> **This course cites ATLAS v2026.08.** It was first built on v5.6.0; on 2026-09-22 every lab
+> moved to v2026.08. The changes that touch the course: `AML.T0058 Publish Poisoned Models`
+> was retired and replaced by
 > **[`AML.T0115` Publish Poisoned AI Artifacts](https://atlas.mitre.org/techniques/AML.T0115)**
-> (created 31 July 2026). Lab 1 still prints `AML.T0058`, so that is what this page cites —
-> with the link pointing where it actually resolves. Checked against the live matrix
-> 2026-09-14: the other 19 IDs this course uses all still resolve.
+> (lab 1 now prints `AML.T0115`); tactic `AML.TA0001` was renamed from *AI Attack Staging* to
+> **AI Attack Adaptation**; seven mitigations gained a "Predictive AI" prefix; and
+> `AML.M0035` AI Red Team was added. The other 19 technique IDs are unchanged. Lab 15 also
+> names one v2026.09 addition, `AML.M0039` AI Honeypots.
 
 ---
 
@@ -64,15 +65,15 @@ follows.
 ### ATLAS
 
 ```
-AML.T0058          →  AML.T0018.000  →  AML.T0010.003   →  AML.T0011.000
+AML.T0115          →  AML.T0018.000  →  AML.T0010.003   →  AML.T0011.000
 Publish Poisoned      Poison AI          AI Supply Chain    User Execution:
-Models                Model              Compromise: Model  Unsafe AI Artifacts
+AI Artifacts          Model              Compromise: Model  Unsafe AI Artifacts
 (Resource Dev)        (Persistence)      (Initial Access)   (Execution)
 ```
 
 **Look these up:**
 
-- `AML.T0058` — **superseded by [AML.T0115](https://atlas.mitre.org/techniques/AML.T0115)**, Publish Poisoned AI Artifacts
+- [AML.T0115](https://atlas.mitre.org/techniques/AML.T0115) — Publish Poisoned AI Artifacts (replaced the retired `AML.T0058`)
 - [AML.T0018.000](https://atlas.mitre.org/techniques/AML.T0018.000) — Manipulate AI Model: Poison AI Model
 - [AML.T0010.003](https://atlas.mitre.org/techniques/AML.T0010.003) — AI Supply Chain Compromise: Model
 - [AML.T0011.000](https://atlas.mitre.org/techniques/AML.T0011.000) — User Execution: Unsafe AI Artifacts
@@ -178,7 +179,7 @@ AML.T0043.000        →  AML.T0015
 Craft Adversarial       Evade AI Model
 Data: White-Box         (Initial Access)
 Optimization
-(AI Attack Staging)
+(AI Attack Adaptation)
 ```
 
 **Stage 2 — the OCR injection:**
@@ -188,7 +189,7 @@ AML.T0065       →  AML.T0043.003        →  AML.T0068          →  AML.T0051
 LLM Prompt         Craft Adversarial       LLM Prompt            LLM Prompt
 Crafting           Data: Manual            Obfuscation           Injection:
 (Resource Dev)     Modification            (Defense Evasion)     Indirect
-                   (AI Attack Staging)                           (Execution)
+                   (AI Attack Adaptation)                           (Execution)
 ```
 
 **Look these up:**
@@ -301,7 +302,7 @@ AML.T0016.002   →  AML.T0043.003        →  AML.T0015         →  AML.T0096
 Obtain             Craft Adversarial       Evade AI Model       AI Service API
 Capabilities:      Data: Manual            (Defense Evasion)    (Command and Control)
 Generative AI      Modification                                 cited, not built
-(Resource Dev)     (AI Attack Staging)
+(Resource Dev)     (AI Attack Adaptation)
 ```
 
 **Look these up:**
@@ -328,7 +329,7 @@ No new mapping. This lab **is** the mapping: students place their own seven atta
 matrix and export an
 **[ATLAS Navigator](https://atlas.mitre.org/navigator)** layer file.
 
-**Coverage across labs 1–7:** 20 distinct techniques, **12 of the 16 ATLAS tactics**, and 8
+**Coverage across labs 1–7:** 20 distinct techniques, **13 of the 16 ATLAS tactics**, and 8
 of the 10 OWASP 2026 entries.
 
 **The spine:** [`AML.T0051.001`](https://atlas.mitre.org/techniques/AML.T0051.001) LLM Prompt
@@ -336,28 +337,34 @@ Injection: Indirect appears in **five of the seven labs**. Twelve of the twenty 
 appear in exactly one. Seven attacks that felt completely different shared one delivery
 mechanism.
 
-**The four tactics never touched** — AI Model Access, Credential Access, Lateral Movement and
-**Exfiltration**. The first three are out of scope by design. Exfiltration was a safety
+**The three tactics never touched** — AI Model Access, Credential Access and **Exfiltration**.
+(Lateral Movement is lit on v2026.08, which also files `AML.T0053` under it.) The first two
+are out of scope by design. Exfiltration was a safety
 decision taken four times: no lab gets an external endpoint, because a work laptop that runs
 a hacking lab and then beacons to an unfamiliar domain is the textbook EDR detection.
 
 **The defensive half**, from ATLAS's own mitigations:
 
+- [AML.M0035](https://atlas.mitre.org/mitigations/AML.M0035) — AI Red Team — **7 of 7 labs**
+- [AML.M0020](https://atlas.mitre.org/mitigations/AML.M0020) — Generative AI Guardrails — **6 of 7 labs**
 - [AML.M0024](https://atlas.mitre.org/mitigations/AML.M0024) — AI Telemetry Logging — **5 of 7 labs**
 - [AML.M0033](https://atlas.mitre.org/mitigations/AML.M0033) — Input and Output Validation for AI Agent Components — **5 of 7 labs**
 
-And the finding the lab ends on: **9 of those 20 techniques have no published ATLAS
-mitigation at all**, every one of them added between March 2025 and March 2026. The eleven
-that do have controls are the older, classical machine-learning techniques.
+And the finding the lab ends on: **only 2 of those 20 techniques have no published ATLAS
+mitigation** — [`AML.T0065`](https://atlas.mitre.org/techniques/AML.T0065) LLM Prompt
+Crafting and [`AML.T0110`](https://atlas.mitre.org/techniques/AML.T0110) AI Agent Tool
+Poisoning, lab 6's core. On v5.6.0 it was 9. The standard caught up fast, mostly with broad
+controls — and covered is not the same as solved. The gap that is left is the agent's tool
+layer.
 
 ### ATLAS
 
 Lab 8 has no chain of its own — it is the chains from labs 1–7, placed on the matrix.
 
 ```
-labs 1-7  ──►  20 techniques  ──►  12 of 16 tactics  ──►  atlas-layer.json
+labs 1-7  ──►  20 techniques  ──►  13 of 16 tactics  ──►  atlas-layer.json
                     │                                     (an ATLAS Navigator
-                    └──►  9 with NO published mitigation    layer file)
+                    └──►  2 with NO published mitigation    layer file)
 ```
 
 **Look these up:**
@@ -365,8 +372,10 @@ labs 1-7  ──►  20 techniques  ──►  12 of 16 tactics  ──►  atla
 - [The ATLAS matrix](https://atlas.mitre.org/matrices/ATLAS-matrix) — where the coverage lands
 - [ATLAS Navigator](https://atlas.mitre.org/navigator) — where the exported layer file loads
 - [AML.T0051.001](https://atlas.mitre.org/techniques/AML.T0051.001) — the spine, in 5 of 7 labs
+- [AML.M0035](https://atlas.mitre.org/mitigations/AML.M0035) — AI Red Team
 - [AML.M0024](https://atlas.mitre.org/mitigations/AML.M0024) — AI Telemetry Logging
 - [AML.M0033](https://atlas.mitre.org/mitigations/AML.M0033) — Input and Output Validation for AI Agent Components
+- [AML.T0110](https://atlas.mitre.org/techniques/AML.T0110) — AI Agent Tool Poisoning, still unmitigated
 
 ---
 

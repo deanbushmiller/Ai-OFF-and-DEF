@@ -84,6 +84,14 @@ def main():
             valid = False
         check("the layer file is valid Navigator JSON", valid,
               "atlas-layer.json is not loadable - re-run python export.py")
+        if valid:
+            stale = sorted({t["techniqueID"] for t in layer["techniques"]}
+                           - set(a["techniques"]))
+            check(f"every technique in the layer exists in ATLAS "
+                  f"{a.get('atlas_version', '')}", not stale,
+                  f"atlas-layer.json cites {', '.join(stale)}, which the baked ATLAS "
+                  "data does not contain - re-run python export.py, and tell the "
+                  "instructor if it persists")
 
     print()
     print("=" * 68)
