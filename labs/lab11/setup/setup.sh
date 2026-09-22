@@ -202,7 +202,7 @@ else
   printf '  already on your disk down to the byte, and this pull is only the\n'
   printf '  two small libraries this lab carries for itself. From a clean\n'
   printf '  machine it is about 101 MB on Apple Silicon, 105 MB on Intel -\n'
-  printf '  no language model, the smallest image in the course either way.\n'
+  printf '  no language model, the smallest image in part 2 either way.\n'
   printf '  Measured on the published image.\n'
   printf '  %s\n' "$TAG"
   hr; printf '\n'
@@ -293,7 +293,7 @@ if [ -n "${NEXT_LAB:-}" ]; then
   hr
   printf '\n'
   info "$NEXT_LAB_NAME"
-  info "Lab 12 runs the same local language model as labs 3 to 8. If you did"
+  info "Lab 12 runs the same local language model as labs 3 to 7. If you did"
   info "those on this machine the download is about 30 KB,"
   info "measured on the published image - because the 1.09 GB model layer"
   info "is already on your disk. If you did not, expect about 1.2 GB."

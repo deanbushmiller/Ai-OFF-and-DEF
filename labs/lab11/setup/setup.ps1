@@ -376,8 +376,8 @@ if ($alreadyHave) {
     Write-Host "  Intel: the OCR engine and the base are already on your disk down"
     Write-Host "  to the byte, and this pull is only the two small libraries this"
     Write-Host "  lab carries for itself. From a clean machine it is about 105 MB"
-    Write-Host "  on Intel - no language model, the smallest image in the course"
-    Write-Host "  either way. Measured on the published image."
+    Write-Host "  on Intel - no language model, the smallest image in part 2 either"
+    Write-Host "  way. Measured on the published image."
     Write-Host "  $Tag"
     Hr
     Write-Host ""
@@ -478,7 +478,7 @@ if ($NextLab) {
     Hr
     Write-Host ""
     Info $NextName
-    Info "Lab 12 runs the same local language model as labs 3 to 8. If you did"
+    Info "Lab 12 runs the same local language model as labs 3 to 7. If you did"
     Info "those on this machine the download is about 30 KB,"
     Info "measured on the published image - because the 1.09 GB model layer"
     Info "is already on your disk. If you did not, expect about 1.2 GB."

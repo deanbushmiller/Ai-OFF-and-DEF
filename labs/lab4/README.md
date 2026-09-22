@@ -15,7 +15,8 @@ Expert mode runs the whole list.
 > `docker --version` works.
 
 If you have already done labs 1 to 3, you are ready — nothing new to install. The image is
-about 1.2 GB because it carries a language model, which labs 5 to 7 reuse.
+about 1.2 GB because it carries a language model, which labs 5 to 7 reuse — but lab 3 already
+put that model on your disk, so your download is only about 31 MB.
 
 ---
 

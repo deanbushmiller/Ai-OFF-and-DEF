@@ -28,12 +28,12 @@ only those. Expert mode runs the whole list.
 > course files, installing Docker, and the extra steps Windows needs. Come back here when
 > `docker --version` works.
 
-If you have already done labs 3 to 8 or 12 to 14, you are ready — nothing new to install,
+If you have already done labs 3 to 7 or 12 to 14, you are ready — nothing new to install,
 and the download is small. This lab runs the same local language model as those labs and
 buys no model, no system package and no Python package of its own, so the pull is the lab's
 own source files and nothing else. The big model layer is already on your disk and is not
 fetched again. From a clean machine, expect about **1.2 GB** — the language model itself,
-the one-time cost that labs 3 to 8, 12 to 14 and this lab all share.
+the one-time cost that labs 3 to 7, 12 to 14 and this lab all share.
 
 <!-- DOWNLOAD FIGURE: written 2026-09-20 in the course-wide pass, from one
      verify-sharing.py run against the published registry. Figures are rounded;

@@ -19,12 +19,12 @@ only those. Expert mode runs the whole list.
 > course files, installing Docker, and the extra steps Windows needs. Come back here when
 > `docker --version` works.
 
-If you have already done labs 3 to 8, you are ready — nothing new to install, and the
+If you have already done labs 3 to 7, you are ready — nothing new to install, and the
 download is **about 30 KB**, on both Apple Silicon and Intel, measured on
 the published image. This lab runs the same local language model as those labs and buys no
 model, no system package and no Python package of its own, so the pull is the lab's own source
 files and nothing else. From a clean machine, expect about **1.2 GB** — the language model
-itself, the one-time cost labs 3 to 8 all share.
+itself, the one-time cost labs 3 to 7 all share.
 
 ---
 

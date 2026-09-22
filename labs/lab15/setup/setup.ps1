@@ -343,7 +343,7 @@ try {
     if (-not $root) { throw 'no path root' }
     $freeGb = [math]::Round((New-Object System.IO.DriveInfo $root).AvailableFreeSpace / 1GB, 1)
     # A VM needs headroom for Docker's ext4.vhdx on top of the lab image.
-    $needGb = if ($inVM) { 20 } else { 1 }
+    $needGb = if ($inVM) { 20 } else { 3 }
     if ($freeGb -lt $needGb) {
         Warn "Only $freeGb GB free; recommend at least $needGb GB."
         if ($inVM) {
@@ -375,7 +375,7 @@ if ($alreadyHave) {
 } else {
     Write-Host "  Downloading the lab image."
     Write-Host ""
-    Write-Host "  If you have done any of labs 3 to 8, 12, 13 or 14 on this"
+    Write-Host "  If you have done any of labs 3 to 7, 12, 13 or 14 on this"
     Write-Host "  machine, this is a small delta - about 56 KB. Those labs"
     Write-Host "  and this one share the same base, the same Python packages and"
     Write-Host "  the same 1.09 GB language model, byte for byte, so none of it"
@@ -421,7 +421,7 @@ Write-Host "  Starting the lab. You will be asked to choose beginner or"
 Write-Host "  expert mode. Beginner types 10 checked commands; expert gets"
 Write-Host "  a real shell and works from LAB.md."
 Write-Host ""
-Write-Host "  If you did labs 3 to 8 or 12 to 14 on this machine, the 1.09 GB"
+Write-Host "  If you did labs 3 to 7 or 12 to 14 on this machine, the 1.09 GB"
 Write-Host "  model layer is already on your disk and is not fetched again."
 Write-Host ""
 Write-Host "  A local language model runs ONCE in this lab, for about 20"

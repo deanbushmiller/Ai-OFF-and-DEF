@@ -174,10 +174,10 @@ else
   AVAIL_GB="$(df -g "$HOME" 2>/dev/null | awk 'NR==2 {print $4}')"
 fi
 if [ -n "${AVAIL_GB:-}" ]; then
-  if [ "$AVAIL_GB" -lt 2 ]; then
-    warn "Only ${AVAIL_GB} GB free. The lab needs about 1 GB. It may fail."
+  if [ "$AVAIL_GB" -lt 3 ]; then
+    warn "Only ${AVAIL_GB} GB free. The lab needs about 3 GB. It may fail."
   else
-    ok "Disk space: ${AVAIL_GB} GB free (need ~1 GB)"
+    ok "Disk space: ${AVAIL_GB} GB free (need ~3 GB)"
   fi
 fi
 
@@ -196,7 +196,7 @@ if docker image inspect "$TAG" >/dev/null 2>&1; then
 else
   printf '  Downloading the lab image.\n'
   printf '\n'
-  printf '  If you have done labs 3 to 8 on this machine, this is about\n'
+  printf '  If you have done labs 3 to 7 on this machine, this is about\n'
   printf '  30 KB on both Apple Silicon and Intel. This lab\n'
   printf '  and those share the same base, the same Python packages and the\n'
   printf '  same 1.09 GB language model, byte for byte, so none of it is\n'
@@ -237,7 +237,7 @@ printf '  Starting the lab. You will be asked to choose beginner or\n'
 printf '  expert mode. Beginner types 10 checked commands; expert gets\n'
 printf '  a real shell and works from LAB.md.\n'
 printf '\n'
-printf '  If you did labs 3 to 8 on this machine, this download is about\n'
+printf '  If you did labs 3 to 7 on this machine, this download is about\n'
 printf '  30 KB, measured on the published image. The 1.09 GB\n'
 printf '  model layer is already on your disk and is not fetched again.\n'
 printf '\n'
