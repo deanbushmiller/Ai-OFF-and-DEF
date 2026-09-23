@@ -1,4 +1,4 @@
-# PLEASE WAIT TO START LABS- BETA 20260921:16:44 - WE will update this note when safe to run
+
 # SecLLM Bootcamp — AI Offense and Defense Labs
 
 > **Beta — rebuilt 2026-09**
