@@ -3,8 +3,8 @@
 # lab 12 image (lab12-splittest-amd64) one at a time, with progress, outside Docker.
 #
 # Run from the course folder:
-#   bash testsplit.sh        all six parts
-#   bash testsplit.sh 1      first part only
+#   bash testsplit/testsplit.sh        all six parts
+#   bash testsplit/testsplit.sh 1      first part only
 #
 # For each part it shows curl's progress bar, then OK or CUT. A CUT part is
 # retried (up to 3 attempts), the way Docker retries a layer. Nothing is saved.
