@@ -1,60 +1,53 @@
 # Connection check — do this before class
 
 The labs download a language model in parts of up to 190 MB from GitHub. Each part has to
-finish within about 5 minutes, or the download is cut off and starts that part again.
-These two checks tell us, before class, whether your connection can do that.
+finish within about 5 minutes, or the download is cut off and starts that part again. On a
+connection that is too slow, it never finishes.
 
-Paste **both result lines** into the class chat, with your country.
+This 30-second check tells you whether your connection is fast enough. You do not need to
+install or download anything for it.
 
----
+## 1. Run a speed test
 
-## Check 1 — speed test (in your browser, about 30 seconds)
+Open **<https://www.speedtest.net>**, click **GO**, and wait until it finishes.
 
-1. Open **<https://www.speedtest.net>**, click **GO**, and wait until it finishes.
-2. Read three numbers from the results: **Download**, **Upload** and **Ping**.
-3. Paste this line into the chat with your numbers filled in:
+## 2. Compare your results with the minimum
 
-```
-SPEEDTEST down=___Mbps up=___Mbps ping=___ms
-```
-
-### Minimum to take the labs
-
-| | Minimum |
+| Result | Minimum to take the labs |
 |---|---|
-| Download | **20 Mbps** or more |
-| Ping | **100 ms** or less |
-| Packet loss | **0.5 %** or less (Check 2 measures this) |
+| **Download** | **20 Mbps** or more |
+| **Ping** | **100 ms** or less |
 
-If any number misses the minimum, tell your instructor **before** lab 3 — the model download
-will not finish on that connection. A wired connection, a different network or a nearer
-location usually fixes it.
+## 3. What to do
+
+**Both numbers meet the minimum:** you are ready. Nothing to report.
+
+**Either number misses the minimum:** post this line in the class chat **before lab 3**, with
+your numbers and your country:
+
+```
+SPEEDTEST down=___Mbps up=___Mbps ping=___ms   (country)
+```
+
+The model download will not finish on that connection. A wired connection, a different
+network, or a location nearer to you usually fixes it — run the test again after changing.
 
 ---
 
-## Check 2 — the real download test (about 1 minute)
+## Troubleshooting — only if a lab download keeps restarting
 
-This downloads 20 MB of the actual lab model from GitHub, the same way Docker does.
+If you met the minimum but a lab's download keeps going back to zero, run this from your
+course folder and post the line that starts with `GHCR-TEST` in the class chat. It measures
+the exact download the labs use.
 
-**Windows** — in PowerShell, from your course folder:
+**Windows** — in PowerShell:
 
 ```
 powershell -ExecutionPolicy Bypass -File .\testconnect.ps1
 ```
 
-**Mac or Linux** — in Terminal, from your course folder:
+**Mac or Linux** — in Terminal:
 
 ```
 bash testconnect.sh
-```
-
-Paste the line that starts with `GHCR-TEST` into the chat.
-
----
-
-## Example of what to paste
-
-```
-SPEEDTEST down=48Mbps up=12Mbps ping=32ms
-GHCR-TEST speed=2.40MB/s latency=30ms loss=0% now=RETRY split=OK   (Germany)
 ```
