@@ -20,4 +20,34 @@ Open **<https://www.speedtest.net>**, click **GO**, and wait until it finishes.
 
 ## 3. Next step
 
-If you meet the requirements, continue on to the next test.
+If you meet the requirements, continue on to [Test 2](#test-2--can-your-computer-download-and-run-a-script).
+
+---
+
+# Test 2 — can your computer download and run a script?
+
+The labs are started by a small script. This test checks, in a few seconds, that your
+computer lets you download one and run it. It does **not** need administrator rights and
+does not install anything.
+
+**Windows:**
+
+1. Click **Start**, type `PowerShell`, and click **Windows PowerShell**.
+   (Do not choose "Run as administrator" — we want to see what a normal window can do.)
+2. Click the copy button at the right of the grey box below.
+3. In the PowerShell window, **right-click** to paste, then press **Enter**.
+
+```powershell
+[Net.ServicePointManager]::SecurityProtocol='Tls12'; irm https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/connection-check/check-run.ps1 -OutFile $env:TEMP\check-run.ps1; powershell -ExecutionPolicy Bypass -File $env:TEMP\check-run.ps1
+```
+
+**What you should see** ends with:
+
+```
+  RESULT: PASS - continue on to the next test.
+```
+
+**If you see `RESULT: STOP`, or red error text** such as *"running scripts is disabled on
+this system"* or *"cannot be loaded"*: your computer is set up to block scripts, usually by
+your organisation. The labs cannot run on it. Tell your instructor before class, or use a
+computer you control.
