@@ -13,7 +13,7 @@ only those. Expert mode runs the whole list.
 ## Before you start
 
 > **First lab? Not set up yet?**
-> Go to **[the setup guide](../../docs/student-setup.md)** first. It covers getting the
+> Go to the setup guide for **[Windows](../../docs/windows-setup.md)** or **[Mac and Linux](../../docs/mac-linux-setup.md)** first. It covers getting the
 > course files, installing Docker, and the extra steps Windows needs. Come back here when
 > `docker --version` works.
 

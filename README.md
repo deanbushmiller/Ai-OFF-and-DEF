@@ -20,7 +20,7 @@ data, and runs entirely on your own machine.
 You do **not** need an API key, a ChatGPT or Claude subscription, Python, or a cloud
 account. Every model the labs use is small, open, and baked into the container image.
 
-**Windows students: [read the setup guide first](docs/student-setup.md).** Windows needs
+**Setup guides: [Windows](docs/windows-setup.md) · [Mac and Linux](docs/mac-linux-setup.md).** Windows students, read yours first — Windows needs
 two extra steps that Docker's own installer does not do for you, and skipping either one
 looks identical to "Docker is broken".
 
@@ -30,8 +30,8 @@ looks identical to "Docker is broken".
 git clone https://github.com/deanbushmiller/Ai-OFF-and-DEF.git
 ```
 
-No git? [Step 1 of the setup guide](docs/student-setup.md) covers installing it on both
-platforms, choosing where to put the labs, and the no-git ZIP alternative.
+No git? Step 1 of the setup guide — [Windows](docs/windows-setup.md#step-1--get-the-course-files) or
+[Mac and Linux](docs/mac-linux-setup.md#step-1--get-the-course-files) — covers installing it, choosing where to put the labs, and the no-git ZIP alternative.
 
 Run every command below **from inside the course folder**.
 
@@ -133,7 +133,8 @@ Each defend lab pairs with an attack lab and turns it into a control you build, 
 
 ## Course materials
 
-- [Student setup](docs/student-setup.md) — start here, especially on Windows
+- [Windows setup](docs/windows-setup.md) — start here on Windows
+- [Mac and Linux setup](docs/mac-linux-setup.md) — start here on a Mac or Linux
 - [OWASP threat mapping](docs/owasp-threat-mapping.md) — how each lab maps to the 2026 Top 10
 
 ## Safety

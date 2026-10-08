@@ -13,7 +13,7 @@ When you download a model from a public hub, what did you actually just put on y
 ## Before you start
 
 > **First time? Start here.**
-> **[The setup guide](../../docs/student-setup.md)** covers getting the course files,
+> The setup guide for **[Windows](../../docs/windows-setup.md)** or **[Mac and Linux](../../docs/mac-linux-setup.md)** covers getting the course files,
 > installing Docker, and the extra steps Windows needs. Work through it once and every
 > later lab just runs.
 

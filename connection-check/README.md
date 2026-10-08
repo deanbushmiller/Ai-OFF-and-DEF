@@ -84,8 +84,8 @@ both. It also counts any other Docker work already on your computer, so you know
 will leave it alone: they only add their own images and remove their own containers. It needs
 no administrator rights and changes nothing.
 
-If you have not installed them yet, follow the [student setup guide](../docs/student-setup.md)
-first. Before you run the test, **start Docker Desktop** and wait until it says it is running.
+If you have not installed them yet, follow the setup guide for
+[Windows](../docs/windows-setup.md) or [Mac and Linux](../docs/mac-linux-setup.md) first. Before you run the test, **start Docker Desktop** and wait until it says it is running.
 
 **Windows:** open **Windows PowerShell** the same way as in Test 2, then copy, paste and press
 **Enter**:
@@ -109,3 +109,14 @@ curl -fsSL https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/
 
 **If you see `RESULT: STOP`:** each line marked `[!!]` says what is missing and how to fix
 it. Fix it, then run the test again.
+
+---
+
+# All tests passed?
+
+**Yes** — go to **[Getting the course files](https://github.com/deanbushmiller/Ai-OFF-and-DEF/tree/main#getting-the-course-files)**.
+
+**Need further setup?** Follow the setup guide for your computer, then run the tests again:
+
+- **[Windows setup](../docs/windows-setup.md)**
+- **[Mac and Linux setup](../docs/mac-linux-setup.md)**
