@@ -51,3 +51,23 @@ does not install anything.
 this system"* or *"cannot be loaded"*: your computer is set up to block scripts, usually by
 your organisation. The labs cannot run on it. Tell your instructor before class, or use a
 computer you control.
+
+**Mac or Linux:**
+
+1. Open **Terminal**. On a Mac: press **Cmd + Space**, type `Terminal`, press **Enter**.
+2. Click the copy button at the right of the grey box below.
+3. In the Terminal window, paste (**Cmd + V** on a Mac, **Ctrl + Shift + V** on Linux), then
+   press **Enter**. Do not add `sudo`.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/connection-check/check-run.sh -o "${TMPDIR:-/tmp}/check-run.sh" && bash "${TMPDIR:-/tmp}/check-run.sh"
+```
+
+**What you should see** ends with:
+
+```
+  RESULT: PASS - continue on to the next test.
+```
+
+**If you see an error instead** (for example `curl: command not found` or `Could not
+resolve host`): copy the error into the class chat before class.
