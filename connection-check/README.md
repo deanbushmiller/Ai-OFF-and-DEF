@@ -71,3 +71,41 @@ curl -fsSL https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/
 
 **If you see an error instead** (for example `curl: command not found` or `Could not
 resolve host`): copy the error into the class chat before class.
+
+**Both:** when you see `RESULT: PASS`, continue on to
+[Test 3](#test-3--software-needed-for-the-labs).
+
+---
+
+# Test 3 — software needed for the labs
+
+The labs need two programs: **git** and **Docker**, with Docker running. This test checks
+both. It also counts any other Docker work already on your computer, so you know the labs
+will leave it alone: they only add their own images and remove their own containers. It needs
+no administrator rights and changes nothing.
+
+If you have not installed them yet, follow the [student setup guide](../docs/student-setup.md)
+first. Before you run the test, **start Docker Desktop** and wait until it says it is running.
+
+**Windows:** open **Windows PowerShell** the same way as in Test 2, then copy, paste and press
+**Enter**:
+
+```powershell
+[Net.ServicePointManager]::SecurityProtocol='Tls12'; irm https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/connection-check/check-software.ps1 -OutFile $env:TEMP\check-software.ps1; powershell -ExecutionPolicy Bypass -File $env:TEMP\check-software.ps1
+```
+
+**Mac or Linux:** open **Terminal** the same way as in Test 2, then copy, paste and press
+**Enter**:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/deanbushmiller/Ai-OFF-and-DEF/main/connection-check/check-software.sh -o "${TMPDIR:-/tmp}/check-software.sh" && bash "${TMPDIR:-/tmp}/check-software.sh"
+```
+
+**What you should see** ends with:
+
+```
+  RESULT: PASS - continue on to the next test.
+```
+
+**If you see `RESULT: STOP`:** each line marked `[!!]` says what is missing and how to fix
+it. Fix it, then run the test again.
