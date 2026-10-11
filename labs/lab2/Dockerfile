@@ -17,7 +17,7 @@
 # Bump it deliberately, for security patching, and when you do, rebuild and
 # republish EVERY lab that carries it in the same sitting. A lab left behind on
 # the old pin shares nothing with the others.
-FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b
+FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b AS deps
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
 LABEL org.opencontainers.image.title="SecLLM Bootcamp Labs"
@@ -54,9 +54,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends nano less \
 # NOTE: do NOT delete torchgen. torch/utils/_python_dispatch.py imports it.
 # ---------------------------------------------------------------------------
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu \
+RUN --mount=type=bind,source=constraints-rag.txt,target=/tmp/constraints-rag.txt \
+    pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu \
         torch==2.9.1 \
- && pip install --no-cache-dir -r /tmp/requirements.txt \
+ && pip install --no-cache-dir -r /tmp/requirements.txt -c /tmp/constraints-rag.txt \
  && rm /tmp/requirements.txt \
  && rm -rf /usr/local/lib/python3.11/site-packages/torch/include \
            /usr/local/lib/python3.11/site-packages/torch/test \
@@ -81,11 +82,34 @@ RUN pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu 
 # byte-identical - and those 40 KB cost every student a 16.5 MB re-download.
 # Download-time telemetry; nothing reads it at run time and these labs run with
 # HF_HUB_OFFLINE=1.
+# ---------------------------------------------------------------------------
+# MODEL STAGE (build-only, never shipped) - fetch both models, then re-save
+# flan-t5-small's 308 MB weights file as 4 files of at most 100 MB.
+#
+# Why (2026-10-10): GHCR serves every layer through a download link that expires
+# 5-10 minutes after issue and cuts a download still running; Docker then restarts
+# that layer from zero. MiniLM + flan-t5 were one 370 MB layer, which a slow
+# connection could never finish. Now: the cache (MiniLM 91 MB + small files) is one
+# layer and each flan-t5 piece is its own. The weights are unchanged; Transformers
+# reads its own multi-file format natively and the labs still load by name.
+# Built FROM deps so it uses exactly the image's own torch/transformers.
+# ---------------------------------------------------------------------------
+FROM deps AS model
 COPY scripts/fetch_assets.py /tmp/fetch_assets.py
-RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
+COPY scripts/reshard_flan.py /tmp/reshard_flan.py
+RUN python /tmp/fetch_assets.py && python /tmp/reshard_flan.py \
  && rm -rf /opt/lab-assets/hf/xet \
- && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11 -name '*.pyc' -delete
+ && test "$(ls /shards | wc -l)" -eq 4
+
+# ---------------------------------------------------------------------------
+# FINAL IMAGE
+# ---------------------------------------------------------------------------
+FROM deps
+COPY --from=model /opt/lab-assets /opt/lab-assets
+COPY --from=model /shards/model-00001-of-00004.safetensors /opt/lab-assets/flan-t5-small-shards/
+COPY --from=model /shards/model-00002-of-00004.safetensors /opt/lab-assets/flan-t5-small-shards/
+COPY --from=model /shards/model-00003-of-00004.safetensors /opt/lab-assets/flan-t5-small-shards/
+COPY --from=model /shards/model-00004-of-00004.safetensors /opt/lab-assets/flan-t5-small-shards/
 
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1
