@@ -33,7 +33,7 @@ from lab12lib import (at_or_above, load_rules, log_write, scan_inbound,
                       scan_outbound)
 
 MODEL = os.environ.get("LAB12_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 
 # THE SEEDED SECRET LIVES IN THE SYSTEM PROMPT, AND THAT IS THE POINT.
 # OWASP LLM02:2026, Tier 1 prevention 4, in its own words: "never store secrets,

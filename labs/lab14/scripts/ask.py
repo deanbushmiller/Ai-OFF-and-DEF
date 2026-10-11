@@ -40,7 +40,7 @@ import verify
 WORK = L.WORK
 ENDPOINT = f"http://127.0.0.1:{L.PORT}"
 MODEL = os.environ.get("LAB14_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 MAX_STEPS = 6
 PY = sys.executable
 

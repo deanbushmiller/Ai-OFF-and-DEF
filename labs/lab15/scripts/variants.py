@@ -65,7 +65,7 @@ import lab15lib as L
 
 MODEL = os.environ.get(
     "LAB15_MODEL",
-    "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+    "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 
 CHANNEL = f"{L.BEACON_HOST}->{L.BEACON_DEST}"
 

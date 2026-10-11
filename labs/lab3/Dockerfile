@@ -19,6 +19,40 @@
 #
 # Bump it deliberately, for security patching, and rebuild EVERY lab in one sitting
 # when you do. See Activity-Labs/lab-build-prompts/REBUILD-PLAN.md.
+# ---------------------------------------------------------------------------
+# MODEL STAGE - fetch Qwen2.5-1.5B-Instruct Q4_K_M and split it into six shards.
+#
+# Why (2026-09-23): GHCR serves a layer through a signed CDN link that expires
+# about 6.5-10 minutes after it is issued, and the CDN cuts a download that is
+# still running at that moment (measured: stream reset at 472 MB, exactly at
+# expiry). Docker then restarts the layer from zero. A single 1.09 GB layer
+# therefore needs ~2.8 MB/s sustained or it never finishes. Six shards of at
+# most ~197 MB need ~0.5 MB/s, and a failure repeats one shard, not the model.
+#
+# 197 MB is the floor: llama.cpp splits on tensor boundaries and output.weight
+# alone is 191,439,360 bytes. llama-gguf-split is built from the llama.cpp
+# source vendored in llama-cpp-python 0.3.35 - the exact version the image runs.
+# Runs on the build host's platform: shards are data, identical for both arches.
+# ---------------------------------------------------------------------------
+FROM --platform=$BUILDPLATFORM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b AS model
+ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1 HF_HOME=/opt/lab-assets/hf
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential cmake \
+ && rm -rf /var/lib/apt/lists/*
+RUN pip download --no-deps --no-binary :all: llama-cpp-python==0.3.35 -d /src \
+ && tar xzf /src/llama_cpp_python-0.3.35.tar.gz -C /src \
+ && cmake -S /src/llama_cpp_python-0.3.35/vendor/llama.cpp -B /build \
+      -DGGML_NATIVE=OFF -DLLAMA_CURL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_SERVER=OFF \
+ && cmake --build /build --target llama-gguf-split -j4 \
+ && cp /build/bin/llama-gguf-split /usr/local/bin/
+RUN pip install huggingface-hub==1.31.0
+COPY scripts/fetch_assets.py /tmp/fetch_assets.py
+RUN python /tmp/fetch_assets.py \
+ && mkdir /shards \
+ && llama-gguf-split --split --split-max-size 192M \
+      /opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf /shards/qwen2.5-1.5b-instruct-q4_k_m \
+ && test "$(ls /shards | wc -l)" -eq 6 \
+ && chmod 644 /shards/*.gguf && touch -d @0 /shards/*.gguf
+
 FROM python:3.11-slim-bookworm@sha256:a36c24f9cbdf4fd0f52d67f0823eeac19c2028c637cecc392d97f980d4fec56b
 
 LABEL org.opencontainers.image.source="https://github.com/deanbushmiller/Ai-OFF-and-DEF"
@@ -81,38 +115,23 @@ RUN --mount=type=bind,from=wheels,target=/wheels \
     pip install --no-cache-dir \
       "$(ls /wheels/${TARGETARCH}/llama_cpp_python-*.whl)" \
       -r /tmp/requirements.txt \
+      -c /wheels/constraints-llama.txt \
  && rm /tmp/requirements.txt \
  && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
  && find /usr/local/lib/python3.11 -name '*.pyc' -delete
 
-# ---------------------------------------------------------------------------
-# Model baked at build time. SHARED with labs 4, 5, 6 and 7 - keep this exact
-# source ID and path so the merged image stores it once.
-#
-# The __pycache__ purge is THE fix, not housekeeping. fetch_assets.py imports
-# huggingface_hub, which writes ~174 .pyc files into the same layer as the
-# 1.09 GB model. A .pyc header embeds the source file's mtime, so the layer
-# differed between every build and between every lab. rewrite-timestamp cannot
-# help: it rewrites mtimes, not file CONTENTS. Measured: lab 3's model layer was
-# 1,043,634 bytes larger than the tier's and shared with nothing.
-# ---------------------------------------------------------------------------
-# Two things in this RUN are what make the baked-asset layer identical across builds
-# AND across base versions (measured 2026-09-19, see REBUILD-PLAN.md):
-#   - rm -rf /opt/lab-assets/hf/xet: huggingface_hub 1.31 writes a transfer log whose
-#     filename and contents carry the build time. 40 KB that forced a full re-download.
-#   - the __pycache__ purge covers the WHOLE python3.11 tree, not just site-packages:
-#     running fetch_assets.py byte-compiles stdlib modules, and a .pyc header embeds
-#     the source mtime, which differs between base builds. Seven such files tied this
-#     layer to the base. The base ships no .pyc, so this whiteouts nothing.
-COPY scripts/fetch_assets.py /tmp/fetch_assets.py
-RUN python /tmp/fetch_assets.py && rm /tmp/fetch_assets.py \
- && rm -rf /opt/lab-assets/hf/xet \
- && find /usr/local/lib/python3.11 -name '__pycache__' -type d -prune -exec rm -rf {} + \
- && find /usr/local/lib/python3.11 -name '*.pyc' -delete
+# Qwen2.5-1.5B-Instruct Q4_K_M, 1.09 GB, as SIX layers (see the model stage above).
+# Byte-identical across labs 3-7 and 12-15, so a student downloads each shard once.
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf /opt/lab-assets/models/
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00002-of-00006.gguf /opt/lab-assets/models/
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00003-of-00006.gguf /opt/lab-assets/models/
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00004-of-00006.gguf /opt/lab-assets/models/
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00005-of-00006.gguf /opt/lab-assets/models/
+COPY --from=model /shards/qwen2.5-1.5b-instruct-q4_k_m-00006-of-00006.gguf /opt/lab-assets/models/
 
 ENV TRANSFORMERS_OFFLINE=1 \
     HF_HUB_OFFLINE=1 \
-    LAB3_MODEL=/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf
+    LAB3_MODEL=/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf
 
 # NOTE: the news.acme.com -> 127.0.0.1 mapping CANNOT be baked here. Docker
 # regenerates /etc/hosts when the container starts, discarding anything written

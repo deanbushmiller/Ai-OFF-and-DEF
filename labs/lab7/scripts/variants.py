@@ -52,7 +52,7 @@ WORK = pathlib.Path("/labs/lab7")
 RECORD = WORK / "record.txt"
 VARIANTS = WORK / "variants.json"
 MODEL = os.environ.get("LAB7_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 
 # The shipped prompt. Benign on its own, deliberately.
 PROMPT = ("Re-encode this record as {desc}. Keep every field name and every value "

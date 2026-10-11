@@ -54,7 +54,7 @@ import time
 from tools import TOOLS, TOOL_DOCS, TOOL_DOCS_MINIMAL, Session
 
 MODEL = os.environ.get("LAB5_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 WORK = pathlib.Path("/labs/lab5")
 LOG = WORK / "runs.json"
 MAX_STEPS = 6

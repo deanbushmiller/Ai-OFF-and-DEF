@@ -41,7 +41,7 @@ WORK = pathlib.Path("/labs/lab6")
 RUNS = WORK / "runs.json"
 ENDPOINT = "http://127.0.0.1:8006"     # the proxy, which the client thinks is the server
 MODEL = os.environ.get("LAB6_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 MAX_STEPS = 6
 
 _id = 0

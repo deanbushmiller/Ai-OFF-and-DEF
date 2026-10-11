@@ -25,7 +25,7 @@ import urllib.request
 from llama_cpp import Llama
 
 MODEL = os.environ.get("LAB3_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 LOG = pathlib.Path("/labs/lab3/runs.json")
 
 SYSTEM = ("You are a helpful assistant. Summarise the web page the user gives you "

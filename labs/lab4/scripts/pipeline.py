@@ -37,7 +37,7 @@ import sys
 from llama_cpp import Llama
 
 MODEL = os.environ.get("LAB4_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 WORK = pathlib.Path("/labs/lab4")
 LOG = WORK / "runs.json"
 

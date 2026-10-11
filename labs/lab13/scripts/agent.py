@@ -47,7 +47,7 @@ from lab13lib import (Broker, RULES, load_policy, next_run_id)   # noqa: E402
 from tools import TOOLS, TOOL_DOCS, Session                       # noqa: E402
 
 MODEL = os.environ.get("LAB13_MODEL",
-                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+                       "/opt/lab-assets/models/qwen2.5-1.5b-instruct-q4_k_m-00001-of-00006.gguf")
 WORK = pathlib.Path("/labs/lab13")
 MAX_STEPS = 6
 TASK = "Summarise today's public notes for me."
