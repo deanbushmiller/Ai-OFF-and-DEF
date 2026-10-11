@@ -12,12 +12,12 @@
 #
 # Why the speed matters: GitHub's download link for each image layer expires
 # 5-10 minutes after it is issued, and the download is cut when it does. The
-# language model is one 1.09 GB layer, so it must arrive at about 1.8 MB/s or
-# faster or it can never finish.
+# language model arrives in six parts of up to 190 MB, so each part must arrive at
+# about 0.32 MB/s or faster or it can never finish (0.63 MB/s to finish first time).
 
 HOST="pkg-containers.githubusercontent.com"
 REPO="deanbushmiller/seclm-labs"
-LAYER="sha256:d9ae46c7ff1e789554d81c957ae0b48bcba3f48601761937e6274ebfb57b1e9b"
+LAYER="sha256:b7e83f18d2689008ad17313f9418f27346d849e34269d2ddcce0df8078fd803f"
 PINGS=10
 
 echo ""
@@ -95,14 +95,13 @@ echo ""
 
 # ---------------------------------------------------------------------------
 # 3. One line to paste.
-#    now=   the lab images as published today (single 1.09 GB model layer)
-#    split= the model split into six layers of at most 190 MB (being tested)
+#    result= whether the lab images will download: the model comes in six parts
+#            of up to 190 MB (published 2026-10-10)
 #    OK = downloads first time; RETRY = finishes after some restarts; FAIL = cannot finish
 # ---------------------------------------------------------------------------
 awk -v s="${SPEED:-0}" -v l="$LOSS" -v r="$LATENCY" -v note="$NOTE" 'BEGIN {
   m = s / 1e6
-  v_now   = (m >= 3.6)  ? "OK" : (m >= 1.8)  ? "RETRY" : "FAIL"
-  v_split = (m >= 0.63) ? "OK" : (m >= 0.32) ? "RETRY" : "FAIL"
-  printf "GHCR-TEST speed=%.2fMB/s latency=%sms loss=%s%% now=%s split=%s%s\n", m, r, l, v_now, v_split, note
+  v = (m >= 0.63) ? "OK" : (m >= 0.32) ? "RETRY" : "FAIL"
+  printf "GHCR-TEST speed=%.2fMB/s latency=%sms loss=%s%% result=%s%s\n", m, r, l, v, note
 }'
 echo ""

@@ -12,15 +12,15 @@
 #
 # Why the speed matters: GitHub's download link for each image layer expires
 # 5-10 minutes after it is issued, and the download is cut when it does. The
-# language model is one 1.09 GB layer, so it must arrive at about 1.8 MB/s or
-# faster or it can never finish.
+# language model arrives in six parts of up to 190 MB, so each part must arrive at
+# about 0.32 MB/s or faster or it can never finish (0.63 MB/s to finish first time).
 
 # Older Windows PowerShell may not use TLS 1.2 by default; GitHub requires it.
 [Net.ServicePointManager]::SecurityProtocol = 'Tls12'
 
 $HostName = 'pkg-containers.githubusercontent.com'
 $Repo     = 'deanbushmiller/seclm-labs'
-$Layer    = 'sha256:d9ae46c7ff1e789554d81c957ae0b48bcba3f48601761937e6274ebfb57b1e9b'
+$Layer    = 'sha256:b7e83f18d2689008ad17313f9418f27346d849e34269d2ddcce0df8078fd803f'
 $Pings    = 10
 
 Write-Host ""
@@ -97,11 +97,10 @@ Write-Host ""
 
 # ---------------------------------------------------------------------------
 # 3. One line to paste.
-#    now=   the lab images as published today (single 1.09 GB model layer)
-#    split= the model split into six layers of at most 190 MB (being tested)
+#    result= whether the lab images will download: the model comes in six parts
+#            of up to 190 MB (published 2026-10-10)
 #    OK = downloads first time; RETRY = finishes after some restarts; FAIL = cannot finish
 # ---------------------------------------------------------------------------
-$now   = if ($speed -ge 3.6)  { 'OK' } elseif ($speed -ge 1.8)  { 'RETRY' } else { 'FAIL' }
-$split = if ($speed -ge 0.63) { 'OK' } elseif ($speed -ge 0.32) { 'RETRY' } else { 'FAIL' }
-"GHCR-TEST speed={0:N2}MB/s latency={1}ms loss={2}% now={3} split={4}{5}" -f $speed, $latency, $loss, $now, $split, $note
+$result = if ($speed -ge 0.63) { 'OK' } elseif ($speed -ge 0.32) { 'RETRY' } else { 'FAIL' }
+"GHCR-TEST speed={0:N2}MB/s latency={1}ms loss={2}% result={3}{4}" -f $speed, $latency, $loss, $result, $note
 Write-Host ""
