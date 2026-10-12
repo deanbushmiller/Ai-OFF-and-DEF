@@ -17,12 +17,15 @@ data, and runs entirely on your own machine.
   Docker keeps about 5.2 GB on disk once it has unpacked it.
 - A terminal: macOS Terminal, Windows PowerShell, or any Linux shell.
 
-You do **not** need an API key, a ChatGPT or Claude subscription, Python, or a cloud
-account. Every model the labs use is small, open, and baked into the container image.
+## Part 1 Test your setup
+- https://github.com/deanbushmiller/Ai-OFF-and-DEF/tree/main/connection-check
+- If you cannot pass these test, you can still read lab and watch video on each
 
+## Part 2 Run 
 **Setup guides: [Windows](docs/windows-setup.md) · [Mac and Linux](docs/mac-linux-setup.md).** Windows students, read yours first — Windows needs
 two extra steps that Docker's own installer does not do for you, and skipping either one
 looks identical to "Docker is broken".
+
 
 ## Getting the course files
 
