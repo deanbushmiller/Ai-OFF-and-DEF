@@ -24,6 +24,9 @@ byte, so the pull is **about 34 KB** and takes a second. From a clean machine it
 572 MB on Apple Silicon and 628 MB on Intel. Measured on the published image, both
 architectures.
 
+> **Starting from a clean Intel/AMD (Windows) machine on a slow connection?** One part of the
+> download (about 210 MB) may stop and start over once. That is expected — let it keep going.
+
 ---
 
 ## How the lab works — read this once

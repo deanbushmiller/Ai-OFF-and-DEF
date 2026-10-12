@@ -16,6 +16,9 @@ Expert mode runs the whole list, including the steps beginner skips.
 
 If you have already done lab 1, you are ready — nothing new to install.
 
+> **On an Intel/AMD (Windows) machine with a slow connection,** one part of the download
+> (about 210 MB) may stop and start over once. That is expected — let it keep going.
+
 ---
 
 ## How the lab works — read this once
