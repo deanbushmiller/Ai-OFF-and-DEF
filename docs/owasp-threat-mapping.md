@@ -111,8 +111,8 @@ AML.T0064  →  AML.T0066   →  AML.T0068   →  AML.T0051.001  →  AML.T0070
 Gather RAG    Retrieval      LLM Prompt     LLM Prompt        RAG
 Indexed       Content        Obfuscation    Injection:        Poisoning
 Targets       Crafting                      Indirect
-(Recon)       (Resource      (Defense       (Execution)       (Impact)
-              Development)   Evasion)
+(Recon)       (AI Attack     (Defense       (Execution)       (Persistence)
+              Adaptation)    Evasion)
 ```
 
 **Look these up:**
@@ -143,8 +143,8 @@ asked to summarise, so the injection arrives as a side effect of an ordinary req
 AML.T0066          →  AML.T0068          →  AML.T0051.001  →  AML.T0051.002
 Retrieval Content     LLM Prompt            LLM Prompt        LLM Prompt
 Crafting              Obfuscation           Injection:        Injection:
-(Resource Dev)        (Defense Evasion)     Indirect          Triggered
-                                            (Execution)       (Execution)
+(AI Attack            (Defense Evasion)     Indirect          Triggered
+Adaptation)                                 (Execution)       (Execution)
 ```
 
 **Look these up:**
@@ -188,8 +188,8 @@ Optimization
 AML.T0065       →  AML.T0043.003        →  AML.T0068          →  AML.T0051.001
 LLM Prompt         Craft Adversarial       LLM Prompt            LLM Prompt
 Crafting           Data: Manual            Obfuscation           Injection:
-(Resource Dev)     Modification            (Defense Evasion)     Indirect
-                   (AI Attack Adaptation)                           (Execution)
+(AI Attack         Modification            (Defense Evasion)     Indirect
+Adaptation)        (AI Attack Adaptation)                           (Execution)
 ```
 
 **Look these up:**
@@ -219,8 +219,8 @@ makes it matter.
 AML.T0084.001      →  AML.T0065       →  AML.T0051.001  →  AML.T0053
 Discover AI Agent     LLM Prompt         LLM Prompt        AI Agent Tool
 Configuration:        Crafting           Injection:        Invocation
-Tool Definitions      (Resource Dev)     Indirect          (Execution,
-(Discovery)                              (Execution)        Priv Esc)
+Tool Definitions      (AI Attack         Indirect          (Execution,
+(Discovery)           Adaptation)        (Execution)        Priv Esc)
       ↓
 AML.T0085.001
 Data from AI

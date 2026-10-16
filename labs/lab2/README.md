@@ -237,8 +237,8 @@ AML.T0064  →  AML.T0066   →  AML.T0068   →  AML.T0051.001  →  AML.T0070
 Gather RAG    Retrieval      LLM Prompt     LLM Prompt        RAG
 Indexed       Content        Obfuscation    Injection:        Poisoning
 Targets       Crafting                      Indirect
-(Recon)       (Resource      (Defense       (Execution)       (Impact)
-              Development)   Evasion)
+(Recon)       (AI Attack     (Defense       (Execution)       (Persistence)
+              Adaptation)    Evasion)
 ```
 
 `AML.T0066 Retrieval Content Crafting` — *"writing content designed to be

@@ -360,8 +360,8 @@ DUPLICATE stamp read as ORIGINAL.
 AML.T0065      →  AML.T0043.003    →  AML.T0068       →  AML.T0051.001
 LLM Prompt        Craft Adversarial   LLM Prompt         LLM Prompt Injection:
 Crafting          Data: Manual        Obfuscation        Indirect
-(Resource Dev)    Modification        (Defense Evasion)  (Execution)
-                  (AI Attack Adaptation)
+(AI Attack        Modification        (Defense Evasion)  (Execution)
+Adaptation)       (AI Attack Adaptation)
 ```
 
 `AML.T0068`'s own description names this exact technique: instructions hidden *"in the data

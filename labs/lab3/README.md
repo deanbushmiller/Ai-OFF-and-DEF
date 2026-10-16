@@ -224,7 +224,8 @@ thing — is lab 5.
 AML.T0066        →  AML.T0068       →  AML.T0051.001 / .002
 Retrieval           LLM Prompt         LLM Prompt Injection:
 Content Crafting    Obfuscation        Indirect / Triggered
-(Resource Dev)      (Defense Evasion)  (Execution)
+(AI Attack          (Defense Evasion)  (Execution)
+Adaptation)
 ```
 
 `.001` is *indirect* — injected via a data channel the model ingests. `.002` is
